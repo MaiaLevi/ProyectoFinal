@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_centerVertical="true"
+    android:layout_centerHorizontal="true"
+    android:weightSum="1"
+    android:id="@+id/layout01"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@color/accent_material_dark">
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="429dp">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="1"
+            android:layout_weight="0.37">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="43dp"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Calendario"
+                android:id="@+id/tvwTitulo"
+                android:textColor="#ffffff"
+                android:textSize="25dp" />
+            <ListView
+                android:layout_width="298dp"
+                android:layout_height="347dp"
+                android:id="@+id/lstEventos"
+                android:visibility="visible"/>
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="129dp"
+            android:weightSum="1">
+            <ImageView
+                android:id="@+id/imgAgregar"
+                android:layout_width="49dp"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_add_white_24dp"
+                android:layout_weight="0.64" />
+            <ImageView
+                android:id="@+id/imgModificar"
+                android:layout_width="49dp"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_create_white_24dp"
+                android:layout_weight="0.64" />
+            <ImageView
+                android:id="@+id/imgEliminar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_delete_white_24dp"
+                android:layout_weight="0.55" />
+        </LinearLayout>
+    </LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Antes de hacer una acción, por favor seleccione el evento"
+        android:id="@+id/textView"
+        android:layout_weight="0.48"
+        android:textColor="#ffffff" />
+</LinearLayout>

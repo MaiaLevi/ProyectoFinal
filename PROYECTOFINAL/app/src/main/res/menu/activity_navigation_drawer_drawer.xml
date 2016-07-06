@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <menu>
+        <item
+            android:id="@+id/usuario"
+            android:icon="@drawable/ic_person_black_24dp"
+            android:title="" />
+        <item
+            android:id="@+id/evento"
+            android:src="@drawable/evento"
+            android:title="" />
+        <item
+            android:id="@+id/libros"
+            android:icon="@drawable/libros"
+            android:title="" />
+        <item
+            android:id="@+id/falta"
+            android:icon="@drawable/falta"
+            android:title="" />
+            <item
+                android:id="@+id/mensaje"
+                android:icon="@drawable/mensaje"
+                android:title="" />
+            <item
+                android:id="@+id/horario"
+                android:icon="@drawable/horario"
+                android:title="" />
+            <item
+                android:id="@+id/config"
+                android:icon="@drawable/config"
+                android:title="" />
+        </menu>
+
+        </group>
+</menu>
