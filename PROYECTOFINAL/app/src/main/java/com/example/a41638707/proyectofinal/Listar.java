@@ -161,9 +161,10 @@ public class Listar extends AppCompatActivity {
     }*/
     private void EliminarEvento(int param)
     {
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
         HttpClient httpClient = new DefaultHttpClient();
-        int id = param;
-        HttpDelete delRequest = new HttpDelete("http://daiuszw.hol.es/bd/eliminarevento.php?Id=" + id);
+        HttpDelete delRequest = new HttpDelete("http://daiuszw.hol.es/bd/eliminarevento.php?Id=" + param);
         delRequest.setHeader("content-type", "application/json");
         try {
             HttpResponse resp = httpClient.execute(delRequest);
@@ -174,9 +175,12 @@ public class Listar extends AppCompatActivity {
             }
         } catch(Exception ex) {
             Log.e("ServicioRest","Error!", ex);
+            Toast toast2 = Toast.makeText(getApplicationContext(),ex.toString(),Toast.LENGTH_SHORT);
+            toast2.show();
         }
     }
 //CONEXION Y PARESEO JSON Forma Polshu
+    /*
 public void ListarJsonEventos() {
     StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
     StrictMode.setThreadPolicy(policy);
@@ -215,7 +219,7 @@ public void ListarJsonEventos() {
         Log.e("ServicioRest", "Error!", ex);
         Log.d("POLSHU", "e", ex);
     }
-}
+}*/
     private void ObtenerReferencias()
     {
         btnAtras=(Button) findViewById(R.id.btnListar);
@@ -224,7 +228,6 @@ public void ListarJsonEventos() {
         imgModificar=(ImageView)findViewById(R.id.imgModificar);
         imgEliminar=(ImageView)findViewById(R.id.imgEliminar);
     }
-
     private void IniciarModificarActividad(int i)
     {
         Intent nuevaActivity=new Intent(this,Modificar.class);
@@ -240,7 +243,7 @@ public void ListarJsonEventos() {
         Intent nuevaActivity=new Intent(this,Agregar.class);
         startActivity(nuevaActivity);
     }
-
+    /*
         private Dialog crearDialogoAlerta(){
 
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -264,7 +267,7 @@ public void ListarJsonEventos() {
             });
             return builder.create();
 
-        }
+        }*/
         private Dialog confirmarEliminar(){
 
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -306,13 +309,13 @@ public void ListarJsonEventos() {
                 return null;
             }
         }
-
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
             progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
             progressDialog.setMax(100);
-            progressDialog.show();}
+            progressDialog.show();
+            listaEventos.clear();}
         @Override
         protected void onPostExecute(ArrayList<Evento> listaMaterias) {
             super.onPostExecute(listaMaterias);
