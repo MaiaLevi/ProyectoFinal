@@ -289,6 +289,7 @@ public class Agregar extends AppCompatActivity {
                 json.put("Fecha", fecha);
                 json.put("Descripcion", edtDescr.getText().toString());
                 json.put("IdUsuario", 1);
+                //falta iddivision
                 RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json.toString());
                 Request request = new Request.Builder()
                         .url(url)

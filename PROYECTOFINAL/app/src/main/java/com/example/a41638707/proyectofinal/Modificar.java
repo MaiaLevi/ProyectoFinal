@@ -277,6 +277,7 @@ public class Modificar extends AppCompatActivity {
                 dato.put("Descripcion", (edtDescr.getText().toString()));
                 dato.put("IdUsuario", 1);
                 dato.put("Id", idEvento);
+                //falta iddivision
                 RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), dato.toString());
 
                 Request request = new Request.Builder()

@@ -18,7 +18,6 @@ public class Evento implements Serializable{
     private Date Fecha;
     private String Descripcion;
     private int IdUsuario;
-
     @Override
     public String toString() {
         return getMateria() + " "+getTipo()+" "+getFecha()+" "+getDescripcion();
