@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
     String url="192.168.56.1";
     Button btnListar;
     Button btnAgregar;
+    Button btnListarLibros;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,11 +82,17 @@ public class MainActivity extends AppCompatActivity {
                 IniciarAgregarActividad();;
             }
         });
+        btnListarLibros.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+               IniciarListarLActividad();
+            }
+        });
     }
 
     ArrayList<Evento> eventos = new ArrayList<>();
     private void ObtenerReferencias()
     {
+        btnListarLibros=(Button)findViewById(R.id.btnListarLibros);
         btnAgregar=(Button) findViewById(R.id.btnAgregar);
         btnListar=(Button)findViewById(R.id.btnListar);
     }
@@ -94,9 +101,15 @@ public class MainActivity extends AppCompatActivity {
         Intent nuevaActivity=new Intent(MainActivity.this,Agregar.class);
         startActivity(nuevaActivity);
     }
+
     private void IniciarListarActividad()
     {
         Intent nuevaActivity=new Intent(MainActivity.this,Listar.class);
+        startActivity(nuevaActivity);
+    }
+    private void IniciarListarLActividad()
+    {
+        Intent nuevaActivity=new Intent(MainActivity.this,ListarLibrosPropios.class);
         startActivity(nuevaActivity);
     }
 
