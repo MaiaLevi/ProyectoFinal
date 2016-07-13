@@ -22,7 +22,6 @@
         <activity android:name=".Agregar" />
         <activity android:name=".Listar" />
         <activity android:name=".Modificar" />
-        <activity android:name=".ListarHome" />
         <activity
             android:name=".Libros"
             android:label="@string/title_activity_libros"
@@ -30,7 +29,8 @@
         <activity
             android:name=".NavigationDrawer"
             android:label="@string/title_activity_navigation_drawer"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".ListarDivision"></activity>
     </application>
 
 </manifest>
