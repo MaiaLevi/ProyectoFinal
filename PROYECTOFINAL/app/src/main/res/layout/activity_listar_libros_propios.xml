@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
+
 <LinearLayout android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,7 +10,20 @@
     android:id="@+id/layout01"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:background="@color/accent_material_dark">
+    <EditText
+        android:layout_width="263dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/edtBusqueda"
+        android:hint="Buscar Libros" />
     <LinearLayout
+        android:id="@+id/linealLayout"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="0.37"></LinearLayout>
+    <LinearLayout
+        android:id="@+id/layoutPrincipal"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="429dp">
@@ -19,21 +33,31 @@
             android:layout_height="wrap_content"
             android:weightSum="1"
             android:layout_weight="0.37">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="43dp"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Mis Libros:"
-                android:id="@+id/tvwTitulo"
-                android:textColor="#ffffff"
-                android:textSize="25dp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="43dp"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Mis Libros:"
+                    android:id="@+id/tvwTitulo"
+                    android:textColor="#ffffff"
+                    android:textSize="25dp" />
             <ListView
                 android:layout_width="298dp"
                 android:layout_height="347dp"
                 android:id="@+id/lstLibros"
                 android:visibility="visible"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Antes de hacer una acción, por favor seleccione el evento"
+                android:id="@+id/textView"
+                android:layout_weight="0.48"
+                android:textColor="#ffffff" />
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/layoutOpciones"
             android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="129dp"
@@ -58,12 +82,4 @@
                 android:layout_weight="0.55" />
         </LinearLayout>
     </LinearLayout>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Antes de hacer una acción, por favor seleccione el evento"
-        android:id="@+id/textView"
-        android:layout_weight="0.48"
-        android:textColor="#ffffff" />
 </LinearLayout>

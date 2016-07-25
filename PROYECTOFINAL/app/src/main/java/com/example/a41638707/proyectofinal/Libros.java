@@ -14,19 +14,24 @@ public class Libros implements Serializable{
     private String Descripcion;
     private String Imagen;
     private int IdUsuario;
+    private String Usuario;
     private int Año;
-    private int IdMateria;
-    private String Vendido;
-
-    public Libros(int idlibro, String nombre, String descripcion, String imagen, int idUsuario, int año, int idMateria, String vendido)
+    private MateriaEvento Materia;
+    private boolean Vendido;
+    @Override
+    public String toString() {
+        return getNombre() + " "+getDesc()+" "+getVendido();
+    }
+    public Libros(int idlibro, String nombre, String descripcion, String imagen, int idUsuario,String usuario, int año, MateriaEvento materia, boolean vendido)
     {
         IdLibro=idlibro;
         Nombre=nombre;
         Descripcion=descripcion;
         Imagen=imagen;
         IdUsuario=idUsuario;
+        Usuario=usuario;
         Año=año;
-        IdMateria=idMateria;
+        Materia=materia;
         Vendido=vendido;
     }
     public int getId()
@@ -53,13 +58,16 @@ public class Libros implements Serializable{
     {
         return Año;
     }
-    public int getIdM()
+    public MateriaEvento getMateria()
     {
-        return IdMateria;
+        return Materia;
     }
-    public String getVendido()
+    public boolean getVendido()
     {
         return Vendido;
+    }
+    public String getUsuario(){
+        return Usuario;
     }
 
 }

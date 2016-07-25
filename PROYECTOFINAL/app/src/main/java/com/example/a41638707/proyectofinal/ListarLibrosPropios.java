@@ -4,17 +4,22 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.okhttp.OkHttpClient;
@@ -36,13 +41,15 @@ public class ListarLibrosPropios extends AppCompatActivity {
     public static final String PARAMETRO1="com.example.a41638707.proyectofinal.PARAMETRO1";
     ListView lstLibros;
     ArrayList<Libros> listaLibros =new ArrayList<Libros>();
-    Button btnAtras;
     List<Libros> listLibros = new ArrayList<Libros>();
     ArrayAdapter<Libros> adaptador=null;
     ImageView imgAgregar, imgModificar, imgEliminar;
     ProgressDialog progressDialog;
     Libros Libroselec;
     String url;
+    EditText edtBuscar;
+    View layoutPpal;
+    LinearLayout layout;
     int idUsuario=1;
     boolean click=false;
     @Override
@@ -105,7 +112,99 @@ public class ListarLibrosPropios extends AppCompatActivity {
                 }
             }
         });
+        edtBuscar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String texto=edtBuscar.getText().toString();
+                if (texto.equals(""))
+                {
+                    layoutPpal.setVisibility(View.VISIBLE);
+                }
+                else
+                {
+                    layoutPpal.setVisibility(View.GONE);
+                    url="http://daiuszw.hol.es/bd/buscarLibros.php?Busqueda=";
+                    url+=texto;
+                    new buscarLibros().execute(url);
+                }
+            }
+        });
+    }
+    private class buscarLibros extends AsyncTask<String, Void, ArrayList<Libros>> {
+        private OkHttpClient client = new OkHttpClient();
+        @Override
+        protected ArrayList<Libros> doInBackground(String... params) {
+            String url = params[0];
+            Request request = new Request.Builder()
+                    .url(url)
+                    .build();
+            try {
+                Response response = client.newCall(request).execute();  // Llamado al API
+                return parsearLibros(response.body().string());      // Convierto el resultado en Evento
 
+            } catch (IOException | JSONException e) {
+                Log.d("Error", e.getMessage());                          // Error de Network o al parsear JSON
+                return null;
+            }
+        }
+        @Override
+        protected void onPreExecute() {
+            //limpiar layout
+            layout.removeAllViews();
+            listaLibros.clear();
+            super.onPreExecute();
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            progressDialog.setMax(100);
+            progressDialog.show();}
+        @Override
+        protected void onPostExecute(ArrayList<Libros> listaLibros) {
+            super.onPostExecute(listaLibros);
+            progressDialog.dismiss();
+            //adapter
+            //for y recorrer cantidad de libros
+            for (int i=0;i<listaLibros.size();i++)
+            {
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                layout.setOrientation(LinearLayout.VERTICAL);
+                //add textView
+                TextView tvwNombre = new TextView(getApplicationContext());
+                tvwNombre.setText(listaLibros.get(i).getNombre()+"\n"+listaLibros.get(i).getDesc()+
+                        "\n Año:"+listaLibros.get(i).getAño()+
+                        "\n Materia:"+listaLibros.get(i).getMateria().getNombre()+
+                        "\n Vendedor:"+listaLibros.get(i).getUsuario());
+                tvwNombre.setTextColor(Color.parseColor("#000000"));
+                tvwNombre.setId(i);
+                tvwNombre.setLayoutParams(params);
+                //add the textView to LinearLayout
+                layout.addView(tvwNombre);
+               }
+        }
+        @Override
+        protected void onProgressUpdate(Void... values) {
+            super.onProgressUpdate(values);
+        }
+        ArrayList<Libros> parsearLibros (String JSONstring) throws JSONException {
+            JSONObject json = new JSONObject(JSONstring);
+            JSONArray respJSON = json.getJSONArray("result");
+            for (int i = 0; i < respJSON.length(); i++)
+            {
+                JSONObject obj = respJSON.getJSONObject(i);
+                int idLibro = obj.getInt("IdLibro");
+                String Nombre = obj.getString("Nombre");
+                String Descr = obj.getString("Descripcion");
+                int Año=obj.getInt("Anio");
+                String Imagen = obj.getString("Imagen");
+                String Usuario = obj.getString("Usuario");
+                int IdUsuario = obj.getInt("IdUsuario");
+                int IdMateria = obj.getInt("IdMateria");
+                String Materia=obj.getString("Materia");
+                MateriaEvento materia=new MateriaEvento(IdMateria,Materia);
+                boolean Vendido = false;
+                Libros unLibro = new Libros (idLibro,Nombre,Descr,Imagen,IdUsuario,Usuario,Año,materia,Vendido);
+                listaLibros.add(unLibro);
+            }
+            return listaLibros;
+        }
     }
     private void ObtenerReferencias()
     {
@@ -113,6 +212,9 @@ public class ListarLibrosPropios extends AppCompatActivity {
         imgAgregar=(ImageView)findViewById(R.id.imgAgregar);
         imgModificar=(ImageView)findViewById(R.id.imgModificar);
         imgEliminar=(ImageView)findViewById(R.id.imgEliminar);
+        edtBuscar=(EditText)findViewById(R.id.edtBusqueda);
+        layoutPpal=findViewById(R.id.layoutPrincipal);
+        layout=(LinearLayout)findViewById(R.id.linealLayout);
     }
     private void IniciarAgregarActividad()
     {
@@ -170,6 +272,7 @@ public class ListarLibrosPropios extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
+            listaLibros.clear();
             super.onPreExecute();
             progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
             progressDialog.setMax(100);
@@ -196,11 +299,24 @@ public class ListarLibrosPropios extends AppCompatActivity {
                 String Nombre = obj.getString("Nombre");
                 String Descr = obj.getString("Descripcion");
                 String Imagen = obj.getString("Imagen");
-                int IdUsuario = obj.getInt("IdUsuario");
-                int Año=obj.getInt("Año");
                 int IdMateria = obj.getInt("IdMateria");
-                String Vendido = obj.getString("Vendido");
-                Libros unLibro = new Libros (idLibro,Nombre,Descr,Imagen,IdUsuario,Año,IdMateria,Vendido);
+                String materia= obj.getString("NombreMat");
+                //int IdUsuario = obj.getInt("IdUsuario");
+                //int Año=obj.getInt("Año");
+                //Soy Daiu tu api no trae año ni idUsuario
+                int Vendido = obj.getInt("Vendido");
+                boolean blnVend;
+                if (Vendido==0)
+                {
+                    //se deberia mostrar, de lo contrario no
+                    blnVend=false;
+                }
+                else
+                {
+                    blnVend=true;
+                }
+                MateriaEvento materiaEv=new MateriaEvento(IdMateria,materia);
+                Libros unLibro = new Libros (idLibro,Nombre,Descr,Imagen,idUsuario,null,0,materiaEv,blnVend);
                 listaLibros.add(unLibro);
             }
             return listaLibros;
