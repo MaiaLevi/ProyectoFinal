@@ -34,6 +34,7 @@
         <activity android:name=".ListarDivision" />
         <activity android:name=".VerLibro" />
         <activity android:name=".AgregarLibro"></activity>
+        <activity android:name=".ModificarLibro"></activity>
     </application>
 
 </manifest>
