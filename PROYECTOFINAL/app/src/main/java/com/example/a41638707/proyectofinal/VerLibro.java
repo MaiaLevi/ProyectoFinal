@@ -3,10 +3,12 @@ package com.example.a41638707.proyectofinal;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class VerLibro extends AppCompatActivity {
-
+    ImageView imgEliminar, imgModificar;
+    //MAIU FIJATE QUE YA TE PUSE UNA VARIABLE PARA TU ONCLICK LISTENER
     TextView edtNombre, txvDesc, txvImg, txvidmat, txvvendido;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
