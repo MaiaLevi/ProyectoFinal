@@ -1,9 +1,11 @@
 package com.example.a41638707.proyectofinal;
 
+import java.io.Serializable;
+
 /**
  * Created by 42038123 on 30/6/2016.
  */
-public class MateriaEvento {
+public class MateriaEvento implements Serializable{
     private int IdMateria;
     private String Nombre;
     @Override

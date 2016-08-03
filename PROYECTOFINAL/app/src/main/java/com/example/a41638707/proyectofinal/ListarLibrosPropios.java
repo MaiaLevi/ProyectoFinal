@@ -38,20 +38,19 @@ import java.util.Date;
 import java.util.List;
 
 public class ListarLibrosPropios extends AppCompatActivity {
-    public static final String PARAMETRO1="com.example.a41638707.proyectofinal.PARAMETRO1";
+    public static final String PARAMETROLIBRO="com.example.a41638707.proyectofinal.PARAMETROLIBRO";
     ListView lstLibros;
     ArrayList<Libros> listaLibros =new ArrayList<Libros>();
-    List<Libros> listLibros = new ArrayList<Libros>();
     ArrayAdapter<Libros> adaptador=null;
     ImageView imgAgregar, imgModificar, imgEliminar;
     ProgressDialog progressDialog;
-    Libros Libroselec;
     String url;
     EditText edtBuscar;
     View layoutPpal;
     LinearLayout layout;
-    int idUsuario=1;
+    int idUsuario=1, contador=0;
     boolean click=false;
+    Libros libroSeleccionado;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,20 +66,13 @@ public class ListarLibrosPropios extends AppCompatActivity {
         lstLibros.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> a, View v, int position, long id) {
-                //Desea eliminar o modificar?
-                //Modificar
-                Libroselec= listaLibros.get(position);
-                click=true;
-                //param=position;
-                //Dialog dialogoElegir=crearDialogoAlerta();
-                //dialogoElegir.show();
-                //Acciones necesarias al hacer click
+                libroSeleccionado= listaLibros.get(position);
+                ActivityVerL(libroSeleccionado);
             }
         });
         imgAgregar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                IniciarAgregarActividad();
             }
         });
         imgModificar.setOnClickListener(new View.OnClickListener() {
@@ -88,7 +80,6 @@ public class ListarLibrosPropios extends AppCompatActivity {
             public void onClick(View v) {
                 if (click)
                 {
-                    IniciarModificarActividad(Libroselec.getId());
                 }
                 else
                 {
@@ -102,8 +93,6 @@ public class ListarLibrosPropios extends AppCompatActivity {
             public void onClick(View v) {
                 if (click)
                 {
-                    Dialog dialogo=confirmarEliminar();
-                    dialogo.show();
                 }
                 else
                 {
@@ -119,6 +108,8 @@ public class ListarLibrosPropios extends AppCompatActivity {
                 if (texto.equals(""))
                 {
                     layoutPpal.setVisibility(View.VISIBLE);
+                    layout.setVisibility(View.GONE);
+                    //sacar el otro layout
                 }
                 else
                 {
@@ -126,6 +117,7 @@ public class ListarLibrosPropios extends AppCompatActivity {
                     url="http://daiuszw.hol.es/bd/buscarLibros.php?Busqueda=";
                     url+=texto;
                     new buscarLibros().execute(url);
+                    layout.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -162,22 +154,40 @@ public class ListarLibrosPropios extends AppCompatActivity {
             progressDialog.dismiss();
             //adapter
             //for y recorrer cantidad de libros
-            for (int i=0;i<listaLibros.size();i++)
+            if (listaLibros.size()==0)
             {
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 layout.setOrientation(LinearLayout.VERTICAL);
                 //add textView
                 TextView tvwNombre = new TextView(getApplicationContext());
-                tvwNombre.setText(listaLibros.get(i).getNombre()+"\n"+listaLibros.get(i).getDesc()+
-                        "\n Año:"+listaLibros.get(i).getAño()+
-                        "\n Materia:"+listaLibros.get(i).getMateria().getNombre()+
-                        "\n Vendedor:"+listaLibros.get(i).getUsuario());
-                tvwNombre.setTextColor(Color.parseColor("#000000"));
-                tvwNombre.setId(i);
+                tvwNombre.setText("No se han encontrado resultados para la búsqueda");
+                tvwNombre.setTextColor(Color.parseColor("#ff8080"));
+                tvwNombre.setId(contador);
                 tvwNombre.setLayoutParams(params);
                 //add the textView to LinearLayout
                 layout.addView(tvwNombre);
-               }
+            }
+            else
+            {
+                for (int i=0;i<listaLibros.size();i++)
+                {
+                    //para que tenga id unico
+                    contador++;
+                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    layout.setOrientation(LinearLayout.VERTICAL);
+                    //add textView
+                    TextView tvwNombre = new TextView(getApplicationContext());
+                    tvwNombre.setText(listaLibros.get(i).getNombre()+"\n"+listaLibros.get(i).getDesc()+
+                            "\n Año:"+listaLibros.get(i).getAño()+
+                            "\n Materia:"+listaLibros.get(i).getMateria().getNombre()+
+                            "\n Vendedor:"+listaLibros.get(i).getUsuario());
+                    tvwNombre.setTextColor(Color.parseColor("#000000"));
+                    tvwNombre.setId(contador);
+                    tvwNombre.setLayoutParams(params);
+                    //add the textView to LinearLayout
+                    layout.addView(tvwNombre);
+                }
+            }
         }
         @Override
         protected void onProgressUpdate(Void... values) {
@@ -206,6 +216,13 @@ public class ListarLibrosPropios extends AppCompatActivity {
             return listaLibros;
         }
     }
+    private void ActivityVerL(Libros librito)
+    {
+        Intent nuevaActivity = new Intent(this, VerLibro.class);
+        //crear libro y meterlo en intent
+        nuevaActivity.putExtra(ListarLibrosPropios.PARAMETROLIBRO,librito);
+        startActivity(nuevaActivity);
+    }
     private void ObtenerReferencias()
     {
         lstLibros=(ListView)findViewById(R.id.lstLibros);
@@ -215,41 +232,6 @@ public class ListarLibrosPropios extends AppCompatActivity {
         edtBuscar=(EditText)findViewById(R.id.edtBusqueda);
         layoutPpal=findViewById(R.id.layoutPrincipal);
         layout=(LinearLayout)findViewById(R.id.linealLayout);
-    }
-    private void IniciarAgregarActividad()
-    {
-        /*Intent nuevaActivity=new Intent(this,AgregarLibros.class);
-        startActivity(nuevaActivity);*/
-    }
-    private void IniciarModificarActividad(int i)
-    {
-        /*Intent nuevaActivity=new Intent(this,ModificarLibros.class);
-        Bundle datos=new Bundle();
-        datos.putInt(Listar.PARAMETRO1,i);
-        nuevaActivity.putExtras(datos);
-        startActivity(nuevaActivity);*/
-    }
-
-    private Dialog confirmarEliminar(){
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Alert Dialog");
-        builder.setMessage("¿Está seguro que desea eliminar el libro?");
-        builder.setPositiveButton("Eliminar", new  DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                Log.i("Diálogos", "Confirmación Aceptada.");
-               // EliminarLibro(Libroselec.getId());
-                new listarLibros().execute(url);
-                dialog.cancel();
-            }
-        });
-        builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                Log.i("Diálogos", "Confirmación Cancelada.");
-                dialog.cancel();
-            }
-        });
-        return builder.create();
     }
     private class listarLibros extends AsyncTask<String, Void, ArrayList<Libros>> {
         private OkHttpClient client = new OkHttpClient();
@@ -269,27 +251,26 @@ public class ListarLibrosPropios extends AppCompatActivity {
                 return null;
             }
         }
-
         @Override
         protected void onPreExecute() {
-            listaLibros.clear();
             super.onPreExecute();
             progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
             progressDialog.setMax(100);
             progressDialog.show();}
         @Override
-        protected void onPostExecute(ArrayList<Libros> listaLibros) {
-            super.onPostExecute(listaLibros);
+        protected void onPostExecute(ArrayList<Libros> lista) {
+            super.onPostExecute(lista);
             progressDialog.dismiss();
             //adapter
-            adaptador = new ArrayAdapter<Libros>(ListarLibrosPropios.this, android.R.layout.simple_list_item_1, listaLibros);
-            lstLibros.setAdapter(adaptador);
+            ArrayAdapter<Libros> Adaptador=new ArrayAdapter<Libros>(ListarLibrosPropios.this, android.R.layout.simple_list_item_1, lista);
+            lstLibros.setAdapter(Adaptador);
         }
         @Override
         protected void onProgressUpdate(Void... values) {
             super.onProgressUpdate(values);
         }
         ArrayList<Libros> parsearLibros (String JSONstring) throws JSONException {
+            ArrayList<Libros>lista=new ArrayList<>();
             JSONObject json = new JSONObject(JSONstring);
             JSONArray respJSON = json.getJSONArray("result");
             for (int i = 0; i < respJSON.length(); i++)
@@ -301,9 +282,9 @@ public class ListarLibrosPropios extends AppCompatActivity {
                 String Imagen = obj.getString("Imagen");
                 int IdMateria = obj.getInt("IdMateria");
                 String materia= obj.getString("NombreMat");
-                //int IdUsuario = obj.getInt("IdUsuario");
-                //int Año=obj.getInt("Año");
-                //Soy Daiu tu api no trae año ni idUsuario
+                int IdUsuario = obj.getInt("IdUsuario");
+                String Usuario = obj.getString("Usuario");
+                int Año=obj.getInt("Anio");
                 int Vendido = obj.getInt("Vendido");
                 boolean blnVend;
                 if (Vendido==0)
@@ -316,10 +297,10 @@ public class ListarLibrosPropios extends AppCompatActivity {
                     blnVend=true;
                 }
                 MateriaEvento materiaEv=new MateriaEvento(IdMateria,materia);
-                Libros unLibro = new Libros (idLibro,Nombre,Descr,Imagen,idUsuario,null,0,materiaEv,blnVend);
-                listaLibros.add(unLibro);
+                Libros unLibro = new Libros (idLibro,Nombre,Descr,Imagen,IdUsuario,Usuario,Año,materiaEv,blnVend);
+                lista.add(unLibro);
             }
-            return listaLibros;
+            return lista;
         }
     }
 }

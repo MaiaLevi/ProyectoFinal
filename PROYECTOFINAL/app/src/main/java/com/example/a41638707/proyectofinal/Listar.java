@@ -179,47 +179,6 @@ public class Listar extends AppCompatActivity {
             toast2.show();
         }
     }
-//CONEXION Y PARESEO JSON Forma Polshu
-    /*
-public void ListarJsonEventos() {
-    StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-    StrictMode.setThreadPolicy(policy);
-    HttpClient httpClient = new DefaultHttpClient();
-    HttpGet getRequest = new HttpGet("http://daiuszw.hol.es/bd/listarEventos.php?IdUsuario=1");
-    getRequest.setHeader("content-type", "application/json");
-    try {
-        HttpResponse resp = httpClient.execute(getRequest);
-        String respStr = EntityUtils.toString(resp.getEntity());
-        JSONArray respJSON = new JSONArray(respStr);
-        for (int i = 0; i < respJSON.length(); i++)
-        {
-            JSONObject obj = respJSON.getJSONObject(i);
-            int idEvento = obj.getInt("Id");
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-            Date convertedDate = new Date();
-            try {
-                convertedDate = dateFormat.parse(obj.getString("Fecha"));
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            String descEvento = obj.getString("Descripcion");
-            int IdMateriaEvento = obj.getInt("IdMateria");
-            String MateriaEvento = obj.getString("Materia");
-            int IdTipo=obj.getInt("IdTipo");
-            String tipoEvento = obj.getString("Tipo");
-            tipo=new TipoEvento(IdTipo,tipoEvento);
-            materia=new MateriaEvento(IdMateriaEvento,MateriaEvento);
-            Evento unEvento =new Evento(idEvento,materia,tipo,convertedDate, descEvento,1);
-           listaEventos.add(unEvento);
-        }
-        //Rellenamos la lista con los resultados
-        adaptador = new ArrayAdapter<Evento>(getApplicationContext(), android.R.layout.simple_list_item_1, listaEventos);
-        lstEventos.setAdapter(adaptador);
-    } catch (Exception ex) {
-        Log.e("ServicioRest", "Error!", ex);
-        Log.d("POLSHU", "e", ex);
-    }
-}*/
     private void ObtenerReferencias()
     {
         btnAtras=(Button) findViewById(R.id.btnListar);

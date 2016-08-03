@@ -20,7 +20,7 @@ public class Libros implements Serializable{
     private boolean Vendido;
     @Override
     public String toString() {
-        return getNombre() + " "+getDesc()+" "+getVendido();
+        return getNombre() + " "+getDesc();
     }
     public Libros(int idlibro, String nombre, String descripcion, String imagen, int idUsuario,String usuario, int año, MateriaEvento materia, boolean vendido)
     {

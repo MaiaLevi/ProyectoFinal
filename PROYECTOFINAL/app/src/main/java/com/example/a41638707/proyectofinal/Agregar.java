@@ -63,12 +63,8 @@ public class Agregar extends AppCompatActivity {
         //traerMaterias();
         new traerTipos().execute(url2);
         new traerMaterias().execute(url3);
-
         //CharSequence s  = DateFormat.getDateInstance().format("dd/mm/yyyy ");
         //Log.d("aca",s.toString());
-
-
-
         btnCancelar.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 irAtras();
@@ -100,35 +96,6 @@ public class Agregar extends AppCompatActivity {
                 if (spnMaterias.getSelectedItem().toString()!="") {
                     if (spnTipos.getSelectedItem().toString()!="") {
                         if (date_picker.getDayOfMonth()!=0) {
-                           /* OkHttpClient client = new OkHttpClient();
-                            String url ="http://daiuszw.hol.es/bd/agregarevento.php";
-                            JSONObject json = new JSONObject();
-                            try {
-                                json.put("IdTipo", spnTipos.getSelectedItemId());
-                                json.put("IdMateria", spnMaterias.getSelectedItemId());
-                                int dia=date_picker.getDayOfMonth();
-                                int mes=date_picker.getMonth();
-                                int anio=date_picker.getYear();
-                                Date date =new Date(anio, mes, dia);
-                                DateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-                                String fecha = df.format(date);
-                                json.put("Fecha", fecha);
-                                json.put("Descripcion", edtDescr.getText().toString());
-                                json.put("IdUsuario", 1);
-                                RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json.toString());
-                                Request request = new Request.Builder()
-                                        .url(url)
-                                        .post(body)
-                                        .build();
-                                Response response = client.newCall(request).execute();
-
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-
-                            */
                             new agregarEvento().execute(url);
                             Toast msg = Toast.makeText(getApplicationContext(), "Evento guardado", Toast.LENGTH_LONG);
                             msg.show();
@@ -153,88 +120,6 @@ public class Agregar extends AppCompatActivity {
             }
         });
     }
-
-    private void traerTipos()
-    {
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-        int id=0;
-        String nombre="";
-        TipoEvento miTipo;
-        HttpClient httpClient = new DefaultHttpClient();
-        HttpGet getRequest = new HttpGet("http://daiuszw.hol.es/bd/listarTipoEvento.php");
-        getRequest.setHeader("content-type", "application/json");
-
-        tipos = new ArrayList<TipoEvento>();
-
-        try {
-            HttpResponse resp = httpClient.execute(getRequest);
-            String respStr = EntityUtils.toString(resp.getEntity());
-            Log.d("ServicioRest", respStr);
-            JSONArray respJSON = new JSONArray(respStr);
-            for(int i=0; i<respJSON.length(); i++) {
-                JSONObject obj = respJSON.getJSONObject(i);
-                id = obj.getInt("IdTipo");
-                nombre = obj.getString("Nombre");
-                miTipo=new TipoEvento(id,nombre);
-                tipos.add(miTipo);
-            }
-
-        }
-        catch(Exception ex) {
-            Log.e("ServicioRest","Error!", ex);
-        }
-
-        try{
-            ArrayAdapter<TipoEvento> adapterTipos = new ArrayAdapter<TipoEvento>(getApplicationContext(),
-                    android.R.layout.simple_spinner_item, tipos);
-            adapterTipos.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spnTipos.setAdapter(adapterTipos);
-        } catch (Exception ex) {
-            Log.e("ErrorAdapter", "Error!", ex);
-        }
-
-    }
-    private void traerMaterias()
-    {
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-        int id=0;
-        String nombre="";
-        MateriaEvento miMateria;
-        HttpClient httpClient = new DefaultHttpClient();
-        HttpGet getRequest = new HttpGet("http://daiuszw.hol.es/bd/listarMateriaEvento.php");
-        getRequest.setHeader("content-type", "application/json");
-        materias = new ArrayList<MateriaEvento>();
-
-        try {
-            HttpResponse resp = httpClient.execute(getRequest);
-            String respStr = EntityUtils.toString(resp.getEntity());
-            JSONArray respJSON = new JSONArray(respStr);
-            for(int i=0; i<respJSON.length(); i++) {
-                JSONObject obj = respJSON.getJSONObject(i);
-                id = obj.getInt("IdMateria");
-                nombre = obj.getString("Nombre");
-                miMateria=new MateriaEvento(id,nombre);
-                materias.add(miMateria);
-            }
-
-
-        }
-        catch(Exception ex) {
-            Log.e("ServicioRest","Error!", ex);
-        }
-        try{
-            ArrayAdapter<MateriaEvento> adapterMat = new ArrayAdapter<MateriaEvento>(getApplicationContext(),
-                    android.R.layout.simple_spinner_item, materias);
-            adapterMat.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spnMaterias.setAdapter(adapterMat);
-        } catch (Exception ex) {
-            Log.e("ErrorAdapter", "Error!", ex);
-        }
-    }
-
-
     private void ObtenerReferencias()
     {
         btnCancelar=(Button) findViewById(R.id.btnCancelar);
@@ -303,7 +188,6 @@ public class Agregar extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
-
     }
     private class traerTipos extends AsyncTask<String, Void, List<TipoEvento>> {
         public OkHttpClient client = new OkHttpClient();
@@ -316,7 +200,6 @@ public class Agregar extends AppCompatActivity {
             adapterTipos.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spnTipos.setAdapter(adapterTipos);
         }
-
         @Override
         protected List<TipoEvento> doInBackground(String... params) {
             String url = params[0];
@@ -327,7 +210,6 @@ public class Agregar extends AppCompatActivity {
                 return null;
             }
         }
-
         // Convierte un JSON en un ArrayList de Direccion
         List<TipoEvento>  enviarJSON(String url) throws JSONException {
             int id=0;
@@ -336,18 +218,14 @@ public class Agregar extends AppCompatActivity {
             OkHttpClient httpClient = new  OkHttpClient();
             HttpGet getRequest = new HttpGet(url);
             getRequest.setHeader("content-type", "application/json");
-
             tipos = new ArrayList<TipoEvento>();
-
             try {
                 Request request = new Request.Builder()
                         .url(url)
                         .build();
-
                 Response resp = client.newCall(request).execute();
                 JSONObject json = new JSONObject(resp.body().string());                 // Convierto el String recibido a JSONObject
                 JSONArray respJSON = json.getJSONArray("result");
-
                 for(int i=0; i<respJSON.length(); i++) {
                     JSONObject obj = respJSON.getJSONObject(i);
                     id = obj.getInt("IdTipo");
@@ -355,7 +233,6 @@ public class Agregar extends AppCompatActivity {
                     miTipo=new TipoEvento(id,nombre);
                     tipos.add(miTipo);
                 }
-
             }
             catch(Exception ex) {
                 Log.e("ServicioRest","Error!", ex);
@@ -365,7 +242,6 @@ public class Agregar extends AppCompatActivity {
     }
     private class traerMaterias extends AsyncTask<String, Void, List<MateriaEvento>> {
         public OkHttpClient client = new OkHttpClient();
-
         @Override
         protected void onPostExecute(List<MateriaEvento> list) {
             super.onPostExecute(list);
@@ -386,26 +262,20 @@ public class Agregar extends AppCompatActivity {
         }
         // Convierte un JSON en un ArrayList de Direccion
         List<MateriaEvento>  enviarJSON(String url) throws JSONException {
-
-
             int id=0;
             String nombre="";
             MateriaEvento mimat;
             OkHttpClient httpClient = new  OkHttpClient();
             HttpGet getRequest = new HttpGet(url);
             getRequest.setHeader("content-type", "application/json");
-
             materias = new ArrayList<MateriaEvento>();
-
             try {
                 Request request = new Request.Builder()
                         .url(url)
                         .build();
-
                 Response resp = client.newCall(request).execute();
                 JSONObject json = new JSONObject(resp.body().string());                 // Convierto el String recibido a JSONObject
                 JSONArray respJSON = json.getJSONArray("result");
-
                 for(int i=0; i<respJSON.length(); i++) {
                     JSONObject obj = respJSON.getJSONObject(i);
                     id = obj.getInt("IdMateria");
@@ -413,19 +283,11 @@ public class Agregar extends AppCompatActivity {
                     mimat=new MateriaEvento(id,nombre);
                     materias.add(mimat);
                 }
-
             }
             catch(Exception ex) {
                 Log.e("ServicioRest","Error!", ex);
             }
-
             return materias;
-
-
-
         }
-
     }
-
-    //asyntask
 }
