@@ -73,6 +73,7 @@ public class ListarLibrosPropios extends AppCompatActivity {
         imgAgregar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                IniciarAgregarActividad();
             }
         });
 
@@ -96,6 +97,11 @@ public class ListarLibrosPropios extends AppCompatActivity {
                 }
             }
         });
+    }
+    private void IniciarAgregarActividad()
+    {
+        Intent nuevaActivity=new Intent(ListarLibrosPropios.this,AgregarLibro.class);
+        startActivity(nuevaActivity);
     }
     private class buscarLibros extends AsyncTask<String, Void, ArrayList<Libros>> {
         private OkHttpClient client = new OkHttpClient();

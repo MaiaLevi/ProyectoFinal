@@ -32,7 +32,8 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".ListarLibrosPropios" />
         <activity android:name=".ListarDivision" />
-        <activity android:name=".VerLibro"></activity>
+        <activity android:name=".VerLibro" />
+        <activity android:name=".AgregarLibro"></activity>
     </application>
 
 </manifest>
