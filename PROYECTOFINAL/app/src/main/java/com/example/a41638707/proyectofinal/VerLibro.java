@@ -3,6 +3,7 @@ package com.example.a41638707.proyectofinal;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -28,6 +29,15 @@ public class VerLibro extends AppCompatActivity {
         txvDesc.setText(miLibro.getDesc());
         txvImg.setText(miLibro.getImg());
         txvidmat.setText(miLibro.getMateria().getNombre());
+        imgModificar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+    }
+    public void inicarModificarActividad()
+    {
 
     }
     public void obtenerReferencias()
@@ -37,6 +47,6 @@ public class VerLibro extends AppCompatActivity {
         txvImg=(TextView) findViewById(R.id.txvimg);
         txvidmat=(TextView) findViewById(R.id.idmateria);
         txvvendido = (TextView) findViewById(R.id.txvvendido);
-
+        imgModificar=(ImageView) findViewById(R.id.imgModificar);
     }
 }
