@@ -52,7 +52,7 @@ public class ListarDivision extends AppCompatActivity {
     ImageView imgAgregar, imgModificar, imgEliminar;
     ProgressDialog progressDialog;
     String url, division="6a";
-    Integer idUsuario=4, idCreador, idDivision;
+    Integer idUsuario=3, idCreador, idDivision;
     boolean click=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

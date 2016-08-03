@@ -75,32 +75,7 @@ public class ListarLibrosPropios extends AppCompatActivity {
             public void onClick(View v) {
             }
         });
-        imgModificar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (click)
-                {
-                }
-                else
-                {
-                    Toast toast1 = Toast.makeText(getApplicationContext(),"Por favor elija un libro",Toast.LENGTH_SHORT);
-                    toast1.show();
-                }
-            }
-        });
-        imgEliminar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (click)
-                {
-                }
-                else
-                {
-                    Toast toast1 = Toast.makeText(getApplicationContext(),"Por favor elija un libro",Toast.LENGTH_SHORT);
-                    toast1.show();
-                }
-            }
-        });
+
         edtBuscar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -227,8 +202,6 @@ public class ListarLibrosPropios extends AppCompatActivity {
     {
         lstLibros=(ListView)findViewById(R.id.lstLibros);
         imgAgregar=(ImageView)findViewById(R.id.imgAgregar);
-        imgModificar=(ImageView)findViewById(R.id.imgModificar);
-        imgEliminar=(ImageView)findViewById(R.id.imgEliminar);
         edtBuscar=(EditText)findViewById(R.id.edtBusqueda);
         layoutPpal=findViewById(R.id.layoutPrincipal);
         layout=(LinearLayout)findViewById(R.id.linealLayout);
