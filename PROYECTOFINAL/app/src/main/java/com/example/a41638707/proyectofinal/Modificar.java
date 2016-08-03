@@ -116,6 +116,7 @@ public class Modificar extends AppCompatActivity {
         btnGuardar.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 String url = "http://daiuszw.hol.es/bd/modificarevento.php?IdUsuario=" + idEvento;
+                //se manda parametro? hace falta?
                 new modificarEvento().execute(url);
                 Toast.makeText(getApplicationContext(), "Se ha guardado el evento", Toast.LENGTH_SHORT).show();
                 GuardarEvento();
