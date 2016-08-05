@@ -118,9 +118,6 @@ public class Modificar extends AppCompatActivity {
                 String url = "http://daiuszw.hol.es/bd/modificarevento.php?IdUsuario=" + idEvento;
                 //se manda parametro? hace falta?
                 new modificarEvento().execute(url);
-                Toast.makeText(getApplicationContext(), "Se ha guardado el evento", Toast.LENGTH_SHORT).show();
-                GuardarEvento();
-                irAtras();
             }
         });
     }
@@ -162,80 +159,17 @@ public class Modificar extends AppCompatActivity {
         spnTipos = (Spinner) findViewById(R.id.spnTipos);
         edtDescr = (EditText) findViewById(R.id.edtDescr);
     }
-/*
-    private void traerTipos() {
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-        int id = 0;
-        String nombre = "";
-        TipoEvento miTipo;
-        HttpClient httpClient = new DefaultHttpClient();
-        HttpGet getRequest = new HttpGet("http://daiuszw.hol.es/bd/listarTipoEvento.php");
-        getRequest.setHeader("content-type", "application/json");
-        try {
-            HttpResponse resp = httpClient.execute(getRequest);
-            String respStr = EntityUtils.toString(resp.getEntity());
-            JSONArray respJSON = new JSONArray(respStr);
-            for (int i = 0; i < respJSON.length(); i++) {
-                JSONObject obj = respJSON.getJSONObject(i);
-                id = obj.getInt("IdTipo");
-                nombre = obj.getString("Nombre");
-                miTipo = new TipoEvento(id, nombre);
-                tipos.add(miTipo);
-            }
-            try {
-                ArrayAdapter<TipoEvento> adapterTipos = new ArrayAdapter<TipoEvento>(getApplicationContext(),
-                        android.R.layout.simple_spinner_item, tipos);
-                adapterTipos.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                spnTipos.setAdapter(adapterTipos);
-            } catch (Exception ex) {
-                Log.e("ErrorAdapter", "Error!", ex);
-            }
-            //spnTipos.setAdapter(adapterTipos);
-        } catch (Exception ex) {
-            Log.e("ServicioRest", "Error!", ex);
-        }
-    }
-
-    private void traerMaterias() {
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-        int id = 0;
-        String nombre = "";
-        MateriaEvento miMateria;
-        HttpClient httpClient = new DefaultHttpClient();
-        HttpGet getRequest = new HttpGet("http://daiuszw.hol.es/bd/listarMateriaEvento.php");
-        getRequest.setHeader("content-type", "application/json");
-        try {
-            HttpResponse resp = httpClient.execute(getRequest);
-            String respStr = EntityUtils.toString(resp.getEntity());
-            JSONArray respJSON = new JSONArray(respStr);
-            for (int i = 0; i < respJSON.length(); i++) {
-                JSONObject obj = respJSON.getJSONObject(i);
-                id = obj.getInt("IdMateria");
-                nombre = obj.getString("Nombre");
-                miMateria = new MateriaEvento(id, nombre);
-                materias.add(miMateria);
-            }
-            ArrayAdapter<MateriaEvento> adapterMaterias = new ArrayAdapter<MateriaEvento>(getApplicationContext(),
-                    android.R.layout.simple_spinner_item, materias);
-            adapterMaterias.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spnMaterias.setAdapter(adapterMaterias);
-        } catch (Exception ex) {
-            Log.e("ServicioRest", "Error!", ex);
-        }
-    }
-*/
     private void irAtras() {
         this.finish();
     }
-
     private class modificarEvento extends AsyncTask<String, Void, Void> {
         public OkHttpClient client = new OkHttpClient();
 
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+            Toast.makeText(getApplicationContext(), "Se ha guardado el evento", Toast.LENGTH_SHORT).show();
+            GuardarEvento();
         }
 
         @Override
@@ -253,8 +187,6 @@ public class Modificar extends AppCompatActivity {
             }
             return null;
         }
-
-        // Convierte un JSON en un ArrayList de Direccion
         void enviarJSON(String url) throws JSONException {
             try {
                 JSONObject dato = new JSONObject();
@@ -280,14 +212,12 @@ public class Modificar extends AppCompatActivity {
                 dato.put("Id", idEvento);
                 //falta iddivision
                 RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), dato.toString());
-
                 Request request = new Request.Builder()
                         .url(url)
                         .post(body)
                         .build();
 
                 Response response = client.newCall(request).execute();
-
             } catch (IOException | JSONException e) {
                 Log.d("Error", e.getMessage());
             }

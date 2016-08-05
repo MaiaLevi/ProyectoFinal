@@ -42,14 +42,13 @@ public class ListarLibrosPropios extends AppCompatActivity {
     ListView lstLibros;
     ArrayList<Libros> listaLibros =new ArrayList<Libros>();
     ArrayAdapter<Libros> adaptador=null;
-    ImageView imgAgregar, imgModificar, imgEliminar;
+    ImageView imgAgregar;
     ProgressDialog progressDialog;
     String url;
     EditText edtBuscar;
     View layoutPpal;
     LinearLayout layout;
     int idUsuario=1, contador=0;
-    boolean click=false;
     Libros libroSeleccionado;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +66,7 @@ public class ListarLibrosPropios extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> a, View v, int position, long id) {
                 libroSeleccionado= listaLibros.get(position);
-                ActivityVerL(libroSeleccionado);
+                ActivityVerL();
             }
         });
         imgAgregar.setOnClickListener(new View.OnClickListener() {
@@ -197,11 +196,11 @@ public class ListarLibrosPropios extends AppCompatActivity {
             return listaLibros;
         }
     }
-    private void ActivityVerL(Libros librito)
+    private void ActivityVerL()
     {
         Intent nuevaActivity = new Intent(this, VerLibro.class);
         //crear libro y meterlo en intent
-        nuevaActivity.putExtra(ListarLibrosPropios.PARAMETROLIBRO,librito);
+        nuevaActivity.putExtra(ListarLibrosPropios.PARAMETROLIBRO,libroSeleccionado);
         startActivity(nuevaActivity);
     }
     private void ObtenerReferencias()
@@ -249,7 +248,6 @@ public class ListarLibrosPropios extends AppCompatActivity {
             super.onProgressUpdate(values);
         }
         ArrayList<Libros> parsearLibros (String JSONstring) throws JSONException {
-            ArrayList<Libros>lista=new ArrayList<>();
             JSONObject json = new JSONObject(JSONstring);
             JSONArray respJSON = json.getJSONArray("result");
             for (int i = 0; i < respJSON.length(); i++)
@@ -277,9 +275,9 @@ public class ListarLibrosPropios extends AppCompatActivity {
                 }
                 MateriaEvento materiaEv=new MateriaEvento(IdMateria,materia);
                 Libros unLibro = new Libros (idLibro,Nombre,Descr,Imagen,IdUsuario,Usuario,Año,materiaEv,blnVend);
-                lista.add(unLibro);
+                listaLibros.add(unLibro);
             }
-            return lista;
+            return listaLibros;
         }
     }
 }
