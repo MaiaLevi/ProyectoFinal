@@ -86,7 +86,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-        /*MessageDigest crypt = null;
+    public String iniciarSesion()
+    {
+        MessageDigest crypt = null;
         try {
             crypt = java.security.MessageDigest.getInstance("MD5");
         } catch (NoSuchAlgorithmException e) {
@@ -99,58 +101,7 @@ public class MainActivity extends AppCompatActivity {
         for (byte b : digested)
             crypt_password += Integer.toHexString(0xFF & b);
         return crypt_password;
-       // MessageDigest md = MessageDigest.getInstance("MD5");
-       // byte[] encryptedPassword = md.digest("yourPassword".getBytes());*/
-
-        public String iniciarSesion(String passwordToHash, String   salt){
-        String generatedPassword = null;
-        try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            md.update(salt.getBytes("UTF-8"));
-            byte[] bytes = md.digest(passwordToHash.getBytes("UTF-8"));
-            StringBuilder sb = new StringBuilder();
-            for(int i=0; i< bytes.length ;i++){
-                sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
-            }
-            generatedPassword = sb.toString();
-        }
-        catch (NoSuchAlgorithmException e){
-            e.printStackTrace();
-        }
-        return generatedPassword;
     }
-    /*
-    public static String iniciarSesion(String strContra) {
-
-        try {
-            return (md5(md5("$1$holacomo"), md5(strContra)));
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-            return "";
-        }
-    }
-    public static String md5(String plainText) throws NoSuchAlgorithmException {
-        return md5(null, plainText);
-    }
-
-    public static String md5(String salt, String plainText)
-            throws NoSuchAlgorithmException {
-        MessageDigest md = MessageDigest.getInstance("MD5");
-
-        if (salt != null) {
-            md.update(salt.getBytes());
-        }
-        md.update(plainText.getBytes());
-
-        byte byteData[] = md.digest();
-
-        StringBuffer sb = new StringBuffer();
-        for (int i = 0; i < byteData.length; i++) {
-            sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16)
-                    .substring(1));
-        }
-        return sb.toString();
-    }*/
     private void ObtenerReferencias()
     {
         btnListarLibros=(Button)findViewById(R.id.btnListarLibros);
@@ -207,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
             progressDialog.dismiss();
             if (miUsuario!=null)
             {
-                if (miUsuario.getContra().equals(iniciarSesion(edtContra.getText().toString())))
+                if (miUsuario.getContra().equals(iniciarSesion()))
                 {
                     Toast.makeText(getApplicationContext(), "Usuario correcto", Toast.LENGTH_SHORT).show();
                 }
