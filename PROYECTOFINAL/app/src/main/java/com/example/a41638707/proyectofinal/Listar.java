@@ -55,18 +55,15 @@ import java.util.Random;
 public class Listar extends AppCompatActivity {
     public static final String PARAMETRO1="com.example.a41638707.proyectofinal.PARAMETRO1";
     ListView lstEventos;
-    Button btnAtras;
-    //int param;
+    Button btnAtras,btnDivision;
     Evento eventoSeleccionado;
     TipoEvento tipo;
     MateriaEvento materia;
-    List<Evento> list = new ArrayList<Evento>();
     ArrayList<Evento> listaEventos=new ArrayList<Evento>();
     ArrayAdapter<Evento> adaptador=null;
     ImageView imgAgregar, imgModificar, imgEliminar;
     ProgressDialog progressDialog;
     String url;
-    int idUsuario=1;
     boolean click=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,13 +72,8 @@ public class Listar extends AppCompatActivity {
         ObtenerReferencias();
         //no se actualiza
         progressDialog=new ProgressDialog(this);
+        traerTodo();
         //ListarJsonEventos();
-        url="http://daiuszw.hol.es/bd/listarEventos.php?IdUsuario=";
-        url+=idUsuario;
-        new listarEventos().execute(url);
-        if (adaptador!=null)
-        {adaptador.notifyDataSetChanged();
-        }
         lstEventos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> a, View v, int position, long id) {
@@ -93,6 +85,12 @@ public class Listar extends AppCompatActivity {
                 //Dialog dialogoElegir=crearDialogoAlerta();
                 //dialogoElegir.show();
                 //Acciones necesarias al hacer click
+            }
+        });
+        btnDivision.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                IniciarDivisionActividad();
             }
         });
         imgAgregar.setOnClickListener(new View.OnClickListener() {
@@ -131,34 +129,25 @@ public class Listar extends AppCompatActivity {
             }
         });
     }
-    //en el on post execute
-    /*
-    private void mostrarOpciones()
+    @Override
+    public void onRestart(){
+        super.onRestart();
+        traerTodo();
+    }
+    private void traerTodo()
     {
-        LinearLayout layout = (LinearLayout)findViewById(R.id.layoutListarEventos ); // //layoutID is id of the linearLayout that defined in your main.xml file
-        ViewGroup.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        for (int i=0; i<listaEventos.size();i++) {
-            ImageView img = new ImageView(getApplicationContext());
-            img.setLayoutParams(lp);
-            img.setImageResource(R.drawable.ic_create_white_24dp);
-            ImageView img2 = new ImageView(getApplicationContext());
-            img2.setLayoutParams(lp);
-            img2.setImageResource(R.drawable.ic_delete_white_24dp);
-            img.setId(i);
-            layout.addView(img);
-            img2.setId(i+1);
-            layout.addView(img2);
-            img.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //Para obtener el id de la imagen
-                    //ImageView iv=(ImageView)v;
-                    //String id=(String)iv.getTag();
-                    IniciarModificarActividad();
-                }
-            });
+        url="http://daiuszw.hol.es/bd/listarEventos.php?IdUsuario=";
+        url+=MainActivity.idUsuario;
+        new listarEventos().execute(url);
+        if (adaptador!=null)
+        {adaptador.notifyDataSetChanged();
         }
-    }*/
+    }
+    private void IniciarDivisionActividad()
+    {
+        Intent nuevaActivity=new Intent(this,ListarDivision.class);
+        startActivity(nuevaActivity);
+    }
     private void EliminarEvento(int param)
     {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -186,13 +175,12 @@ public class Listar extends AppCompatActivity {
         imgAgregar=(ImageView)findViewById(R.id.imgAgregar);
         imgModificar=(ImageView)findViewById(R.id.imgModificar);
         imgEliminar=(ImageView)findViewById(R.id.imgEliminar);
+        btnDivision=(Button)findViewById(R.id.btnDivision);
     }
     private void IniciarModificarActividad(int i)
     {
         Intent nuevaActivity=new Intent(this,Modificar.class);
         Bundle datos=new Bundle();
-        //nuevaActivity.putExtra(Listar.PARAMETRO1,Mio);
-        //datos.putSerializable(Listar.PARAMETRO1,Mio);
         datos.putInt(Listar.PARAMETRO1,i);
         nuevaActivity.putExtras(datos);
         startActivity(nuevaActivity);
@@ -202,31 +190,6 @@ public class Listar extends AppCompatActivity {
         Intent nuevaActivity=new Intent(this,Agregar.class);
         startActivity(nuevaActivity);
     }
-    /*
-        private Dialog crearDialogoAlerta(){
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Alert Dialog");
-            builder.setMessage("¿Qué desea hacer?");
-            builder.setPositiveButton("Modificar", new  DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    Log.i("Diálogos", "Modificar.");
-                    IniciarModificarActividad(eventoSeleccionado.getId());
-                    dialog.cancel();
-                }
-            });
-            builder.setNegativeButton("Eliminar", new DialogInterface.OnClickListener() {
-
-                public void onClick(DialogInterface dialog, int which) {
-
-                    Log.i("Diálogos", "Eliminar.");
-                    Dialog dialogo=confirmarEliminar();
-                    dialogo.show();
-                }
-            });
-            return builder.create();
-
-        }*/
         private Dialog confirmarEliminar(){
 
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -308,7 +271,7 @@ public class Listar extends AppCompatActivity {
                 String tipoEvento = obj.getString("Tipo");
                 tipo=new TipoEvento(IdTipo,tipoEvento);
                 materia=new MateriaEvento(IdMateriaEvento,MateriaEvento);
-                Evento unEvento =new Evento(idEvento,materia,tipo,convertedDate, descEvento,1);
+                Evento unEvento =new Evento(idEvento,materia,tipo,convertedDate, descEvento,MainActivity.idUsuario, null);
                 listaEventos.add(unEvento);
             }
             return listaEventos;

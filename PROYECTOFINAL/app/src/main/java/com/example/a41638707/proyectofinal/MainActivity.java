@@ -50,10 +50,13 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
     // public static final ArrayList<Evento> PARAMETRO1=new ArrayList<Evento>();
+    public static int idUsuario, idDivision;
     public ProgressDialog progressDialog;
     Button btnListar, btnAgregar, btnListarLibros, btnIniciarSesion;
     EditText edtMail, edtContra;
     Usuarios miUsuario;
+    View layoutBotones, layoutLogin;
+    TextView tvwBienvenido;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,7 +97,6 @@ public class MainActivity extends AppCompatActivity {
         } catch (NoSuchAlgorithmException e) {
             System.out.println("MD5 not supported");
         }
-
         byte[] digested = crypt.digest(edtContra.getText().toString().getBytes());
         String crypt_password = new String();
         // Converts bytes to string
@@ -110,6 +112,9 @@ public class MainActivity extends AppCompatActivity {
         btnIniciarSesion=(Button)findViewById(R.id.btnIniciarSesion);
         edtMail=(EditText)findViewById(R.id.edtMail);
         edtContra=(EditText)findViewById(R.id.edtContrasena);
+        tvwBienvenido=(TextView)findViewById(R.id.tvwBienvenido);
+        layoutBotones=findViewById(R.id.botones);
+        layoutLogin=findViewById(R.id.login);
     }
     private void IniciarAgregarActividad()
     {
@@ -160,7 +165,11 @@ public class MainActivity extends AppCompatActivity {
             {
                 if (miUsuario.getContra().equals(iniciarSesion()))
                 {
-                    Toast.makeText(getApplicationContext(), "Usuario correcto", Toast.LENGTH_SHORT).show();
+                    tvwBienvenido.setText("Bienvenido/a "+miUsuario.getNombre());
+                    layoutLogin.setVisibility(View.GONE);
+                    layoutBotones.setVisibility(View.VISIBLE);
+                    MainActivity.idUsuario=miUsuario.getId();
+                    MainActivity.idDivision=miUsuario.getDivision().getId();
                 }
                 else {
                     Toast.makeText(getApplicationContext(), "Usuario incorrecto", Toast.LENGTH_SHORT).show();
@@ -169,9 +178,12 @@ public class MainActivity extends AppCompatActivity {
         }
         Usuarios parsearUsuario (String JSONstring) throws JSONException {
             JSONObject json = new JSONObject(JSONstring);
+            int id=json.getInt("IdUsuario");
             String nombre=json.getString("Nombre");
             String contrasena = json.getString("Contrasena");
-            miUsuario=new Usuarios(nombre,null,contrasena);
+            int divi=json.getInt("IdDivision");
+            Division miDivi=new Division(divi,"");
+            miUsuario=new Usuarios(id, nombre,null,contrasena,miDivi);
             return miUsuario;
         }
     }

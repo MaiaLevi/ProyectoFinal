@@ -5,48 +5,70 @@
     android:layout_centerVertical="true"
     android:layout_centerHorizontal="true"
     xmlns:android="http://schemas.android.com/apk/res/android">
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Listar eventos"
-            android:id="@+id/btnListar"
-            android:layout_gravity="center_horizontal" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Agregar evento"
-            android:id="@+id/btnAgregar"
-            android:layout_gravity="center_horizontal" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Listar libros"
-            android:id="@+id/btnListarLibros"
-            android:layout_gravity="center_horizontal" />
-
-        <EditText
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textEmailAddress"
-            android:ems="10"
-            android:id="@+id/edtMail"
-            android:hint="Ingrese su mail" />
+            android:id="@+id/login">
 
-        <EditText
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textEmailAddress"
+                    android:ems="10"
+                    android:id="@+id/edtMail"
+                    android:hint="Ingrese su mail" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPassword"
+                    android:ems="10"
+                    android:id="@+id/edtContrasena"
+                    android:hint="Ingrese la contraseña" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Iniciar sesión"
+                    android:id="@+id/btnIniciarSesion" />
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            android:ems="10"
-            android:id="@+id/edtContrasena"
-            android:hint="Ingrese la contraseña" />
+            android:layout_gravity="center_horizontal"
+            android:id="@+id/botones"
+            android:visibility="invisible">
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Iniciar sesión"
-            android:id="@+id/btnIniciarSesion" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="New Text"
+                    android:id="@+id/tvwBienvenido"
+                    android:textSize="20dp" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Listar eventos"
+                    android:id="@+id/btnListar"
+                    android:layout_gravity="center_horizontal" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Agregar evento"
+                    android:id="@+id/btnAgregar"
+                    android:layout_gravity="center_horizontal" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Listar libros"
+                    android:id="@+id/btnListarLibros"
+                    android:layout_gravity="center_horizontal" />
+        </LinearLayout>
+
 
 </LinearLayout>

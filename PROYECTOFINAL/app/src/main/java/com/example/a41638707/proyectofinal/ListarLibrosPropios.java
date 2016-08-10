@@ -48,7 +48,7 @@ public class ListarLibrosPropios extends AppCompatActivity {
     EditText edtBuscar;
     View layoutPpal;
     LinearLayout layout;
-    int idUsuario=1, contador=0;
+    int idUsuario=MainActivity.idUsuario, contador=0;
     Libros libroSeleccionado;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,9 +88,12 @@ public class ListarLibrosPropios extends AppCompatActivity {
                 }
                 else
                 {
+                    //PROBAR ESTA API ACA
                     layoutPpal.setVisibility(View.GONE);
                     url="http://daiuszw.hol.es/bd/buscarLibros.php?Busqueda=";
                     url+=texto;
+                    url+="&id=";
+                    url+=MainActivity.idUsuario;
                     new buscarLibros().execute(url);
                     layout.setVisibility(View.VISIBLE);
                 }

@@ -133,7 +133,6 @@ public class Agregar extends AppCompatActivity {
     {
         this.finish();
     }
-
     private class agregarEvento extends AsyncTask<String, Void, Void> {
         public OkHttpClient client = new OkHttpClient();
 
@@ -157,8 +156,6 @@ public class Agregar extends AppCompatActivity {
             }
             return null;
         }
-
-        // Convierte un JSON en un ArrayList de Direccion
         void enviarJSON(String url) throws JSONException {
 
             JSONObject json = new JSONObject();
@@ -173,8 +170,8 @@ public class Agregar extends AppCompatActivity {
                 String fecha = df.format(date);
                 json.put("Fecha", fecha);
                 json.put("Descripcion", edtDescr.getText().toString());
-                json.put("IdUsuario", 1);
-                //falta iddivision
+                json.put("IdUsuario", MainActivity.idUsuario);
+                json.put("iddivision",MainActivity.idDivision);
                 RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json.toString());
                 Request request = new Request.Builder()
                         .url(url)

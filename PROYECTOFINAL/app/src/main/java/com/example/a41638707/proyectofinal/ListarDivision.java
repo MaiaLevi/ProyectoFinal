@@ -42,7 +42,6 @@ public class ListarDivision extends AppCompatActivity {
     public static final String PARAMETRO1="com.example.a41638707.proyectofinal.PARAMETRO1";
     ListView lstEventos;
     Button btnAtras;
-    //int param;
     Evento eventoSeleccionado;
     TipoEvento tipo;
     MateriaEvento materia;
@@ -51,8 +50,8 @@ public class ListarDivision extends AppCompatActivity {
     ArrayAdapter<Evento> adaptador=null;
     ImageView imgAgregar, imgModificar, imgEliminar;
     ProgressDialog progressDialog;
-    String url, division="6a";
-    Integer idUsuario=3, idCreador, idDivision;
+    String url;
+    Integer idCreador;
     boolean click=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +63,7 @@ public class ListarDivision extends AppCompatActivity {
         //url="http://daiuszw.hol.es/bd/idDivision.php?nombre="+division;
         //new obtenerIdDivision().execute(url);
         url="http://daiuszw.hol.es/bd/listarEventosDivision.php?id=";
-        url+=division;
+        url+=MainActivity.idDivision;
         new listarEventos().execute(url);
         if (adaptador!=null)
         {adaptador.notifyDataSetChanged();
@@ -89,7 +88,7 @@ public class ListarDivision extends AppCompatActivity {
             public void onClick(View v) {
                 if (click)
                 {
-                    if (idUsuario==eventoSeleccionado.getIdUsuario())
+                    if (MainActivity.idUsuario==eventoSeleccionado.getIdUsuario())
                     {
                         IniciarModificarActividad(eventoSeleccionado.getId());
                     }
@@ -110,7 +109,7 @@ public class ListarDivision extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (click)
-                {if (idUsuario==eventoSeleccionado.getIdUsuario())
+                {if (MainActivity.idUsuario==eventoSeleccionado.getIdUsuario())
                 {
                     Dialog dialogo=confirmarEliminar();
                     dialogo.show();
@@ -179,8 +178,6 @@ public class ListarDivision extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 Log.i("Diálogos", "Confirmación Aceptada.");
                 EliminarEvento(eventoSeleccionado.getId());
-                //no anda adaptador.notifyDataSetChanged();
-                //probar si el notify anda, onpostexecute
                 new listarEventos().execute(url);
                 dialog.cancel();
             }
@@ -252,55 +249,11 @@ public class ListarDivision extends AppCompatActivity {
                 idCreador=obj.getInt("IdUsuario");
                 tipo=new TipoEvento(IdTipo,tipoEvento);
                 materia=new MateriaEvento(IdMateriaEvento,MateriaEvento);
-                Evento unEvento =new Evento(idEvento,materia,tipo,convertedDate, descEvento,idCreador);
+                //no tiene sentido traer la division si son todos de la misma
+                Evento unEvento =new Evento(idEvento,materia,tipo,convertedDate,descEvento,idCreador, null);
                 listaEventos.add(unEvento);
             }
             return listaEventos;
-        }
-    }
-    private class obtenerIdDivision extends AsyncTask<String, Void, Integer >{
-        private OkHttpClient client = new OkHttpClient();
-        @Override
-        protected Integer doInBackground(String... params) {
-            String url = params[0];
-            Request request = new Request.Builder()
-                    //error aca
-                    .url(url)
-                    .build();
-            try {
-                Response response = client.newCall(request).execute();  // Llamado al API
-                return parsearId(response.body().string());      // Convierto el resultado en Evento
-
-            } catch (IOException | JSONException e) {
-                Log.d("Error", e.getMessage());                          // Error de Network o al parsear JSON
-                return 0;
-            }
-        }
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-            progressDialog.setMax(100);
-            progressDialog.show();
-            listaEventos.clear();}
-        @Override
-        protected void onPostExecute(Integer num) {
-            super.onPostExecute(num);
-            progressDialog.dismiss();
-        }
-        @Override
-        protected void onProgressUpdate(Void... values) {
-            super.onProgressUpdate(values);
-        }
-        Integer parsearId(String JSONstring) throws JSONException {
-            JSONObject json = new JSONObject(JSONstring);
-            JSONArray respJSON = json.getJSONArray("result");
-            for (int i = 0; i < respJSON.length(); i++)
-            {
-                JSONObject obj = respJSON.getJSONObject(i);
-                idDivision = obj.getInt("Id");
-            }
-            return idDivision;
         }
     }
 }

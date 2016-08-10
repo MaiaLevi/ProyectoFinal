@@ -58,7 +58,6 @@ public class Modificar extends AppCompatActivity {
     int idEvento;
     Calendar calen;
     public ProgressDialog progressDialog;
-    //lo de abajo esta null
     ArrayList<MateriaEvento> materias = new ArrayList<MateriaEvento>();
     ArrayList<TipoEvento> tipos = new ArrayList<TipoEvento>();
     @Override
@@ -67,20 +66,12 @@ public class Modificar extends AppCompatActivity {
         setContentView(R.layout.activity_modificar);
         Intent elIntent=getIntent();
         Bundle datos=elIntent.getExtras();
-        //idEvento = 1;
         idEvento=datos.getInt(Listar.PARAMETRO1);
         ObtenerReferencias();
         progressDialog=new ProgressDialog(this);
         String url="http://daiuszw.hol.es/bd/traerEvento.php?Evento=";
         url=url+idEvento;
         new traerEvento().execute(url);
-        //traerMaterias();
-        //traerTipos();
-        //url="http://daiuszw.hol.es/bd/listarMateriaEvento.php";
-        //new traerMaterias().execute(url);
-        //url="http://daiuszw.hol.es/bd/listarTipoEvento.php";
-        //new traerTipos().execute(url);
-        //mostrarEvento();
         calendario.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
                 calen = new GregorianCalendar(year, month, dayOfMonth);
@@ -115,43 +106,16 @@ public class Modificar extends AppCompatActivity {
         });
         btnGuardar.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                String url = "http://daiuszw.hol.es/bd/modificarevento.php?IdUsuario=" + idEvento;
+                String url = "http://daiuszw.hol.es/bd/modificarevento.php";
                 //se manda parametro? hace falta?
                 new modificarEvento().execute(url);
             }
         });
     }
-
     private void GuardarEvento() {
         Intent nuevaActivity = new Intent(Modificar.this, Listar.class);
         startActivity(nuevaActivity);
-    }
-    /*
-    private void mostrarEvento() {
-        //los spinners muestran informacion incorrecta
-        //int position = 0;
-        //fijarme posicion en adapter y comparar el id con el del evento
-        for (int i = 0; i < materias.size(); i++) {
-            //cuando ejecuto me aparece null pointer exception pero debuggeo y esta todo ok
-            if (materias.get(i).getId() == MiEvento.getMateria().getId()){
-                    spnMaterias.setSelection(i);
-            }
-        }
-        //HACER ASYNTASK Y PONER ESTO EN EL ONPOST EXECUTE
-        //si se llega a borrar alguna materia y hay por ej 3 y dsp 5 no va a andar
-        //hay que recorrer y fijarse en que posicion del vector esta y guardarlo ahi y mostrar
-
-        //spnMaterias.setSelection(2);
-        //se muestra mal
-        for (int i = 0; i < tipos.size(); i++) {
-            if (tipos.get(i).getId() == MiEvento.getTipo().getId()){
-                spnTipos.setSelection(i);
-            }
-        }
-        //obtengo la fecha del evento
-    }*/
-
-    private void ObtenerReferencias() {
+    }private void ObtenerReferencias() {
         calendario = (CalendarView) findViewById(R.id.calendario);
         btnCancelar = (Button) findViewById(R.id.btnCancelar);
         btnGuardar = (Button) findViewById(R.id.btnGuardar);
@@ -164,14 +128,12 @@ public class Modificar extends AppCompatActivity {
     }
     private class modificarEvento extends AsyncTask<String, Void, Void> {
         public OkHttpClient client = new OkHttpClient();
-
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             Toast.makeText(getApplicationContext(), "Se ha guardado el evento", Toast.LENGTH_SHORT).show();
             GuardarEvento();
         }
-
         @Override
         protected void onProgressUpdate(Void... values) {
             super.onProgressUpdate(values);
@@ -208,9 +170,9 @@ public class Modificar extends AppCompatActivity {
                 //String reportDate = String.valueOf(year)+"-"+String.valueOf(month)+"-"+String.valueOf(day);
                 dato.put("Fecha", reportDate);
                 dato.put("Descripcion", (edtDescr.getText().toString()));
-                dato.put("IdUsuario", 1);
+                dato.put("IdUsuario", MainActivity.idUsuario);
+                dato.put("iddivision",MainActivity.idDivision);
                 dato.put("Id", idEvento);
-                //falta iddivision
                 RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), dato.toString());
                 Request request = new Request.Builder()
                         .url(url)
@@ -222,7 +184,6 @@ public class Modificar extends AppCompatActivity {
                 Log.d("Error", e.getMessage());
             }
         }
-
     }
     private class traerEvento extends AsyncTask<String, Void, Evento> {
         private OkHttpClient client = new OkHttpClient();
@@ -292,9 +253,12 @@ public class Modificar extends AppCompatActivity {
             int idTipo = json.getInt("IdTipo");
             String tipo = json.getString("Tipo");
             int idUsuario = json.getInt("IdUsuario");
+            int idDivi = json.getInt("IdDivision");
+            String nombreDivi = json.getString("Division");
             eventoTipo = new TipoEvento(idTipo, tipo);
             eventoMateria = new MateriaEvento(idMateria, materia);
-            MiEvento = new Evento(id, eventoMateria, eventoTipo, convertedDate, descripcion, idUsuario);
+            Division miDivision=new Division(idDivi, nombreDivi);
+            MiEvento = new Evento(id, eventoMateria, eventoTipo, convertedDate, descripcion, idUsuario, miDivision);
             return MiEvento;
         }
     }

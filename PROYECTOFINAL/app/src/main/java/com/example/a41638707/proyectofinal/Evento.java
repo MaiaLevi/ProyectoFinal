@@ -18,12 +18,14 @@ public class Evento implements Serializable{
     private Date Fecha;
     private String Descripcion;
     private int IdUsuario;
+    //no deberia ser usuario? Cambiarlo
+    private Division division;
     @Override
     public String toString() {
-        return getMateria() + " "+getTipo()+" "+getFecha()+" "+getDescripcion();
+        return getMateria() + " "+getTipo()+  android.text.format.DateFormat.format("dd", getFecha())+" "+android.text.format.DateFormat.format("MMM", getFecha())+" "+android.text.format.DateFormat.format("yyyy", getFecha())+" "+getDescripcion();
     }
 
-    public Evento(int id, MateriaEvento materia, TipoEvento tipo, Date fec, String descr, Integer IdU)
+    public Evento(int id, MateriaEvento materia, TipoEvento tipo, Date fec, String descr, Integer IdU, Division divi)
     {
         Id=id;
         Materia=materia;
@@ -31,6 +33,7 @@ public class Evento implements Serializable{
         Fecha=fec;
         Descripcion=descr;
         IdUsuario=IdU;
+        division=divi;
     }
     public int getId()
     {
@@ -55,5 +58,9 @@ public class Evento implements Serializable{
     public Integer getIdUsuario()
     {
         return IdUsuario;
+    }
+    public Division getDivision()
+    {
+        return division;
     }
 }

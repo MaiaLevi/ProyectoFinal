@@ -13,6 +13,7 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="429dp">
+
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
@@ -32,6 +33,14 @@
                 android:layout_height="347dp"
                 android:id="@+id/lstEventos"
                 android:visibility="visible"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ver eventos de la división"
+                android:id="@+id/btnDivision"
+                android:layout_gravity="bottom"
+                android:layout_weight="0.37" />
         </LinearLayout>
         <LinearLayout
             android:orientation="vertical"
