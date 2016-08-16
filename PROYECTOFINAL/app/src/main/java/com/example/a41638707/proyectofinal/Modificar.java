@@ -44,6 +44,7 @@ public class Modificar extends AppCompatActivity {
     CalendarView calendario;
     int idEvento;
     Calendar calen;
+    Usuarios miUsuario;
     public ProgressDialog progressDialog;
     ArrayList<MateriaEvento> materias = new ArrayList<MateriaEvento>();
     ArrayList<TipoEvento> tipos = new ArrayList<TipoEvento>();
@@ -95,7 +96,7 @@ public class Modificar extends AppCompatActivity {
             public void onClick(View v) {
                 String url = "http://daiuszw.hol.es/bd/modificarevento.php";
                 //se manda parametro? hace falta?
-                new modificarEvento(getApplicationContext()).execute(url);
+                new modificarEvento().execute(url);
             }
         });
     }
@@ -115,11 +116,7 @@ public class Modificar extends AppCompatActivity {
         this.finish();
     }
     private class modificarEvento extends AsyncTask<String, Void, Void> {
-        private Context mContext;
         private OkHttpClient client = new OkHttpClient();
-        public modificarEvento(Context context) {
-            mContext = context;
-        }
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
@@ -161,7 +158,7 @@ public class Modificar extends AppCompatActivity {
                 //String reportDate = String.valueOf(year)+"-"+String.valueOf(month)+"-"+String.valueOf(day);
                 dato.put("Fecha", reportDate);
                 dato.put("Descripcion", (edtDescr.getText().toString()));
-                dato.put("IdUsuario", ((Usuarios) this.mContext).getId());
+                dato.put("IdUsuario", miUsuario.getId());
                 //NO SE GUARDA EL IDDIVISION
                 //dato.put("iddivision",MainActivity.idDivision);
                 dato.put("Id", idEvento);

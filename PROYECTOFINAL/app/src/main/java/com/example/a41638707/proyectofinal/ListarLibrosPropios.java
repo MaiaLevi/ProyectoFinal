@@ -50,12 +50,13 @@ public class ListarLibrosPropios extends AppCompatActivity {
     LinearLayout layout;
     int idUsuario, contador=0;
     Libros libroSeleccionado;
+    Usuarios miUsuario;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listar_libros_propios);
         ObtenerReferencias();
-        idUsuario=((Usuarios)this.getApplicationContext()).getId();
+        idUsuario=miUsuario.getId();
         progressDialog=new ProgressDialog(this);
         url="http://daiuszw.hol.es/bd/listarLibrosPropios.php?IdUsuario=";
         url+=idUsuario;
@@ -94,7 +95,7 @@ public class ListarLibrosPropios extends AppCompatActivity {
                     url="http://daiuszw.hol.es/bd/buscarLibros.php?Busqueda=";
                     url+=texto;
                     url+="&id=";
-                    url+=((Usuarios)getApplicationContext()).getId();
+                    url+=miUsuario.getId();
                     new buscarLibros().execute(url);
                     layout.setVisibility(View.VISIBLE);
                 }
@@ -138,7 +139,7 @@ public class ListarLibrosPropios extends AppCompatActivity {
             progressDialog.dismiss();
             //adapter
             //for y recorrer cantidad de libros
-            if (listaLibros.isEmpty())
+            if (listaLibros.isEmpty()||listaLibros.size()<=0)
             {
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 layout.setOrientation(LinearLayout.VERTICAL);

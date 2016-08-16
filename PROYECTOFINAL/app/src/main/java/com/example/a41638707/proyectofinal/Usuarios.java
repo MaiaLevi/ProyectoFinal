@@ -7,12 +7,12 @@ import java.io.Serializable;
 /**
  * Created by 42038123 on 3/8/2016.
  */
-public class Usuarios extends Application implements Serializable  {
-    private int Id;
+public class Usuarios implements Serializable  {
+    private static int Id;
     private String Nombre;
     private String Mail;
     private String Contra;
-    private Division Division;
+    private static Division Division;
     public String toString() {
         return getNombre();
     }
@@ -24,7 +24,7 @@ public class Usuarios extends Application implements Serializable  {
         Contra=contra;
         Division=div;
     }
-    public int getId()
+    public static int getId()
     {
         return Id;
     }
@@ -40,7 +40,7 @@ public class Usuarios extends Application implements Serializable  {
     {
         return Contra;
     }
-    public Division getDivision()
+    public static Division getDivision()
     {
         return Division;
     }

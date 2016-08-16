@@ -53,6 +53,7 @@ public class ListarDivision extends AppCompatActivity {
     ProgressDialog progressDialog;
     String url;
     Integer idCreador;
+    Usuarios miUsuario;
     boolean click=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,8 +65,8 @@ public class ListarDivision extends AppCompatActivity {
         //url="http://daiuszw.hol.es/bd/idDivision.php?nombre="+division;
         //new obtenerIdDivision().execute(url);
         url="http://daiuszw.hol.es/bd/listarEventosDivision.php?id=";
-        url+=((Usuarios)this.getApplicationContext()).getDivision().getId();
-        new listarEventos(getApplicationContext()).execute(url);
+        url+=miUsuario.getDivision().getId();
+        new listarEventos().execute(url);
         if (adaptador!=null)
         {adaptador.notifyDataSetChanged();
         }
@@ -89,7 +90,7 @@ public class ListarDivision extends AppCompatActivity {
             public void onClick(View v) {
                 if (click)
                 {
-                    if (((Usuarios)getApplicationContext()).getId()==eventoSeleccionado.getIdUsuario())
+                    if (miUsuario.getId()==eventoSeleccionado.getIdUsuario())
                     {
                         IniciarModificarActividad(eventoSeleccionado.getId());
                     }
@@ -110,7 +111,7 @@ public class ListarDivision extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (click)
-                {if (((Usuarios)getApplicationContext()).getId()==eventoSeleccionado.getIdUsuario())
+                {if (miUsuario.getId()==eventoSeleccionado.getIdUsuario())
                 {
                     Dialog dialogo=confirmarEliminar();
                     dialogo.show();
@@ -128,6 +129,16 @@ public class ListarDivision extends AppCompatActivity {
                 }
             }
         });
+    }
+    @Override
+    public void onRestart(){
+        super.onRestart();
+        url="http://daiuszw.hol.es/bd/listarEventosDivision.php?id=";
+        url+=miUsuario.getDivision().getId();
+        new listarEventos().execute(url);
+        if (adaptador!=null)
+        {adaptador.notifyDataSetChanged();
+        }
     }
     private void EliminarEvento(int param)
     {
@@ -179,7 +190,7 @@ public class ListarDivision extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 Log.i("Diálogos", "Confirmación Aceptada.");
                 EliminarEvento(eventoSeleccionado.getId());
-                new listarEventos(getApplicationContext()).execute(url);
+                new listarEventos().execute(url);
                 dialog.cancel();
             }
         });
@@ -192,11 +203,8 @@ public class ListarDivision extends AppCompatActivity {
         return builder.create();
     }
     private class listarEventos extends AsyncTask<String, Void, ArrayList<Evento>> {
-        private Context mContext;
         private OkHttpClient client = new OkHttpClient();
-        public listarEventos(Context context) {
-            mContext = context;
-        }        @Override
+        @Override
         protected ArrayList<Evento> doInBackground(String... params) {
             String url = params[0];
             Request request = new Request.Builder()
@@ -254,7 +262,7 @@ public class ListarDivision extends AppCompatActivity {
                 tipo=new TipoEvento(IdTipo,tipoEvento);
                 materia=new MateriaEvento(IdMateriaEvento,MateriaEvento);
                 //no tiene sentido traer la division si son todos de la misma
-                Evento unEvento =new Evento(idEvento,materia,tipo,convertedDate,descEvento,idCreador, ((Usuarios)this.mContext).getDivision());
+                Evento unEvento =new Evento(idEvento,materia,tipo,convertedDate,descEvento,idCreador, miUsuario.getDivision());
                 listaEventos.add(unEvento);
             }
             return listaEventos;

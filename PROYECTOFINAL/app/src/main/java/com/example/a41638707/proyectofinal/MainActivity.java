@@ -89,7 +89,6 @@ public class MainActivity extends AppCompatActivity {
             tvwBienvenido.setText("Bienvenido/a "+nombre);
             layoutLogin.setVisibility(View.GONE);
             layoutBotones.setVisibility(View.VISIBLE);
-            ((Usuarios) this.getApplication()).setIds(miUsuario.getId(), miUsuario.getDivision());
         }
         else
         {
@@ -130,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
                 {
                     if (!edtContra.getText().toString().equals("")&&!edtContra.getText().toString().equals(" "))
                     {
-                        new traerUsuario(getApplicationContext()).execute(url);
+                        new traerUsuario().execute(url);
                     }
                     else {
                         Toast.makeText(getApplicationContext(), "La contraseña no puede ser vacía", Toast.LENGTH_SHORT).show();
@@ -219,11 +218,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(nuevaActivity);
     }
     private class traerUsuario extends AsyncTask<String, Void, Usuarios> {
-        private Context mContext;
         private OkHttpClient client = new OkHttpClient();
-        public traerUsuario(Context context) {
-            mContext = context;
-        }
         @Override
         protected Usuarios doInBackground(String... params) {
             String url = params[0];
@@ -235,7 +230,6 @@ public class MainActivity extends AppCompatActivity {
                 return parsearUsuario(response.body().string());      // Convierto el resultado en Evento
 
             } catch (IOException | JSONException e) {
-
                 Log.d("Error", e.getMessage());                          // Error de Network o al parsear JSON
                 return null;
             }
@@ -257,13 +251,12 @@ public class MainActivity extends AppCompatActivity {
                     tvwBienvenido.setText("Bienvenido/a "+miUsuario.getNombre());
                     layoutLogin.setVisibility(View.GONE);
                     layoutBotones.setVisibility(View.VISIBLE);
-                    ((Usuarios) this.mContext).setIds(miUsuario.getId(),miUsuario.getDivision());
                     SharedPreferences prefs =
                             getSharedPreferences("MisPreferencias", Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = prefs.edit();
                     editor.putString("email", miUsuario.getMail());
                     editor.putString("nombre", miUsuario.getNombre());
-                    editor.putInt("idivision", miUsuario.getDivision().getId());
+                    editor.putInt("iddivision", miUsuario.getDivision().getId());
                     editor.putString("division", miUsuario.getDivision().getNombre());
                     editor.putInt("id", miUsuario.getId());
                     editor.putBoolean("sesion", true);
@@ -274,8 +267,11 @@ public class MainActivity extends AppCompatActivity {
                     editor.commit();
                 }
                 else {
-                    Toast.makeText(getApplicationContext(), "Usuario incorrecto", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Contraseña incorrecta", Toast.LENGTH_SHORT).show();
                 }
+            }
+            else {
+                Toast.makeText(getApplicationContext(), "Usuario incorrecto", Toast.LENGTH_SHORT).show();
             }
         }
         Usuarios parsearUsuario (String JSONstring) throws JSONException {
@@ -284,8 +280,9 @@ public class MainActivity extends AppCompatActivity {
             String nombre=json.getString("Nombre");
             String contrasena = json.getString("Contrasena");
             int divi=json.getInt("IdDivision");
-            Division miDivi=new Division(divi,"");
-            miUsuario=new Usuarios(id, nombre,null,contrasena,miDivi);
+            String division = json.getString("Division");
+            Division miDivi=new Division(divi,division);
+            miUsuario=new Usuarios(id, nombre,edtMail.getText().toString(),contrasena,miDivi);
             return miUsuario;
         }
     }

@@ -23,10 +23,6 @@
         <activity android:name=".Listar" />
         <activity android:name=".Modificar" />
         <activity
-            android:name=".Libros"
-            android:label="@string/title_activity_libros"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".NavigationDrawer"
             android:label="@string/title_activity_navigation_drawer"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -35,10 +31,6 @@
         <activity android:name=".VerLibro" />
         <activity android:name=".AgregarLibro"></activity>
         <activity android:name=".ModificarLibro"></activity>
-        <application
-            android:name=".Usuarios"
-            android:label="@string/app_name">
-        </application>
     </application>
 
 </manifest>

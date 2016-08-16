@@ -51,6 +51,7 @@ public class Agregar extends AppCompatActivity {
     TipoEvento tipoSeleccionado;
     MateriaEvento materiaSeleccionada;
     CalendarView calendar;
+    Usuarios miUsuario;
     Calendar calen;
     String url ="http://daiuszw.hol.es/bd/agregarevento.php";
     String url2="http://daiuszw.hol.es/bd/listarTipoEvento.php";
@@ -102,7 +103,7 @@ public class Agregar extends AppCompatActivity {
             public void onClick(View v) {
                 if (spnMaterias.getSelectedItem().toString()!="") {
                     if (spnTipos.getSelectedItem().toString()!="") {
-                            new agregarEvento(getApplicationContext()).execute(url);
+                            new agregarEvento().execute(url);
                             Toast msg = Toast.makeText(getApplicationContext(), "Evento guardado", Toast.LENGTH_LONG);
                             msg.show();
                             irAtras();
@@ -134,11 +135,7 @@ public class Agregar extends AppCompatActivity {
         this.finish();
     }
     private class agregarEvento extends AsyncTask<String, Void, Void> {
-        private Context mContext;
         private OkHttpClient client = new OkHttpClient();
-        public agregarEvento(Context context) {
-            mContext = context;
-        }
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
@@ -169,8 +166,8 @@ public class Agregar extends AppCompatActivity {
                 String reportDate = df.format(calen.getTime());
                 json.put("Fecha", reportDate);
                 json.put("Descripcion", edtDescr.getText().toString());
-                json.put("IdUsuario", ((Usuarios) this.mContext).getId());
-                json.put("iddivision",((Usuarios) this.mContext).getDivision().getId());
+                json.put("IdUsuario", miUsuario.getId());
+                json.put("iddivision",miUsuario.getDivision().getId());
                 RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json.toString());
                 Request request = new Request.Builder()
                         .url(url)
