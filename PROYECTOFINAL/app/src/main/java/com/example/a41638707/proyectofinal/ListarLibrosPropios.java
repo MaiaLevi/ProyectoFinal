@@ -39,8 +39,8 @@ import java.util.List;
 
 public class ListarLibrosPropios extends AppCompatActivity {
     public static final String PARAMETROLIBRO="com.example.a41638707.proyectofinal.PARAMETROLIBRO";
-    ListView lstLibros;
-    ArrayList<Libros> listaLibros =new ArrayList<Libros>();
+    ListView lstviewLibros;
+    ArrayList<Libros> listaLibros, lstLibros;
     ArrayAdapter<Libros> adaptador=null;
     ImageView imgAgregar;
     ProgressDialog progressDialog;
@@ -55,6 +55,8 @@ public class ListarLibrosPropios extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listar_libros_propios);
+        listaLibros=new ArrayList<Libros>();
+        lstLibros=new ArrayList<Libros>();
         ObtenerReferencias();
         idUsuario=miUsuario.getId();
         progressDialog=new ProgressDialog(this);
@@ -62,9 +64,10 @@ public class ListarLibrosPropios extends AppCompatActivity {
         url+=idUsuario;
         new listarLibros().execute(url);
         if (adaptador!=null)
-        {adaptador.notifyDataSetChanged();
+        {
+            adaptador.notifyDataSetChanged();
         }
-        lstLibros.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        lstviewLibros.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> a, View v, int position, long id) {
                 libroSeleccionado= listaLibros.get(position);
@@ -134,12 +137,12 @@ public class ListarLibrosPropios extends AppCompatActivity {
             progressDialog.setMax(100);
             progressDialog.show();}
         @Override
-        protected void onPostExecute(ArrayList<Libros> listaLibros) {
-            super.onPostExecute(listaLibros);
+        protected void onPostExecute(ArrayList<Libros> lstLibros) {
+            super.onPostExecute(lstLibros);
             progressDialog.dismiss();
             //adapter
             //for y recorrer cantidad de libros
-            if (listaLibros.isEmpty()||listaLibros.size()<=0)
+            if (lstLibros.isEmpty()||lstLibros.size()==0)
             {
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 layout.setOrientation(LinearLayout.VERTICAL);
@@ -154,7 +157,7 @@ public class ListarLibrosPropios extends AppCompatActivity {
             }
             else
             {
-                for (int i=0;i<listaLibros.size();i++)
+                for (int i=0;i<lstLibros.size();i++)
                 {
                     //para que tenga id unico
                     contador++;
@@ -162,10 +165,10 @@ public class ListarLibrosPropios extends AppCompatActivity {
                     layout.setOrientation(LinearLayout.VERTICAL);
                     //add textView
                     TextView tvwNombre = new TextView(getApplicationContext());
-                    tvwNombre.setText(listaLibros.get(i).getNombre()+"\n"+listaLibros.get(i).getDesc()+
-                            "\n Año:"+listaLibros.get(i).getAño()+
-                            "\n Materia:"+listaLibros.get(i).getMateria().getNombre()+
-                            "\n Vendedor:"+listaLibros.get(i).getUsuario());
+                    tvwNombre.setText(lstLibros.get(i).getNombre()+"\n"+lstLibros.get(i).getDesc()+
+                            "\n Año:"+lstLibros.get(i).getAño()+
+                            "\n Materia:"+lstLibros.get(i).getMateria().getNombre()+
+                            "\n Vendedor:"+lstLibros.get(i).getUsuario());
                     tvwNombre.setTextColor(Color.parseColor("#000000"));
                     tvwNombre.setId(contador);
                     tvwNombre.setLayoutParams(params);
@@ -195,9 +198,9 @@ public class ListarLibrosPropios extends AppCompatActivity {
                 MateriaEvento materia=new MateriaEvento(IdMateria,Materia);
                 boolean Vendido = false;
                 Libros unLibro = new Libros (idLibro,Nombre,Descr,Imagen,IdUsuario,Usuario,Año,materia,Vendido);
-                listaLibros.add(unLibro);
+                lstLibros.add(unLibro);
             }
-            return listaLibros;
+            return lstLibros;
         }
     }
     private void ActivityVerL()
@@ -209,7 +212,7 @@ public class ListarLibrosPropios extends AppCompatActivity {
     }
     private void ObtenerReferencias()
     {
-        lstLibros=(ListView)findViewById(R.id.lstLibros);
+        lstviewLibros=(ListView)findViewById(R.id.lstLibros);
         imgAgregar=(ImageView)findViewById(R.id.imgAgregar);
         edtBuscar=(EditText)findViewById(R.id.edtBusqueda);
         layoutPpal=findViewById(R.id.layoutPrincipal);
@@ -245,7 +248,7 @@ public class ListarLibrosPropios extends AppCompatActivity {
             progressDialog.dismiss();
             //adapter
             ArrayAdapter<Libros> Adaptador=new ArrayAdapter<Libros>(ListarLibrosPropios.this, android.R.layout.simple_list_item_1, lista);
-            lstLibros.setAdapter(Adaptador);
+            lstviewLibros.setAdapter(Adaptador);
         }
         @Override
         protected void onProgressUpdate(Void... values) {
