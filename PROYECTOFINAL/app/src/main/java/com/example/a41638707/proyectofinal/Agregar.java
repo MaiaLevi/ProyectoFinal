@@ -43,7 +43,6 @@ public class Agregar extends AppCompatActivity {
     Button btnCancelar,btnGuardar;
     EditText edtDescr;
     Spinner spnMaterias, spnTipos;
-    DatePicker date_picker;
     List<TipoEvento> tipos;
     ArrayAdapter<TipoEvento> adapterTipos;
     ArrayAdapter<MateriaEvento> adapterMaterias;
@@ -51,11 +50,13 @@ public class Agregar extends AppCompatActivity {
     TipoEvento tipoSeleccionado;
     MateriaEvento materiaSeleccionada;
     CalendarView calendar;
+    Calendar calen;
     String url ="http://daiuszw.hol.es/bd/agregarevento.php";
     String url2="http://daiuszw.hol.es/bd/listarTipoEvento.php";
     String url3="http://daiuszw.hol.es/bd/listarMateriaEvento.php";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //MAU FALTA AGREGAR IDDIVISION SINO SE ROMPE EL TRAER EVENTO
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_agregar);
         ObtenerReferencias();
@@ -80,6 +81,11 @@ public class Agregar extends AppCompatActivity {
 
             }
         });
+        calendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
+                calen = new GregorianCalendar(year, month, dayOfMonth);
+            }//met
+        });
         spnTipos.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -95,17 +101,10 @@ public class Agregar extends AppCompatActivity {
             public void onClick(View v) {
                 if (spnMaterias.getSelectedItem().toString()!="") {
                     if (spnTipos.getSelectedItem().toString()!="") {
-                        if (date_picker.getDayOfMonth()!=0) {
                             new agregarEvento().execute(url);
                             Toast msg = Toast.makeText(getApplicationContext(), "Evento guardado", Toast.LENGTH_LONG);
                             msg.show();
                             irAtras();
-                        }
-                        else
-                        {
-                            Toast msg = Toast.makeText(getApplicationContext(), "Ingrese una fecha", Toast.LENGTH_LONG);
-                            msg.show();
-                        }
                     }
                     else {
                         Toast msg = Toast.makeText(getApplicationContext(), "Seleccione un tipo", Toast.LENGTH_LONG);
@@ -126,7 +125,7 @@ public class Agregar extends AppCompatActivity {
         btnGuardar=(Button)findViewById(R.id.btnGuardar);
         spnMaterias=(Spinner)findViewById(R.id.spnMaterias);
         spnTipos=(Spinner)findViewById(R.id.spnTipos);
-        date_picker=(DatePicker)findViewById(R.id.datePicker);
+        calendar=(CalendarView)findViewById(R.id.calendario);
         edtDescr=(EditText)findViewById(R.id.edtDescr);
     }
     private void irAtras()
@@ -162,13 +161,9 @@ public class Agregar extends AppCompatActivity {
             try {
                 json.put("IdTipo", tipoSeleccionado.getId());
                 json.put("IdMateria", materiaSeleccionada.getId());
-                int dia=date_picker.getDayOfMonth();
-                int mes=date_picker.getMonth();
-                int anio=date_picker.getYear();
-                Date date =new Date(dia, mes, anio);
-                DateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-                String fecha = df.format(date);
-                json.put("Fecha", fecha);
+                SimpleDateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                String reportDate = df.format(calen.getTime());
+                json.put("Fecha", reportDate);
                 json.put("Descripcion", edtDescr.getText().toString());
                 json.put("IdUsuario", MainActivity.idUsuario);
                 json.put("iddivision",MainActivity.idDivision);
@@ -194,7 +189,7 @@ public class Agregar extends AppCompatActivity {
             super.onPostExecute(list);
             adapterTipos = new ArrayAdapter<TipoEvento>(getApplicationContext(),
                     android.R.layout.simple_spinner_item, tipos);
-            adapterTipos.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            adapterTipos.setDropDownViewResource(R.layout.simple_spinner_dropdown_item);
             spnTipos.setAdapter(adapterTipos);
         }
         @Override
@@ -244,7 +239,7 @@ public class Agregar extends AppCompatActivity {
             super.onPostExecute(list);
             adapterMaterias = new ArrayAdapter<MateriaEvento>(getApplicationContext(),
                     android.R.layout.simple_spinner_item, materias);
-            adapterMaterias.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            adapterMaterias.setDropDownViewResource(R.layout.simple_spinner_dropdown_item);
             spnMaterias.setAdapter(adapterMaterias);
         }
         @Override

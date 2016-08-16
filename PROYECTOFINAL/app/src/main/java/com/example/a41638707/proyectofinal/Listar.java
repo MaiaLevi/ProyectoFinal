@@ -60,7 +60,7 @@ public class Listar extends AppCompatActivity {
     TipoEvento tipo;
     MateriaEvento materia;
     ArrayList<Evento> listaEventos=new ArrayList<Evento>();
-    ArrayAdapter<Evento> adaptador=null;
+    ArrayAdapter<Evento> adaptador;
     ImageView imgAgregar, imgModificar, imgEliminar;
     ProgressDialog progressDialog;
     String url;
@@ -190,12 +190,12 @@ public class Listar extends AppCompatActivity {
         Intent nuevaActivity=new Intent(this,Agregar.class);
         startActivity(nuevaActivity);
     }
-        private Dialog confirmarEliminar(){
+    private Dialog confirmarEliminar(){
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Alert Dialog");
-            builder.setMessage("¿Está seguro que desea eliminar el evento?");
-            builder.setPositiveButton("Eliminar", new  DialogInterface.OnClickListener() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Alert Dialog");
+        builder.setMessage("¿Está seguro que desea eliminar el evento?");
+        builder.setPositiveButton("Eliminar", new  DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     Log.i("Diálogos", "Confirmación Aceptada.");
                     EliminarEvento(eventoSeleccionado.getId());

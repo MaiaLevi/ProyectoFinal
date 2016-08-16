@@ -22,9 +22,8 @@ public class Evento implements Serializable{
     private Division division;
     @Override
     public String toString() {
-        return getMateria() + " "+getTipo()+  android.text.format.DateFormat.format("dd", getFecha())+" "+android.text.format.DateFormat.format("MMM", getFecha())+" "+android.text.format.DateFormat.format("yyyy", getFecha())+" "+getDescripcion();
+        return getMateria() + " "+getTipo()+" "+  android.text.format.DateFormat.format("dd", getFecha())+" "+android.text.format.DateFormat.format("MMM", getFecha())+" "+android.text.format.DateFormat.format("yyyy", getFecha())+" "+getDescripcion();
     }
-
     public Evento(int id, MateriaEvento materia, TipoEvento tipo, Date fec, String descr, Integer IdU, Division divi)
     {
         Id=id;

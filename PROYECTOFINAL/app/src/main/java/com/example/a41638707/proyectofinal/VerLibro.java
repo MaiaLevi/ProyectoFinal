@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -12,6 +13,7 @@ public class VerLibro extends AppCompatActivity {
     //MAIU FIJATE QUE YA TE PUSE UNA VARIABLE PARA TU ONCLICK LISTENER
     public static final String PARAMETROLIBRO2="com.example.a41638707.proyectofinal.PARAMETROLIBRO";
     TextView edtNombre, txvDesc, txvImg, txvidmat, txvvendido;
+    Button btnAtras;
     Libros miLibro;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,12 +31,18 @@ public class VerLibro extends AppCompatActivity {
             txvvendido.setText("Vendido");
         }
         txvDesc.setText(miLibro.getDesc());
-        txvImg.setText(miLibro.getImg());
+        //No tiene imagen txvImg.setText(miLibro.getImg());
         txvidmat.setText(miLibro.getMateria().getNombre());
         imgModificar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 iniciarModificarActividad();
+                irAtras();
+            }
+        });
+        btnAtras.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 irAtras();
             }
         });
@@ -58,5 +66,6 @@ public class VerLibro extends AppCompatActivity {
         txvidmat=(TextView) findViewById(R.id.idmateria);
         txvvendido = (TextView) findViewById(R.id.txvvendido);
         imgModificar=(ImageView) findViewById(R.id.imgModificar);
+        btnAtras=(Button)findViewById(R.id.btnAtras);
     }
 }

@@ -1,11 +1,10 @@
 package com.example.a41638707.proyectofinal;
 
-import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.AsyncTask;
-import android.os.StrictMode;
+
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,11 +13,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CalendarView;
-import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.okhttp.MediaType;
@@ -26,20 +22,11 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPut;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -115,8 +102,9 @@ public class Modificar extends AppCompatActivity {
     private void GuardarEvento() {
         Intent nuevaActivity = new Intent(Modificar.this, Listar.class);
         startActivity(nuevaActivity);
-    }private void ObtenerReferencias() {
-        calendario = (CalendarView) findViewById(R.id.calendario);
+    }
+    private void ObtenerReferencias() {
+        calendario = (CalendarView) findViewById(R.id.calendario1);
         btnCancelar = (Button) findViewById(R.id.btnCancelar);
         btnGuardar = (Button) findViewById(R.id.btnGuardar);
         spnMaterias = (Spinner) findViewById(R.id.spnMaterias);
@@ -138,7 +126,6 @@ public class Modificar extends AppCompatActivity {
         protected void onProgressUpdate(Void... values) {
             super.onProgressUpdate(values);
         }
-
         @Override
         protected Void doInBackground(String... params) {
             String url = params[0];
@@ -171,7 +158,8 @@ public class Modificar extends AppCompatActivity {
                 dato.put("Fecha", reportDate);
                 dato.put("Descripcion", (edtDescr.getText().toString()));
                 dato.put("IdUsuario", MainActivity.idUsuario);
-                dato.put("iddivision",MainActivity.idDivision);
+                //NO SE GUARDA EL IDDIVISION
+                //dato.put("iddivision",MainActivity.idDivision);
                 dato.put("Id", idEvento);
                 RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), dato.toString());
                 Request request = new Request.Builder()
@@ -293,10 +281,9 @@ public class Modificar extends AppCompatActivity {
             progressDialog.dismiss();
             ArrayAdapter<MateriaEvento> adapterMaterias = new ArrayAdapter<MateriaEvento>(getApplicationContext(),
                     android.R.layout.simple_spinner_item, materias);
-            adapterMaterias.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            adapterMaterias.setDropDownViewResource(R.layout.simple_spinner_dropdown_item);
             spnMaterias.setAdapter(adapterMaterias);
             for (int i = 0; i < materias.size(); i++) {
-                //cuando ejecuto me aparece null pointer exception pero debuggeo y esta todo ok
                 if (materias.get(i).getId() == MiEvento.getMateria().getId()){
                     spnMaterias.setSelection(i);
                 }
@@ -350,7 +337,7 @@ public class Modificar extends AppCompatActivity {
             super.onPostExecute(listaTipos);
             ArrayAdapter<TipoEvento> adapterTipos = new ArrayAdapter<TipoEvento>(getApplicationContext(),
                     android.R.layout.simple_spinner_item, tipos);
-            adapterTipos.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            adapterTipos.setDropDownViewResource(R.layout.simple_spinner_dropdown_item);
             spnTipos.setAdapter(adapterTipos);
             progressDialog.dismiss();
             for (int i = 0; i < tipos.size(); i++) {

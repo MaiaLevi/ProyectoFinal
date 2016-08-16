@@ -27,12 +27,20 @@
                     android:id="@+id/edtContrasena"
                     android:hint="Ingrese la contraseña" />
 
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Recordar mail"
+                    android:id="@+id/chkMail" />
+
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Iniciar sesión"
                     android:id="@+id/btnIniciarSesion" />
+
         </LinearLayout>
+
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
@@ -58,17 +66,25 @@
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Agregar evento"
-                    android:id="@+id/btnAgregar"
+                    android:text="Listar libros"
+                    android:id="@+id/btnListarLibros"
                     android:layout_gravity="center_horizontal" />
 
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Listar libros"
-                    android:id="@+id/btnListarLibros"
+                    android:text="Cerrar sesión"
+                    android:id="@+id/btnLogout"
                     android:layout_gravity="center_horizontal" />
         </LinearLayout>
 
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Agregar evento"
+            android:id="@+id/btnAgregar"
+            android:layout_gravity="center_horizontal"
+            android:visibility="invisible" />
 
 </LinearLayout>

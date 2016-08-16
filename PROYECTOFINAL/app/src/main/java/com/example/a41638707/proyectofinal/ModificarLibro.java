@@ -3,7 +3,6 @@ package com.example.a41638707.proyectofinal;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.annotation.IntegerRes;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,12 +26,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 
 public class ModificarLibro extends AppCompatActivity {
     public ProgressDialog progressDialog;
@@ -141,7 +135,7 @@ public class ModificarLibro extends AppCompatActivity {
             progressDialog.dismiss();
             ArrayAdapter<MateriaEvento> adapterMaterias = new ArrayAdapter<MateriaEvento>(getApplicationContext(),
                     android.R.layout.simple_spinner_item, materias);
-            adapterMaterias.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            adapterMaterias.setDropDownViewResource(R.layout.simple_spinner_dropdown_item);
             spnMaterias.setAdapter(adapterMaterias);
             for (int i = 0; i < materias.size(); i++) {
                 if (materias.get(i).getId() == miLibro.getMateria().getId()){
@@ -249,7 +243,7 @@ public class ModificarLibro extends AppCompatActivity {
                     getApplicationContext(),
                     android.R.layout.simple_spinner_item,
                     anios);
-            adaptador.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            adaptador.setDropDownViewResource(R.layout.simple_spinner_dropdown_item);
             spnAnios.setAdapter(adaptador);
             for (int i = 0; i < anios.size(); i++) {
                 if (anios.get(i) == miLibro.getAño()){

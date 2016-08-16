@@ -137,7 +137,7 @@ public class ListarLibrosPropios extends AppCompatActivity {
             progressDialog.dismiss();
             //adapter
             //for y recorrer cantidad de libros
-            if (listaLibros.size()==0)
+            if (listaLibros.isEmpty())
             {
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 layout.setOrientation(LinearLayout.VERTICAL);
@@ -167,7 +167,6 @@ public class ListarLibrosPropios extends AppCompatActivity {
                     tvwNombre.setTextColor(Color.parseColor("#000000"));
                     tvwNombre.setId(contador);
                     tvwNombre.setLayoutParams(params);
-                    //add the textView to LinearLayout
                     layout.addView(tvwNombre);
                 }
             }
