@@ -1,11 +1,13 @@
 package com.example.a41638707.proyectofinal;
 
+import android.app.Application;
+
 import java.io.Serializable;
 
 /**
  * Created by 42038123 on 3/8/2016.
  */
-public class Usuarios implements Serializable {
+public class Usuarios extends Application implements Serializable  {
     private int Id;
     private String Nombre;
     private String Mail;
@@ -41,5 +43,9 @@ public class Usuarios implements Serializable {
     public Division getDivision()
     {
         return Division;
+    }
+    public void setIds(int id, Division division) {
+        this.Id = id;
+        this.Division=division;
     }
 }

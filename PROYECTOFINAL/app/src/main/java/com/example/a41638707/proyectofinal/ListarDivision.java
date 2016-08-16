@@ -2,6 +2,7 @@ package com.example.a41638707.proyectofinal;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -63,8 +64,8 @@ public class ListarDivision extends AppCompatActivity {
         //url="http://daiuszw.hol.es/bd/idDivision.php?nombre="+division;
         //new obtenerIdDivision().execute(url);
         url="http://daiuszw.hol.es/bd/listarEventosDivision.php?id=";
-        url+=MainActivity.idDivision;
-        new listarEventos().execute(url);
+        url+=((Usuarios)this.getApplicationContext()).getDivision().getId();
+        new listarEventos(getApplicationContext()).execute(url);
         if (adaptador!=null)
         {adaptador.notifyDataSetChanged();
         }
@@ -88,7 +89,7 @@ public class ListarDivision extends AppCompatActivity {
             public void onClick(View v) {
                 if (click)
                 {
-                    if (MainActivity.idUsuario==eventoSeleccionado.getIdUsuario())
+                    if (((Usuarios)getApplicationContext()).getId()==eventoSeleccionado.getIdUsuario())
                     {
                         IniciarModificarActividad(eventoSeleccionado.getId());
                     }
@@ -109,7 +110,7 @@ public class ListarDivision extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (click)
-                {if (MainActivity.idUsuario==eventoSeleccionado.getIdUsuario())
+                {if (((Usuarios)getApplicationContext()).getId()==eventoSeleccionado.getIdUsuario())
                 {
                     Dialog dialogo=confirmarEliminar();
                     dialogo.show();
@@ -178,7 +179,7 @@ public class ListarDivision extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 Log.i("Diálogos", "Confirmación Aceptada.");
                 EliminarEvento(eventoSeleccionado.getId());
-                new listarEventos().execute(url);
+                new listarEventos(getApplicationContext()).execute(url);
                 dialog.cancel();
             }
         });
@@ -191,8 +192,11 @@ public class ListarDivision extends AppCompatActivity {
         return builder.create();
     }
     private class listarEventos extends AsyncTask<String, Void, ArrayList<Evento>> {
+        private Context mContext;
         private OkHttpClient client = new OkHttpClient();
-        @Override
+        public listarEventos(Context context) {
+            mContext = context;
+        }        @Override
         protected ArrayList<Evento> doInBackground(String... params) {
             String url = params[0];
             Request request = new Request.Builder()
@@ -250,7 +254,7 @@ public class ListarDivision extends AppCompatActivity {
                 tipo=new TipoEvento(IdTipo,tipoEvento);
                 materia=new MateriaEvento(IdMateriaEvento,MateriaEvento);
                 //no tiene sentido traer la division si son todos de la misma
-                Evento unEvento =new Evento(idEvento,materia,tipo,convertedDate,descEvento,idCreador, null);
+                Evento unEvento =new Evento(idEvento,materia,tipo,convertedDate,descEvento,idCreador, ((Usuarios)this.mContext).getDivision());
                 listaEventos.add(unEvento);
             }
             return listaEventos;

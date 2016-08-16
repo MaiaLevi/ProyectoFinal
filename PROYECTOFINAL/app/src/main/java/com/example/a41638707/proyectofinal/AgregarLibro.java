@@ -31,28 +31,23 @@ public class AgregarLibro extends AppCompatActivity {
     ArrayAdapter<MateriaEvento> adapterMaterias;
     MateriaEvento materiaSeleccionada;
     String url3="http://daiuszw.hol.es/bd/listarMateriaEvento.php";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_agregar_libro);
         ObtenerReferencias();
         new traerMaterias().execute(url3);
-
         btnCancelar.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 irAtras();
             }});
-
         spnMateria.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 materiaSeleccionada = materias.get(i);
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-
             }
         });
 

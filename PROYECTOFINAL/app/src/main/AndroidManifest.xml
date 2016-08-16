@@ -35,6 +35,10 @@
         <activity android:name=".VerLibro" />
         <activity android:name=".AgregarLibro"></activity>
         <activity android:name=".ModificarLibro"></activity>
+        <application
+            android:name=".Usuarios"
+            android:label="@string/app_name">
+        </application>
     </application>
 
 </manifest>

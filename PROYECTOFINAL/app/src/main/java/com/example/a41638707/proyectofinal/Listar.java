@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.app.usage.UsageEvents;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -72,7 +73,7 @@ public class Listar extends AppCompatActivity {
         ObtenerReferencias();
         //no se actualiza
         progressDialog=new ProgressDialog(this);
-        traerTodo();
+        traerTodo(getApplicationContext());
         //ListarJsonEventos();
         lstEventos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -118,7 +119,7 @@ public class Listar extends AppCompatActivity {
             public void onClick(View v) {
                 if (click)
                 {
-                    Dialog dialogo=confirmarEliminar();
+                    Dialog dialogo=confirmarEliminar(getApplicationContext());
                     dialogo.show();
                 }
                 else
@@ -132,13 +133,14 @@ public class Listar extends AppCompatActivity {
     @Override
     public void onRestart(){
         super.onRestart();
-        traerTodo();
+        traerTodo(getApplicationContext());
     }
-    private void traerTodo()
+    private void traerTodo(Context Context)
     {
         url="http://daiuszw.hol.es/bd/listarEventos.php?IdUsuario=";
-        url+=MainActivity.idUsuario;
-        new listarEventos().execute(url);
+        //ver si lo de abajo anda
+        url+= ((Usuarios)Context).getId();
+        new listarEventos(Context).execute(url);
         if (adaptador!=null)
         {adaptador.notifyDataSetChanged();
         }
@@ -190,7 +192,7 @@ public class Listar extends AppCompatActivity {
         Intent nuevaActivity=new Intent(this,Agregar.class);
         startActivity(nuevaActivity);
     }
-    private Dialog confirmarEliminar(){
+    private Dialog confirmarEliminar(final Context context){
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Alert Dialog");
@@ -201,7 +203,7 @@ public class Listar extends AppCompatActivity {
                     EliminarEvento(eventoSeleccionado.getId());
                    //no anda adaptador.notifyDataSetChanged();
                     //probar si el notify anda, onpostexecute
-                    new listarEventos().execute(url);
+                    new listarEventos(context).execute(url);
                     dialog.cancel();
                 }
             });
@@ -214,7 +216,11 @@ public class Listar extends AppCompatActivity {
             return builder.create();
         }
     private class listarEventos extends AsyncTask<String, Void, ArrayList<Evento>> {
+        private Context mContext;
         private OkHttpClient client = new OkHttpClient();
+        public listarEventos(Context context) {
+            mContext = context;
+        }
         @Override
         protected ArrayList<Evento> doInBackground(String... params) {
             String url = params[0];
@@ -271,7 +277,7 @@ public class Listar extends AppCompatActivity {
                 String tipoEvento = obj.getString("Tipo");
                 tipo=new TipoEvento(IdTipo,tipoEvento);
                 materia=new MateriaEvento(IdMateriaEvento,MateriaEvento);
-                Evento unEvento =new Evento(idEvento,materia,tipo,convertedDate, descEvento,MainActivity.idUsuario, null);
+                Evento unEvento =new Evento(idEvento,materia,tipo,convertedDate, descEvento,((Usuarios)this.mContext).getId(), null);
                 listaEventos.add(unEvento);
             }
             return listaEventos;

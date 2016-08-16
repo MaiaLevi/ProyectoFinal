@@ -1,5 +1,6 @@
 package com.example.a41638707.proyectofinal;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
@@ -101,7 +102,7 @@ public class Agregar extends AppCompatActivity {
             public void onClick(View v) {
                 if (spnMaterias.getSelectedItem().toString()!="") {
                     if (spnTipos.getSelectedItem().toString()!="") {
-                            new agregarEvento().execute(url);
+                            new agregarEvento(getApplicationContext()).execute(url);
                             Toast msg = Toast.makeText(getApplicationContext(), "Evento guardado", Toast.LENGTH_LONG);
                             msg.show();
                             irAtras();
@@ -133,8 +134,11 @@ public class Agregar extends AppCompatActivity {
         this.finish();
     }
     private class agregarEvento extends AsyncTask<String, Void, Void> {
-        public OkHttpClient client = new OkHttpClient();
-
+        private Context mContext;
+        private OkHttpClient client = new OkHttpClient();
+        public agregarEvento(Context context) {
+            mContext = context;
+        }
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
@@ -165,8 +169,8 @@ public class Agregar extends AppCompatActivity {
                 String reportDate = df.format(calen.getTime());
                 json.put("Fecha", reportDate);
                 json.put("Descripcion", edtDescr.getText().toString());
-                json.put("IdUsuario", MainActivity.idUsuario);
-                json.put("iddivision",MainActivity.idDivision);
+                json.put("IdUsuario", ((Usuarios) this.mContext).getId());
+                json.put("iddivision",((Usuarios) this.mContext).getDivision().getId());
                 RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json.toString());
                 Request request = new Request.Builder()
                         .url(url)

@@ -56,7 +56,6 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
     // public static final ArrayList<Evento> PARAMETRO1=new ArrayList<Evento>();
-    public static int idUsuario, idDivision;
     public ProgressDialog progressDialog;
     Button btnListar, btnAgregar, btnListarLibros, btnIniciarSesion, btnLogout;
     EditText edtMail, edtContra;
@@ -90,8 +89,7 @@ public class MainActivity extends AppCompatActivity {
             tvwBienvenido.setText("Bienvenido/a "+nombre);
             layoutLogin.setVisibility(View.GONE);
             layoutBotones.setVisibility(View.VISIBLE);
-            MainActivity.idUsuario=miUsuario.getId();
-            MainActivity.idDivision=miUsuario.getDivision().getId();
+            ((Usuarios) this.getApplication()).setIds(miUsuario.getId(), miUsuario.getDivision());
         }
         else
         {
@@ -132,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
                 {
                     if (!edtContra.getText().toString().equals("")&&!edtContra.getText().toString().equals(" "))
                     {
-                        new traerUsuario().execute(url);
+                        new traerUsuario(getApplicationContext()).execute(url);
                     }
                     else {
                         Toast.makeText(getApplicationContext(), "La contraseña no puede ser vacía", Toast.LENGTH_SHORT).show();
@@ -221,7 +219,11 @@ public class MainActivity extends AppCompatActivity {
         startActivity(nuevaActivity);
     }
     private class traerUsuario extends AsyncTask<String, Void, Usuarios> {
+        private Context mContext;
         private OkHttpClient client = new OkHttpClient();
+        public traerUsuario(Context context) {
+            mContext = context;
+        }
         @Override
         protected Usuarios doInBackground(String... params) {
             String url = params[0];
@@ -255,8 +257,7 @@ public class MainActivity extends AppCompatActivity {
                     tvwBienvenido.setText("Bienvenido/a "+miUsuario.getNombre());
                     layoutLogin.setVisibility(View.GONE);
                     layoutBotones.setVisibility(View.VISIBLE);
-                    MainActivity.idUsuario=miUsuario.getId();
-                    MainActivity.idDivision=miUsuario.getDivision().getId();
+                    ((Usuarios) this.mContext).setIds(miUsuario.getId(),miUsuario.getDivision());
                     SharedPreferences prefs =
                             getSharedPreferences("MisPreferencias", Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = prefs.edit();
