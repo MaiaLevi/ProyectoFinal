@@ -48,9 +48,8 @@ public class ListarLibrosPropios extends AppCompatActivity {
     EditText edtBuscar;
     View layoutPpal;
     LinearLayout layout;
-    int idUsuario, contador=0;
+    int idUsuario, contador=0, contadorBuscar=0;
     Libros libroSeleccionado;
-    Usuarios miUsuario;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,7 +57,7 @@ public class ListarLibrosPropios extends AppCompatActivity {
         listaLibros=new ArrayList<Libros>();
         lstLibros=new ArrayList<Libros>();
         ObtenerReferencias();
-        idUsuario=miUsuario.getId();
+        idUsuario=Usuarios.getId();
         progressDialog=new ProgressDialog(this);
         url="http://daiuszw.hol.es/bd/listarLibrosPropios.php?IdUsuario=";
         url+=idUsuario;
@@ -80,7 +79,6 @@ public class ListarLibrosPropios extends AppCompatActivity {
                 IniciarAgregarActividad();
             }
         });
-
         edtBuscar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -98,7 +96,7 @@ public class ListarLibrosPropios extends AppCompatActivity {
                     url="http://daiuszw.hol.es/bd/buscarLibros.php?Busqueda=";
                     url+=texto;
                     url+="&id=";
-                    url+=miUsuario.getId();
+                    url+=Usuarios.getId();
                     new buscarLibros().execute(url);
                     layout.setVisibility(View.VISIBLE);
                 }
@@ -109,6 +107,17 @@ public class ListarLibrosPropios extends AppCompatActivity {
     {
         Intent nuevaActivity=new Intent(ListarLibrosPropios.this,AgregarLibro.class);
         startActivity(nuevaActivity);
+    }
+    @Override
+    public void onRestart(){
+        super.onRestart();
+        url="http://daiuszw.hol.es/bd/listarLibrosPropios.php?IdUsuario=";
+        url+=idUsuario;
+        new listarLibros().execute(url);
+        if (adaptador!=null)
+        {
+            adaptador.notifyDataSetChanged();
+        }
     }
     private class buscarLibros extends AsyncTask<String, Void, ArrayList<Libros>> {
         private OkHttpClient client = new OkHttpClient();
@@ -131,18 +140,18 @@ public class ListarLibrosPropios extends AppCompatActivity {
         protected void onPreExecute() {
             //limpiar layout
             layout.removeAllViews();
-            listaLibros.clear();
+            lstLibros.clear();
             super.onPreExecute();
             progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
             progressDialog.setMax(100);
             progressDialog.show();}
         @Override
-        protected void onPostExecute(ArrayList<Libros> lstLibros) {
-            super.onPostExecute(lstLibros);
+        protected void onPostExecute(ArrayList<Libros> lstaLibros) {
+            super.onPostExecute(lstaLibros);
             progressDialog.dismiss();
             //adapter
             //for y recorrer cantidad de libros
-            if (lstLibros.isEmpty()||lstLibros.size()==0)
+            if (lstaLibros.isEmpty())
             {
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 layout.setOrientation(LinearLayout.VERTICAL);
@@ -157,7 +166,7 @@ public class ListarLibrosPropios extends AppCompatActivity {
             }
             else
             {
-                for (int i=0;i<lstLibros.size();i++)
+                for (int i=0;i<lstaLibros.size();i++)
                 {
                     //para que tenga id unico
                     contador++;
@@ -165,10 +174,10 @@ public class ListarLibrosPropios extends AppCompatActivity {
                     layout.setOrientation(LinearLayout.VERTICAL);
                     //add textView
                     TextView tvwNombre = new TextView(getApplicationContext());
-                    tvwNombre.setText(lstLibros.get(i).getNombre()+"\n"+lstLibros.get(i).getDesc()+
-                            "\n Año:"+lstLibros.get(i).getAño()+
-                            "\n Materia:"+lstLibros.get(i).getMateria().getNombre()+
-                            "\n Vendedor:"+lstLibros.get(i).getUsuario());
+                    tvwNombre.setText(lstaLibros.get(i).getNombre()+"\n"+lstaLibros.get(i).getDesc()+
+                            "\n Año:"+lstaLibros.get(i).getAño()+
+                            "\n Materia:"+lstaLibros.get(i).getMateria().getNombre()+
+                            "\n Vendedor:"+lstaLibros.get(i).getUsuario());
                     tvwNombre.setTextColor(Color.parseColor("#000000"));
                     tvwNombre.setId(contador);
                     tvwNombre.setLayoutParams(params);
@@ -190,14 +199,13 @@ public class ListarLibrosPropios extends AppCompatActivity {
                 String Nombre = obj.getString("Nombre");
                 String Descr = obj.getString("Descripcion");
                 int Año=obj.getInt("Anio");
-                String Imagen = obj.getString("Imagen");
                 String Usuario = obj.getString("Usuario");
                 int IdUsuario = obj.getInt("IdUsuario");
                 int IdMateria = obj.getInt("IdMateria");
                 String Materia=obj.getString("Materia");
                 MateriaEvento materia=new MateriaEvento(IdMateria,Materia);
                 boolean Vendido = false;
-                Libros unLibro = new Libros (idLibro,Nombre,Descr,Imagen,IdUsuario,Usuario,Año,materia,Vendido);
+                Libros unLibro = new Libros (idLibro,Nombre,Descr,"",IdUsuario,Usuario,Año,materia,Vendido);
                 lstLibros.add(unLibro);
             }
             return lstLibros;
@@ -241,7 +249,9 @@ public class ListarLibrosPropios extends AppCompatActivity {
             super.onPreExecute();
             progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
             progressDialog.setMax(100);
-            progressDialog.show();}
+            progressDialog.show();
+            listaLibros.clear();
+        }
         @Override
         protected void onPostExecute(ArrayList<Libros> lista) {
             super.onPostExecute(lista);

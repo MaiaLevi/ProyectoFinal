@@ -44,7 +44,6 @@ public class Modificar extends AppCompatActivity {
     CalendarView calendario;
     int idEvento;
     Calendar calen;
-    Usuarios miUsuario;
     public ProgressDialog progressDialog;
     ArrayList<MateriaEvento> materias = new ArrayList<MateriaEvento>();
     ArrayList<TipoEvento> tipos = new ArrayList<TipoEvento>();
@@ -158,7 +157,7 @@ public class Modificar extends AppCompatActivity {
                 //String reportDate = String.valueOf(year)+"-"+String.valueOf(month)+"-"+String.valueOf(day);
                 dato.put("Fecha", reportDate);
                 dato.put("Descripcion", (edtDescr.getText().toString()));
-                dato.put("IdUsuario", miUsuario.getId());
+                dato.put("IdUsuario", Usuarios.getId());
                 //NO SE GUARDA EL IDDIVISION
                 //dato.put("iddivision",MainActivity.idDivision);
                 dato.put("Id", idEvento);

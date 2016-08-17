@@ -8,34 +8,34 @@
     android:background="@color/accent_material_dark"
     android:weightSum="1">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <EditText
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Ingrese un título"
-        android:id="@+id/tvwMateria"
-        android:textSize="25sp" />
+        android:id="@+id/edtTitulo"
+        android:hint="Ingrese el nombre"/>
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/edtTitulo" />
+        android:id="@+id/edtDesc"
+        android:hint="Ingrese la descripción"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Ingrese una descripción"
-        android:id="@+id/tvwTipo"
+        android:text="Elija un año"
+        android:id="@+id/textView2"
         android:textSize="25sp" />
 
-    <EditText
+    <Spinner
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/edtDesc" />
+        android:id="@+id/spnAnios" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Seleccione a qué materia pertenece"
+        android:text="Elija una materia"
         android:id="@+id/tvwFecha"
         android:textSize="25sp" />
 
@@ -45,20 +45,11 @@
         android:id="@+id/spnMateria"
         android:layout_gravity="center_horizontal" />
 
-    <TextView
+    <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Seleccione a qué año pertenece"
-        android:id="@+id/textView2"
-        android:textSize="25sp" />
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        android:ems="10"
-        android:id="@+id/edtAnio"
-        android:layout_gravity="center_horizontal" />
+        android:text="Vendido"
+        android:id="@+id/chkVendido" />
 
     <LinearLayout
         android:orientation="horizontal"

@@ -51,14 +51,13 @@ public class Agregar extends AppCompatActivity {
     TipoEvento tipoSeleccionado;
     MateriaEvento materiaSeleccionada;
     CalendarView calendar;
-    Usuarios miUsuario;
     Calendar calen;
     String url ="http://daiuszw.hol.es/bd/agregarevento.php";
     String url2="http://daiuszw.hol.es/bd/listarTipoEvento.php";
     String url3="http://daiuszw.hol.es/bd/listarMateriaEvento.php";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //MAU FALTA AGREGAR IDDIVISION SINO SE ROMPE EL TRAER EVENTO
+        //api pida iddivision
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_agregar);
         ObtenerReferencias();
@@ -166,8 +165,9 @@ public class Agregar extends AppCompatActivity {
                 String reportDate = df.format(calen.getTime());
                 json.put("Fecha", reportDate);
                 json.put("Descripcion", edtDescr.getText().toString());
-                json.put("IdUsuario", miUsuario.getId());
-                json.put("iddivision",miUsuario.getDivision().getId());
+                json.put("IdUsuario", Usuarios.getId());
+                //PROBAR SI LO DE ABAJO ANDA
+                json.put("iddivision",Usuarios.getDivision().getId());
                 RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json.toString());
                 Request request = new Request.Builder()
                         .url(url)

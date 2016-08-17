@@ -16,13 +16,11 @@ public class Usuarios implements Serializable  {
     public String toString() {
         return getNombre();
     }
-    public Usuarios(int id, String nombre, String mail, String contra, Division div)
+    public Usuarios(String nombre, String mail, String contra)
     {
-        Id=id;
         Nombre=nombre;
         Mail=mail;
         Contra=contra;
-        Division=div;
     }
     public static int getId()
     {
@@ -44,8 +42,10 @@ public class Usuarios implements Serializable  {
     {
         return Division;
     }
-    public void setIds(int id, Division division) {
-        this.Id = id;
-        this.Division=division;
+    public static void setId(int id) {
+        Id = id;
+    }
+    public static void setDivision(Division division) {
+        Division= division;
     }
 }

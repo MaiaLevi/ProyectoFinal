@@ -46,7 +46,6 @@ public class ListarDivision extends AppCompatActivity {
     Evento eventoSeleccionado;
     TipoEvento tipo;
     MateriaEvento materia;
-    List<Evento> list = new ArrayList<Evento>();
     ArrayList<Evento> listaEventos=new ArrayList<Evento>();
     ArrayAdapter<Evento> adaptador=null;
     ImageView imgAgregar, imgModificar, imgEliminar;
@@ -65,7 +64,7 @@ public class ListarDivision extends AppCompatActivity {
         //url="http://daiuszw.hol.es/bd/idDivision.php?nombre="+division;
         //new obtenerIdDivision().execute(url);
         url="http://daiuszw.hol.es/bd/listarEventosDivision.php?id=";
-        url+=miUsuario.getDivision().getId();
+        url+=Usuarios.getDivision().getId();
         new listarEventos().execute(url);
         if (adaptador!=null)
         {adaptador.notifyDataSetChanged();
@@ -90,7 +89,7 @@ public class ListarDivision extends AppCompatActivity {
             public void onClick(View v) {
                 if (click)
                 {
-                    if (miUsuario.getId()==eventoSeleccionado.getIdUsuario())
+                    if (Usuarios.getId()==eventoSeleccionado.getIdUsuario())
                     {
                         IniciarModificarActividad(eventoSeleccionado.getId());
                     }
@@ -111,7 +110,7 @@ public class ListarDivision extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (click)
-                {if (miUsuario.getId()==eventoSeleccionado.getIdUsuario())
+                {if (Usuarios.getId()==eventoSeleccionado.getIdUsuario())
                 {
                     Dialog dialogo=confirmarEliminar();
                     dialogo.show();
@@ -134,7 +133,7 @@ public class ListarDivision extends AppCompatActivity {
     public void onRestart(){
         super.onRestart();
         url="http://daiuszw.hol.es/bd/listarEventosDivision.php?id=";
-        url+=miUsuario.getDivision().getId();
+        url+=Usuarios.getDivision().getId();
         new listarEventos().execute(url);
         if (adaptador!=null)
         {adaptador.notifyDataSetChanged();
@@ -262,7 +261,7 @@ public class ListarDivision extends AppCompatActivity {
                 tipo=new TipoEvento(IdTipo,tipoEvento);
                 materia=new MateriaEvento(IdMateriaEvento,MateriaEvento);
                 //no tiene sentido traer la division si son todos de la misma
-                Evento unEvento =new Evento(idEvento,materia,tipo,convertedDate,descEvento,idCreador, miUsuario.getDivision());
+                Evento unEvento =new Evento(idEvento,materia,tipo,convertedDate,descEvento,idCreador, Usuarios.getDivision());
                 listaEventos.add(unEvento);
             }
             return listaEventos;

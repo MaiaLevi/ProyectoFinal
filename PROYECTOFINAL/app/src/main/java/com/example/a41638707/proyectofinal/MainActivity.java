@@ -79,16 +79,19 @@ public class MainActivity extends AppCompatActivity {
         nombre=prefs.getString("nombre","");
         mail=prefs.getString("email","");
         id=prefs.getInt("id",0);
+        //PROBAR ABAJO
         iddivision=prefs.getInt("iddivision",0);
         division=prefs.getString("division", "");
         miDivision=new Division(iddivision,division);
-        miUsuario= new Usuarios(id,nombre,mail,"",miDivision);
+        miUsuario= new Usuarios(nombre,mail,"");
         //CARGAR VALORES EN CLASE USUARIO
         if (sesion)
         {
             tvwBienvenido.setText("Bienvenido/a "+nombre);
             layoutLogin.setVisibility(View.GONE);
             layoutBotones.setVisibility(View.VISIBLE);
+            Usuarios.setDivision(miDivision);
+            Usuarios.setId(id);
         }
         else
         {
@@ -256,9 +259,9 @@ public class MainActivity extends AppCompatActivity {
                     SharedPreferences.Editor editor = prefs.edit();
                     editor.putString("email", miUsuario.getMail());
                     editor.putString("nombre", miUsuario.getNombre());
-                    editor.putInt("iddivision", miUsuario.getDivision().getId());
-                    editor.putString("division", miUsuario.getDivision().getNombre());
-                    editor.putInt("id", miUsuario.getId());
+                    editor.putInt("iddivision", Usuarios.getDivision().getId());
+                    editor.putString("division", Usuarios.getDivision().getNombre());
+                    editor.putInt("id", Usuarios.getId());
                     editor.putBoolean("sesion", true);
                     if (chkMail.isChecked())
                     {
@@ -282,7 +285,9 @@ public class MainActivity extends AppCompatActivity {
             int divi=json.getInt("IdDivision");
             String division = json.getString("Division");
             Division miDivi=new Division(divi,division);
-            miUsuario=new Usuarios(id, nombre,edtMail.getText().toString(),contrasena,miDivi);
+            miUsuario=new Usuarios(nombre,edtMail.getText().toString(),contrasena);
+            Usuarios.setId(id);
+            Usuarios.setDivision(miDivi);
             return miUsuario;
         }
     }

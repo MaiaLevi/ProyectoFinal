@@ -38,7 +38,6 @@ public class ModificarLibro extends AppCompatActivity {
     EditText edtDescr, edtNombre;
     int idUsuario, idLibro, anioSeleccionado;
     CheckBox chkVendido;
-    Usuarios miUsuario;
     ArrayList<Integer> anios = new ArrayList<Integer>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +55,7 @@ public class ModificarLibro extends AppCompatActivity {
         anios.add(6);
         progressDialog=new ProgressDialog(this);
         obtenerReferencias();
-        idUsuario=miUsuario.getId();
+        idUsuario=Usuarios.getId();
         String url="http://daiuszw.hol.es/bd/traerLibro.php?Id=";
         url+=idLibro;
         new traerLibro().execute(url);

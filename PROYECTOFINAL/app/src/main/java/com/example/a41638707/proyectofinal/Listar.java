@@ -65,7 +65,6 @@ public class Listar extends AppCompatActivity {
     ImageView imgAgregar, imgModificar, imgEliminar;
     ProgressDialog progressDialog;
     String url;
-    Usuarios miUsuario;
     boolean click=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,13 +133,15 @@ public class Listar extends AppCompatActivity {
     @Override
     public void onRestart(){
         super.onRestart();
+        click=false;
+        progressDialog=new ProgressDialog(this);
         traerTodo();
     }
     private void traerTodo()
     {
         url="http://daiuszw.hol.es/bd/listarEventos.php?IdUsuario=";
         //ver si lo de abajo anda
-        url+= miUsuario.getId();
+        url+= Usuarios.getId();
         new listarEventos().execute(url);
         if (adaptador!=null)
         {adaptador.notifyDataSetChanged();
@@ -202,6 +203,7 @@ public class Listar extends AppCompatActivity {
                 public void onClick(DialogInterface dialog, int which) {
                     Log.i("Diálogos", "Confirmación Aceptada.");
                     EliminarEvento(eventoSeleccionado.getId());
+                    click=false;
                    //no anda adaptador.notifyDataSetChanged();
                     //probar si el notify anda, onpostexecute
                     new listarEventos().execute(url);
@@ -274,7 +276,7 @@ public class Listar extends AppCompatActivity {
                 String tipoEvento = obj.getString("Tipo");
                 tipo=new TipoEvento(IdTipo,tipoEvento);
                 materia=new MateriaEvento(IdMateriaEvento,MateriaEvento);
-                Evento unEvento =new Evento(idEvento,materia,tipo,convertedDate, descEvento,miUsuario.getId(), null);
+                Evento unEvento =new Evento(idEvento,materia,tipo,convertedDate, descEvento,Usuarios.getId(), null);
                 listaEventos.add(unEvento);
             }
             return listaEventos;
