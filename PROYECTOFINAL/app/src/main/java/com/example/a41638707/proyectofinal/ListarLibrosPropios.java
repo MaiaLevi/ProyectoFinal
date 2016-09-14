@@ -4,6 +4,8 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v7.app.AlertDialog;
@@ -119,6 +121,28 @@ public class ListarLibrosPropios extends AppCompatActivity {
             adaptador.notifyDataSetChanged();
         }
     }
+    public void onClickWhatsApp(View view, String s) {
+
+        PackageManager pm=getPackageManager();
+        try {
+
+            Intent waIntent = new Intent(Intent.ACTION_SEND);
+            waIntent.setType("text/plain");
+            String text = "Hola, deseo comprar tu libro llamado "+s;
+
+            PackageInfo info=pm.getPackageInfo("com.whatsapp", PackageManager.GET_META_DATA);
+            //Check if package exists or not. If not then code
+            //in catch block will be called
+            waIntent.setPackage("com.whatsapp");
+
+            waIntent.putExtra(Intent.EXTRA_TEXT, text);
+            startActivity(Intent.createChooser(waIntent, "Share with"));
+
+        } catch (PackageManager.NameNotFoundException e) {
+            Toast.makeText(this, "WhatsApp not Installed el libro es "+s, Toast.LENGTH_SHORT)
+                    .show();
+        }
+    }
     private class buscarLibros extends AsyncTask<String, Void, ArrayList<Libros>> {
         private OkHttpClient client = new OkHttpClient();
         @Override
@@ -146,7 +170,7 @@ public class ListarLibrosPropios extends AppCompatActivity {
             progressDialog.setMax(100);
             progressDialog.show();}
         @Override
-        protected void onPostExecute(ArrayList<Libros> lstaLibros) {
+        protected void onPostExecute(final ArrayList<Libros> lstaLibros) {
             super.onPostExecute(lstaLibros);
             progressDialog.dismiss();
             //adapter
@@ -168,6 +192,7 @@ public class ListarLibrosPropios extends AppCompatActivity {
             {
                 for (int i=0;i<lstaLibros.size();i++)
                 {
+                    final int numerito=i;
                     //para que tenga id unico
                     contador++;
                     LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -182,6 +207,18 @@ public class ListarLibrosPropios extends AppCompatActivity {
                     tvwNombre.setId(contador);
                     tvwNombre.setLayoutParams(params);
                     layout.addView(tvwNombre);
+                    Button btnTag = new Button(getApplicationContext());
+                    // btnTag.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+                    btnTag.setText("Comprar");
+                    btnTag.setId(contador*2);
+                    btnTag.setTag(lstaLibros.get(i).getId());
+                    layout.addView(btnTag);
+                    btnTag.setOnClickListener(new View.OnClickListener() {
+                        public void onClick(View v) {
+                            Log.i("TAG", "The index is" + contador);
+                            onClickWhatsApp(v, lstaLibros.get(numerito).getNombre());
+                        }
+                    });
                 }
             }
         }
