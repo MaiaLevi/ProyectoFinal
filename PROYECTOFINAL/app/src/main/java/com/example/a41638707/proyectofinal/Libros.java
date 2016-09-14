@@ -14,6 +14,7 @@ public class Libros implements Serializable{
     private String Descripcion;
     private String Imagen;
     private int IdUsuario;
+    //tiene que hbaer un Usuarios
     private String Usuario;
     private int Año;
     private MateriaEvento Materia;

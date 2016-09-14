@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
         iddivision=prefs.getInt("iddivision",0);
         division=prefs.getString("division", "");
         miDivision=new Division(iddivision,division);
-        miUsuario= new Usuarios(nombre,mail,"");
+        miUsuario= new Usuarios(nombre,mail,"",0);
         //CARGAR VALORES EN CLASE USUARIO
         if (sesion)
         {
@@ -285,7 +285,7 @@ public class MainActivity extends AppCompatActivity {
             int divi=json.getInt("IdDivision");
             String division = json.getString("Division");
             Division miDivi=new Division(divi,division);
-            miUsuario=new Usuarios(nombre,edtMail.getText().toString(),contrasena);
+            miUsuario=new Usuarios(nombre,edtMail.getText().toString(),contrasena,0);
             Usuarios.setId(id);
             Usuarios.setDivision(miDivi);
             return miUsuario;

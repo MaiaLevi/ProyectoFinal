@@ -2,12 +2,16 @@ package com.example.a41638707.proyectofinal;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.ContentProviderOperation;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.provider.ContactsContract;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -125,16 +129,13 @@ public class ListarLibrosPropios extends AppCompatActivity {
 
         PackageManager pm=getPackageManager();
         try {
-
             Intent waIntent = new Intent(Intent.ACTION_SEND);
             waIntent.setType("text/plain");
             String text = "Hola, deseo comprar tu libro llamado "+s;
-
             PackageInfo info=pm.getPackageInfo("com.whatsapp", PackageManager.GET_META_DATA);
             //Check if package exists or not. If not then code
             //in catch block will be called
             waIntent.setPackage("com.whatsapp");
-
             waIntent.putExtra(Intent.EXTRA_TEXT, text);
             startActivity(Intent.createChooser(waIntent, "Share with"));
 
@@ -216,7 +217,9 @@ public class ListarLibrosPropios extends AppCompatActivity {
                     btnTag.setOnClickListener(new View.OnClickListener() {
                         public void onClick(View v) {
                             Log.i("TAG", "The index is" + contador);
-                            onClickWhatsApp(v, lstaLibros.get(numerito).getNombre());
+                            //preguntar si tiene al contacto
+                            Dialog dialogo=agregarContacto(v, lstaLibros.get(numerito));
+                            dialogo.show();
                         }
                     });
                 }
@@ -247,6 +250,78 @@ public class ListarLibrosPropios extends AppCompatActivity {
             }
             return lstLibros;
         }
+    }
+    private Dialog agregarContacto(final View v, final Libros libro){
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Contacto");
+        builder.setMessage("¿Tiene en sus contactos al vendedor del libro ("+libro.getUsuario()+")?");
+        builder.setPositiveButton("Sí", new  DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                Log.i("Diálogos", "Confirmación Aceptada.");
+                onClickWhatsApp(v, libro.getNombre());
+                dialog.cancel();
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                Log.i("Diálogos", "Confirmación Cancelada.");
+                Usuarios miUsuario=new Usuarios("","","",1551503919);
+                contacto(v, miUsuario, libro.getNombre());
+                dialog.cancel();
+            }
+        });
+        return builder.create();
+    }
+    private void contacto(View v, Usuarios usuarios, String s)
+    {
+        ArrayList < ContentProviderOperation > ops = new ArrayList < ContentProviderOperation > ();
+
+        ops.add(ContentProviderOperation.newInsert(
+                ContactsContract.RawContacts.CONTENT_URI)
+                .withValue(ContactsContract.RawContacts.ACCOUNT_TYPE, null)
+                .withValue(ContactsContract.RawContacts.ACCOUNT_NAME, null)
+                .build());
+        ops.add(ContentProviderOperation.newInsert(
+                ContactsContract.Data.CONTENT_URI)
+                .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
+                .withValue(ContactsContract.Data.MIMETYPE,
+                        ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE)
+                .withValue(
+                        ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME,
+                        usuarios.getNombre()).build());
+        ops.add(ContentProviderOperation.
+                newInsert(ContactsContract.Data.CONTENT_URI)
+                .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
+                .withValue(ContactsContract.Data.MIMETYPE,
+                        ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE)
+                .withValue(ContactsContract.CommonDataKinds.Phone.NUMBER, usuarios.getTelefono())
+                .withValue(ContactsContract.CommonDataKinds.Phone.TYPE,
+                        ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE)
+                .build());
+        try {
+            getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);
+            Toast.makeText(getApplicationContext(), "Contacto agregado", Toast.LENGTH_SHORT).show();
+            onClickWhatsApp(v,s);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(getApplicationContext(), "Exception: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+        /*
+        // Creates a new Intent to insert a contact
+        Intent intent = new Intent(ContactsContract.Intents.Insert.ACTION);
+// Sets the MIME type to match the Contacts Provider
+        intent.setType(ContactsContract.RawContacts.CONTENT_TYPE);
+        intent.putExtra(ContactsContract.Intents.Insert.PHONE, usuarios.getTelefono());
+        intent.putExtra(ContactsContract.Intents.Insert.PHONE_TYPE, ContactsContract.CommonDataKinds.Phone.TYPE_WORK);
+        startActivity(intent);
+
+        ContentValues values = new ContentValues();
+        values.put(ContactsContract.Contacts.Data.RAW_CONTACT_ID, 001);
+        values.put(ContactsContract.CommonDataKinds.Phone.NUMBER, usuarios.getTelefono());
+        values.put(ContactsContract.Contacts.Data.MIMETYPE, ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE);
+        values.put(ContactsContract.CommonDataKinds.Phone.TYPE, ContactsContract.CommonDataKinds.Phone.TYPE_CUSTOM);
+        Uri dataUri = getContentResolver().insert(android.provider.ContactsContract.Data.CONTENT_URI, values);*/
     }
     private void ActivityVerL()
     {
