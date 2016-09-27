@@ -22,12 +22,14 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -64,13 +66,15 @@ public class MainActivity extends AppCompatActivity {
     View layoutBotones, layoutLogin;
     TextView tvwBienvenido;
     Boolean sesion, blnMail;
+    DrawerLayout drawerLayout;
+    NavigationView navigationView;
     CheckBox chkMail;
     String nombre, mail, division;
     int iddivision, id;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.navigation);
         ObtenerReferencias();
         progressDialog = new ProgressDialog(this);
         SharedPreferences prefs =
@@ -104,6 +108,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
+
         btnListar.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 //new ListarEventos().execute(url);
@@ -150,6 +155,32 @@ public class MainActivity extends AppCompatActivity {
                 IniciarListarLActividad();
             }
         });
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+                        boolean blnMenu=false;
+                        switch (menuItem.getItemId()) {
+                            case R.id.Eventos:
+                                IniciarListarActividad();
+                                blnMenu=true;
+                                break;
+                            case R.id.Libros:
+                                blnMenu=true;
+                                IniciarListarLActividad();
+                                break;
+                            case R.id.Horario:
+                                blnMenu=true;
+                                break;
+                        }
+                        if (blnMenu){
+                            menuItem.setChecked(true);
+                            getSupportActionBar().setTitle(menuItem.getTitle());
+                        }
+                        drawerLayout.closeDrawers();
+                        return true;
+                    }
+                });
     }
     private Dialog confirmarLogout(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -204,6 +235,8 @@ public class MainActivity extends AppCompatActivity {
         layoutLogin=findViewById(R.id.login);
         btnLogout=(Button)findViewById(R.id.btnLogout);
         chkMail=(CheckBox)findViewById(R.id.chkMail);
+        drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+        navigationView = (NavigationView)findViewById(R.id.navview);
     }
     private void IniciarAgregarActividad()
     {

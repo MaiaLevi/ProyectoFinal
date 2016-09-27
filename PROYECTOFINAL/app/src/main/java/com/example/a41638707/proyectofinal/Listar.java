@@ -53,7 +53,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
-public class Listar extends AppCompatActivity {
+public class Listar extends MainActivity {
     public static final String PARAMETRO1="com.example.a41638707.proyectofinal.PARAMETRO1";
     ListView lstEventos;
     Button btnAtras,btnDivision;
