@@ -12,28 +12,28 @@ public class Libros implements Serializable{
     private int IdLibro;
     private String Nombre;
     private String Descripcion;
-    private String Imagen;
     private int IdUsuario;
     //tiene que hbaer un Usuarios
     private String Usuario;
     private int Año;
     private MateriaEvento Materia;
     private boolean Vendido;
+    private int Celular;
     @Override
     public String toString() {
         return getNombre() + " "+getDesc();
     }
-    public Libros(int idlibro, String nombre, String descripcion, String imagen, int idUsuario,String usuario, int año, MateriaEvento materia, boolean vendido)
+    public Libros(int idlibro, String nombre, String descripcion, int idUsuario,String usuario, int año, MateriaEvento materia, boolean vendido, int celular)
     {
         IdLibro=idlibro;
         Nombre=nombre;
         Descripcion=descripcion;
-        Imagen=imagen;
         IdUsuario=idUsuario;
         Usuario=usuario;
         Año=año;
         Materia=materia;
         Vendido=vendido;
+        Celular=celular;
     }
     public int getId()
     {
@@ -46,10 +46,6 @@ public class Libros implements Serializable{
     public String getDesc()
     {
         return Descripcion;
-    }
-    public String getImg()
-    {
-        return Imagen;
     }
     public int getIdU()
     {
@@ -69,6 +65,14 @@ public class Libros implements Serializable{
     }
     public String getUsuario(){
         return Usuario;
+    }
+    public int getCelular()
+    {
+        return Celular;
+    }
+    public void setCelular(int celular)
+    {
+        Celular=celular;
     }
 
 }

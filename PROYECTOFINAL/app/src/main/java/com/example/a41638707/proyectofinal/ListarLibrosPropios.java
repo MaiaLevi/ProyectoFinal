@@ -242,10 +242,11 @@ public class ListarLibrosPropios extends AppCompatActivity {
                 String Usuario = obj.getString("Usuario");
                 int IdUsuario = obj.getInt("IdUsuario");
                 int IdMateria = obj.getInt("IdMateria");
+                int celular=obj.getInt("Celular");
                 String Materia=obj.getString("Materia");
                 MateriaEvento materia=new MateriaEvento(IdMateria,Materia);
                 boolean Vendido = false;
-                Libros unLibro = new Libros (idLibro,Nombre,Descr,"",IdUsuario,Usuario,Año,materia,Vendido);
+                Libros unLibro = new Libros (idLibro,Nombre,Descr,IdUsuario,Usuario,Año,materia,Vendido, celular);
                 lstLibros.add(unLibro);
             }
             return lstLibros;
@@ -266,7 +267,7 @@ public class ListarLibrosPropios extends AppCompatActivity {
         builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 Log.i("Diálogos", "Confirmación Cancelada.");
-                Usuarios miUsuario=new Usuarios("","","",1551503919);
+                Usuarios miUsuario=new Usuarios("","","NombrePrueba",libro.getCelular());
                 contacto(v, miUsuario, libro.getNombre());
                 dialog.cancel();
             }
@@ -385,7 +386,6 @@ public class ListarLibrosPropios extends AppCompatActivity {
                 int idLibro = obj.getInt("IdLibro");
                 String Nombre = obj.getString("Nombre");
                 String Descr = obj.getString("Descripcion");
-                String Imagen = obj.getString("Imagen");
                 int IdMateria = obj.getInt("IdMateria");
                 String materia= obj.getString("NombreMat");
                 int IdUsuario = obj.getInt("IdUsuario");
@@ -403,7 +403,7 @@ public class ListarLibrosPropios extends AppCompatActivity {
                     blnVend=true;
                 }
                 MateriaEvento materiaEv=new MateriaEvento(IdMateria,materia);
-                Libros unLibro = new Libros (idLibro,Nombre,Descr,Imagen,IdUsuario,Usuario,Año,materiaEv,blnVend);
+                Libros unLibro = new Libros (idLibro,Nombre,Descr,IdUsuario,Usuario,Año,materiaEv,blnVend,0);
                 listaLibros.add(unLibro);
             }
             return listaLibros;
