@@ -213,10 +213,11 @@ public class MainActivity extends AppCompatActivity {
         builder.setPositiveButton("Cerrar sesión", new  DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 Log.i("Diálogos", "Confirmación Aceptada.");
+                sesion=false;
                 SharedPreferences prefs =
                         getSharedPreferences("MisPreferencias", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = prefs.edit();
-                editor.putBoolean("sesion", false);
+                editor.putBoolean("sesion", sesion);
                 editor.commit();
                 layoutLogin.setVisibility(View.VISIBLE);
                 layoutBotones.setVisibility(View.GONE);
