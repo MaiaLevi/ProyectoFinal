@@ -1,90 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout android:orientation="vertical"
-    android:layout_width="match_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
     android:layout_height="match_parent"
-    android:layout_centerVertical="true"
-    android:layout_centerHorizontal="true"
-    xmlns:android="http://schemas.android.com/apk/res/android">
-        <LinearLayout
-            android:orientation="vertical"
+    android:layout_width="match_parent">
+        <TabHost android:id="@android:id/tabhost"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/login">
-
-                <EditText
+            android:layout_height="match_parent">
+                <LinearLayout
+                    android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textEmailAddress"
-                    android:ems="10"
-                    android:id="@+id/edtMail"
-                    android:hint="Ingrese su mail" />
+                    android:layout_height="match_parent" >
 
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPassword"
-                    android:ems="10"
-                    android:id="@+id/edtContrasena"
-                    android:hint="Ingrese la contraseña" />
+                        <TabWidget android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@android:id/tabs" />
+                        <FrameLayout android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:id="@android:id/tabcontent" >
+                                <LinearLayout android:id="@+id/tab1"
+                                    android:orientation="vertical"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent">
+                                        <LinearLayout android:orientation="vertical"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="match_parent"
+                                            android:layout_centerVertical="true"
+                                            android:layout_centerHorizontal="true"
+                                            xmlns:android="http://schemas.android.com/apk/res/android">
+                                                <LinearLayout
+                                                    android:orientation="vertical"
+                                                    android:layout_width="match_parent"
+                                                    android:layout_height="wrap_content"
+                                                    android:id="@+id/login">
 
-                <CheckBox
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Recordar mail"
-                    android:id="@+id/chkMail" />
+                                                        <EditText
+                                                            android:layout_width="match_parent"
+                                                            android:layout_height="wrap_content"
+                                                            android:inputType="textEmailAddress"
+                                                            android:ems="10"
+                                                            android:id="@+id/edtMail"
+                                                            android:hint="Ingrese su mail" />
 
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Iniciar sesión"
-                    android:id="@+id/btnIniciarSesion" />
+                                                        <EditText
+                                                            android:layout_width="match_parent"
+                                                            android:layout_height="wrap_content"
+                                                            android:inputType="textPassword"
+                                                            android:ems="10"
+                                                            android:id="@+id/edtContrasena"
+                                                            android:hint="Ingrese la contraseña" />
 
-        </LinearLayout>
+                                                        <CheckBox
+                                                            android:layout_width="wrap_content"
+                                                            android:layout_height="wrap_content"
+                                                            android:text="Recordar mail"
+                                                            android:id="@+id/chkMail" />
 
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:id="@+id/botones"
-            android:visibility="invisible">
+                                                        <Button
+                                                            android:layout_width="wrap_content"
+                                                            android:layout_height="wrap_content"
+                                                            android:text="Iniciar sesión"
+                                                            android:id="@+id/btnIniciarSesion" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="New Text"
-                    android:id="@+id/tvwBienvenido"
-                    android:textSize="20dp" />
+                                                </LinearLayout>
 
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Listar eventos"
-                    android:id="@+id/btnListar"
-                    android:layout_gravity="center_horizontal" />
+                                                <LinearLayout
+                                                    android:orientation="vertical"
+                                                    android:layout_width="match_parent"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_gravity="center_horizontal"
+                                                    android:id="@+id/botones"
+                                                    android:visibility="invisible">
 
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Listar libros"
-                    android:id="@+id/btnListarLibros"
-                    android:layout_gravity="center_horizontal" />
+                                                        <TextView
+                                                            android:layout_width="wrap_content"
+                                                            android:layout_height="wrap_content"
+                                                            android:text="New Text"
+                                                            android:id="@+id/tvwBienvenido"
+                                                            android:textSize="20dp" />
 
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Cerrar sesión"
-                    android:id="@+id/btnLogout"
-                    android:layout_gravity="center_horizontal" />
-        </LinearLayout>
-
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Agregar evento"
-            android:id="@+id/btnAgregar"
-            android:layout_gravity="center_horizontal"
-            android:visibility="invisible" />
-
+                                                </LinearLayout>
+                                        </LinearLayout>
+                                </LinearLayout>
+                            <LinearLayout android:id="@+id/tab2"
+                                android:orientation="vertical"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent" >
+                            </LinearLayout>
+                            <LinearLayout android:id="@+id/tab3"
+                                android:orientation="vertical"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent" >
+                            </LinearLayout>
+                            <LinearLayout android:id="@+id/tab4"
+                                android:orientation="vertical"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent" >
+                            </LinearLayout>
+                        </FrameLayout>
+                </LinearLayout>
+        </TabHost>
 </LinearLayout>

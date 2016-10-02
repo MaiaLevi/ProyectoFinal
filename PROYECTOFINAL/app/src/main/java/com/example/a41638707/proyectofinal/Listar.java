@@ -1,33 +1,22 @@
 package com.example.a41638707.proyectofinal;
 
-import android.app.ActionBar;
-import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.app.usage.UsageEvents;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.StrictMode;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.graphics.Color;
+import android.widget.TabHost;
 import android.widget.Toast;
 
 import com.squareup.okhttp.OkHttpClient;
@@ -37,7 +26,6 @@ import com.squareup.okhttp.Response;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpDelete;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
@@ -45,13 +33,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-import java.util.Random;
 
 public class Listar extends MainActivity {
     public static final String PARAMETRO1="com.example.a41638707.proyectofinal.PARAMETRO1";
@@ -65,6 +50,7 @@ public class Listar extends MainActivity {
     ImageView imgAgregar, imgModificar, imgEliminar;
     ProgressDialog progressDialog;
     String url;
+    TabHost tabs;
     boolean click=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,6 +115,29 @@ public class Listar extends MainActivity {
                 }
             }
         });
+        tabs.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
+            @Override
+            public void onTabChanged(String tabId) {
+                switch(tabId)
+                {
+                    case ("usuario"):
+
+                        Intent nuevaActivity=new Intent(Listar.this,MainActivity.class);
+                        startActivity(nuevaActivity);
+                        chau();
+                        break;
+                    case ("libros"):
+
+                        Intent nuevaActivity2=new Intent(Listar.this,ListarLibrosPropios.class);
+                        startActivity(nuevaActivity2);
+                        chau();
+                        break;
+                    case ("horario"):
+                    //todavia nada porque no esta la activity
+                    break;
+                }
+            }
+        });
     }
     @Override
     public void onRestart(){
@@ -136,6 +145,10 @@ public class Listar extends MainActivity {
         click=false;
         progressDialog=new ProgressDialog(this);
         traerTodo();
+    }
+    private void chau()
+    {
+        this.finish();
     }
     private void traerTodo()
     {
@@ -180,6 +193,30 @@ public class Listar extends MainActivity {
         imgModificar=(ImageView)findViewById(R.id.imgModificar);
         imgEliminar=(ImageView)findViewById(R.id.imgEliminar);
         btnDivision=(Button)findViewById(R.id.btnDivision);
+        Resources res = getResources();
+        tabs=(TabHost)findViewById(android.R.id.tabhost);
+        tabs.setup();
+        TabHost.TabSpec spec=tabs.newTabSpec("usuario");
+        spec.setContent(R.id.tab1);
+        spec.setIndicator("",
+                res.getDrawable(R.drawable.ic_person_black_24dp1));
+        tabs.addTab(spec);
+        spec=tabs.newTabSpec("eventos");
+        spec.setContent(R.id.tab2);
+        spec.setIndicator("",
+                res.getDrawable(R.drawable.ic_assignment_black_24dp));
+        tabs.addTab(spec);
+        spec=tabs.newTabSpec("libros");
+        spec.setContent(R.id.tab3);
+        spec.setIndicator("",
+                res.getDrawable(R.drawable.ic_local_library_black_24dp));
+        tabs.addTab(spec);
+        spec=tabs.newTabSpec("horario");
+        spec.setContent(R.id.tab4);
+        spec.setIndicator("",
+                res.getDrawable(R.drawable.ic_alarm_black_24dp));
+        tabs.addTab(spec);
+        tabs.setCurrentTab(1);
     }
     private void IniciarModificarActividad(int i)
     {

@@ -268,7 +268,7 @@ public class ModificarLibro extends AppCompatActivity {
                 blnVendido=true;
             }
             eventoMateria = new MateriaEvento(idMateria, materia);
-            miLibro=new Libros(id,nombre,descripcion, null, idUsuario, "", año, eventoMateria, blnVendido );
+            miLibro=new Libros(id,nombre,descripcion, idUsuario, "", año, eventoMateria, blnVendido,0 );
             return miLibro;
         }
     }

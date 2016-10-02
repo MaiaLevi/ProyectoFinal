@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.StrictMode;
@@ -31,6 +32,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 /*
@@ -59,22 +61,21 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity {
     // public static final ArrayList<Evento> PARAMETRO1=new ArrayList<Evento>();
     public ProgressDialog progressDialog;
-    Button btnListar, btnAgregar, btnListarLibros, btnIniciarSesion, btnLogout;
+    Button  btnIniciarSesion, btnLogout;
     EditText edtMail, edtContra;
     Usuarios miUsuario;
     Division miDivision;
     View layoutBotones, layoutLogin;
     TextView tvwBienvenido;
     Boolean sesion, blnMail;
-    DrawerLayout drawerLayout;
-    NavigationView navigationView;
     CheckBox chkMail;
     String nombre, mail, division;
     int iddivision, id;
+    TabHost tabs;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.navigation);
+        setContentView(R.layout.activity_main);
         ObtenerReferencias();
         progressDialog = new ProgressDialog(this);
         SharedPreferences prefs =
@@ -108,17 +109,29 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
+        tabs.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
+            @Override
+            public void onTabChanged(String tabId) {
+                switch(tabId)
+                {
+                    case ("eventos"):
 
-        btnListar.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                //new ListarEventos().execute(url);
-                //NO ANDA   List<Evento> lisLin= (List<Evento>) new ProgressTask(MainActivity.this).execute("192.168.56.1/listareventos.php");
-                IniciarListarActividad();
-            }
-        });
-        btnAgregar.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                IniciarAgregarActividad();
+                        Intent nuevaActivity=new Intent(getApplicationContext(),Listar.class);
+                        startActivity(nuevaActivity);
+                        chau();
+                    break;
+                    case ("libros"):
+
+                        Intent nuevaActivity2=new Intent(getApplicationContext(),ListarLibrosPropios.class);
+                        startActivity(nuevaActivity2);
+                        chau();
+                    break;
+                    case ("horario"):
+                    {
+                        //todavia nada porque no esta la activity
+                    }
+                    break;
+                }
             }
         });
         btnLogout.setOnClickListener(new View.OnClickListener() {
@@ -149,13 +162,9 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
-        btnListarLibros.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                IniciarListarLActividad();
-            }
-        });
-        navigationView.setNavigationItemSelectedListener(
+       }
+        //CAMBIAR POR TAB
+        /*navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
@@ -181,6 +190,10 @@ public class MainActivity extends AppCompatActivity {
                         return true;
                     }
                 });
+    }*/
+    private void chau()
+    {
+        this.finish();
     }
     private Dialog confirmarLogout(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -224,9 +237,6 @@ public class MainActivity extends AppCompatActivity {
     }
     private void ObtenerReferencias()
     {
-        btnListarLibros=(Button)findViewById(R.id.btnListarLibros);
-        btnAgregar=(Button) findViewById(R.id.btnAgregar);
-        btnListar=(Button)findViewById(R.id.btnListar);
         btnIniciarSesion=(Button)findViewById(R.id.btnIniciarSesion);
         edtMail=(EditText)findViewById(R.id.edtMail);
         edtContra=(EditText)findViewById(R.id.edtContrasena);
@@ -235,8 +245,31 @@ public class MainActivity extends AppCompatActivity {
         layoutLogin=findViewById(R.id.login);
         btnLogout=(Button)findViewById(R.id.btnLogout);
         chkMail=(CheckBox)findViewById(R.id.chkMail);
-        drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
-        navigationView = (NavigationView)findViewById(R.id.navview);
+        //SETEO TABS
+        Resources res = getResources();
+        tabs=(TabHost)findViewById(android.R.id.tabhost);
+        tabs.setup();
+        TabHost.TabSpec spec=tabs.newTabSpec("usuario");
+        spec.setContent(R.id.tab1);
+        spec.setIndicator("",
+                res.getDrawable(R.drawable.ic_person_black_24dp1));
+        tabs.addTab(spec);
+        spec=tabs.newTabSpec("eventos");
+        spec.setContent(R.id.tab2);
+        spec.setIndicator("",
+                res.getDrawable(R.drawable.ic_assignment_black_24dp));
+        tabs.addTab(spec);
+        spec=tabs.newTabSpec("libros");
+        spec.setContent(R.id.tab3);
+        spec.setIndicator("",
+                res.getDrawable(R.drawable.ic_local_library_black_24dp));
+        tabs.addTab(spec);
+        spec=tabs.newTabSpec("horario");
+        spec.setContent(R.id.tab4);
+        spec.setIndicator("",
+                res.getDrawable(R.drawable.ic_alarm_black_24dp));
+        tabs.addTab(spec);
+        tabs.setCurrentTab(0);
     }
     private void IniciarAgregarActividad()
     {

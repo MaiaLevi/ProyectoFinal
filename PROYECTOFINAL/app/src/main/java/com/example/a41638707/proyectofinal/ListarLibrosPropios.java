@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -25,6 +26,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,6 +53,7 @@ public class ListarLibrosPropios extends AppCompatActivity {
     ImageView imgAgregar;
     ProgressDialog progressDialog;
     String url;
+    TabHost tabs;
     EditText edtBuscar;
     View layoutPpal;
     LinearLayout layout;
@@ -77,6 +80,31 @@ public class ListarLibrosPropios extends AppCompatActivity {
             public void onItemClick(AdapterView<?> a, View v, int position, long id) {
                 libroSeleccionado= listaLibros.get(position);
                 ActivityVerL();
+            }
+        });
+
+        tabs.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
+            @Override
+            public void onTabChanged(String tabId) {
+                switch(tabId)
+                {
+                    case ("usuario"):
+
+                        Intent nuevaActivity=new Intent(ListarLibrosPropios.this,MainActivity.class);
+                        startActivity(nuevaActivity);
+                        chau();
+                        break;
+                    case ("eventos"):
+
+                        Intent nuevaActivity2=new Intent(ListarLibrosPropios.this,Listar.class);
+                        startActivity(nuevaActivity2);
+                        chau();
+                        break;
+                    case ("horario"):
+                        //todavia nada porque no esta la activity
+                    break;
+
+                }
             }
         });
         imgAgregar.setOnClickListener(new View.OnClickListener() {
@@ -113,6 +141,10 @@ public class ListarLibrosPropios extends AppCompatActivity {
     {
         Intent nuevaActivity=new Intent(ListarLibrosPropios.this,AgregarLibro.class);
         startActivity(nuevaActivity);
+    }
+    private void chau()
+    {
+        this.finish();
     }
     @Override
     public void onRestart(){
@@ -337,7 +369,31 @@ public class ListarLibrosPropios extends AppCompatActivity {
         imgAgregar=(ImageView)findViewById(R.id.imgAgregar);
         edtBuscar=(EditText)findViewById(R.id.edtBusqueda);
         layoutPpal=findViewById(R.id.layoutPrincipal);
-        layout=(LinearLayout)findViewById(R.id.linealLayout);
+        layout=(LinearLayout)findViewById(R.id.linealLayout);//SETEO TABS
+        Resources res = getResources();
+        tabs=(TabHost)findViewById(android.R.id.tabhost);
+        tabs.setup();
+        TabHost.TabSpec spec=tabs.newTabSpec("usuario");
+        spec.setContent(R.id.tab1);
+        spec.setIndicator("",
+                res.getDrawable(R.drawable.ic_person_black_24dp1));
+        tabs.addTab(spec);
+        spec=tabs.newTabSpec("eventos");
+        spec.setContent(R.id.tab2);
+        spec.setIndicator("",
+                res.getDrawable(R.drawable.ic_assignment_black_24dp));
+        tabs.addTab(spec);
+        spec=tabs.newTabSpec("libros");
+        spec.setContent(R.id.tab3);
+        spec.setIndicator("",
+                res.getDrawable(R.drawable.ic_local_library_black_24dp));
+        tabs.addTab(spec);
+        spec=tabs.newTabSpec("horario");
+        spec.setContent(R.id.tab4);
+        spec.setIndicator("",
+                res.getDrawable(R.drawable.ic_alarm_black_24dp));
+        tabs.addTab(spec);
+        tabs.setCurrentTab(2);
     }
     private class listarLibros extends AsyncTask<String, Void, ArrayList<Libros>> {
         private OkHttpClient client = new OkHttpClient();
