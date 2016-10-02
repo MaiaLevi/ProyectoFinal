@@ -283,21 +283,6 @@ public class MainActivity extends AppCompatActivity {
         tabs.addTab(spec);
         tabs.setCurrentTab(0);
     }
-    private void IniciarAgregarActividad()
-    {
-        Intent nuevaActivity=new Intent(MainActivity.this,Agregar.class);
-        startActivity(nuevaActivity);
-    }
-    private void IniciarListarActividad()
-    {
-        Intent nuevaActivity=new Intent(MainActivity.this,Listar.class);
-        startActivity(nuevaActivity);
-    }
-    private void IniciarListarLActividad()
-    {
-        Intent nuevaActivity=new Intent(MainActivity.this,ListarLibrosPropios.class);
-        startActivity(nuevaActivity);
-    }
     private class traerUsuario extends AsyncTask<String, Void, Usuarios> {
         private OkHttpClient client = new OkHttpClient();
         @Override
@@ -332,6 +317,7 @@ public class MainActivity extends AppCompatActivity {
                     tvwBienvenido.setText("Bienvenido/a "+miUsuario.getNombre());
                     layoutLogin.setVisibility(View.GONE);
                     layoutBotones.setVisibility(View.VISIBLE);
+                    sesion=true;
                     SharedPreferences prefs =
                             getSharedPreferences("MisPreferencias", Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = prefs.edit();
@@ -340,7 +326,7 @@ public class MainActivity extends AppCompatActivity {
                     editor.putInt("iddivision", Usuarios.getDivision().getId());
                     editor.putString("division", Usuarios.getDivision().getNombre());
                     editor.putInt("id", Usuarios.getId());
-                    editor.putBoolean("sesion", true);
+                    editor.putBoolean("sesion", sesion);
                     if (chkMail.isChecked())
                     {
                         editor.putBoolean("mail", true);
