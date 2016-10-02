@@ -41,7 +41,7 @@ import java.util.Date;
 public class Listar extends MainActivity {
     public static final String PARAMETRO1="com.example.a41638707.proyectofinal.PARAMETRO1";
     ListView lstEventos;
-    Button btnAtras,btnDivision;
+    Button btnDivision;
     Evento eventoSeleccionado;
     TipoEvento tipo;
     MateriaEvento materia;
@@ -152,7 +152,7 @@ public class Listar extends MainActivity {
     }
     private void traerTodo()
     {
-        url="http://daiuszw.hol.es/bd/listarEventos.php?IdUsuario=";
+        url="http://apicampus.azurewebsites.net/listarEventos.php?IdUsuario=";
         //ver si lo de abajo anda
         url+= Usuarios.getId();
         new listarEventos().execute(url);
@@ -170,7 +170,7 @@ public class Listar extends MainActivity {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         HttpClient httpClient = new DefaultHttpClient();
-        HttpDelete delRequest = new HttpDelete("http://daiuszw.hol.es/bd/eliminarevento.php?Id=" + param);
+        HttpDelete delRequest = new HttpDelete("http://apicampus.azurewebsites.net/eliminarevento.php?Id=" + param);
         delRequest.setHeader("content-type", "application/json");
         try {
             HttpResponse resp = httpClient.execute(delRequest);
@@ -187,7 +187,6 @@ public class Listar extends MainActivity {
     }
     private void ObtenerReferencias()
     {
-        btnAtras=(Button) findViewById(R.id.btnListar);
         lstEventos=(ListView)findViewById(R.id.lstEventos);
         imgAgregar=(ImageView)findViewById(R.id.imgAgregar);
         imgModificar=(ImageView)findViewById(R.id.imgModificar);

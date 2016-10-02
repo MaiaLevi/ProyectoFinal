@@ -52,9 +52,9 @@ public class Agregar extends AppCompatActivity {
     MateriaEvento materiaSeleccionada;
     CalendarView calendar;
     Calendar calen;
-    String url ="http://daiuszw.hol.es/bd/agregarevento.php";
-    String url2="http://daiuszw.hol.es/bd/listarTipoEvento.php";
-    String url3="http://daiuszw.hol.es/bd/listarMateriaEvento.php";
+    String url ="http://apicampus.azurewebsites.net/agregarevento.php";
+    String url2="http://apicampus.azurewebsites.net/listarTipoEvento.php";
+    String url3="http://apicampus.azurewebsites.net/listarMateriaEvento.php";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //api pida iddivision

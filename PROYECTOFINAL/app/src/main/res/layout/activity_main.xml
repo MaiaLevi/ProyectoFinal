@@ -78,6 +78,12 @@
                                                             android:id="@+id/tvwBienvenido"
                                                             android:textSize="20dp" />
 
+                                                    <Button
+                                                            android:layout_width="wrap_content"
+                                                            android:layout_height="wrap_content"
+                                                            android:text="Cerrar sesión"
+                                                            android:id="@+id/btnLogout"
+                                                            android:layout_gravity="center_horizontal" />
                                                 </LinearLayout>
                                         </LinearLayout>
                                 </LinearLayout>

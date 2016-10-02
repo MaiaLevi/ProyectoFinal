@@ -68,7 +68,7 @@ public class ListarLibrosPropios extends AppCompatActivity {
         ObtenerReferencias();
         idUsuario=Usuarios.getId();
         progressDialog=new ProgressDialog(this);
-        url="http://daiuszw.hol.es/bd/listarLibrosPropios.php?IdUsuario=";
+        url="http://apicampus.azurewebsites.net/listarLibrosPropios.php?IdUsuario=";
         url+=idUsuario;
         new listarLibros().execute(url);
         if (adaptador!=null)
@@ -127,7 +127,7 @@ public class ListarLibrosPropios extends AppCompatActivity {
                 {
                     //PROBAR ESTA API ACA
                     layoutPpal.setVisibility(View.GONE);
-                    url="http://daiuszw.hol.es/bd/buscarLibros.php?Busqueda=";
+                    url="http://apicampus.azurewebsites.net/buscarLibros.php?Busqueda=";
                     url+=texto;
                     url+="&id=";
                     url+=Usuarios.getId();
@@ -149,7 +149,7 @@ public class ListarLibrosPropios extends AppCompatActivity {
     @Override
     public void onRestart(){
         super.onRestart();
-        url="http://daiuszw.hol.es/bd/listarLibrosPropios.php?IdUsuario=";
+        url="http://apicampus.azurewebsites.net/listarLibrosPropios.php?IdUsuario=";
         url+=idUsuario;
         new listarLibros().execute(url);
         if (adaptador!=null)
@@ -208,7 +208,7 @@ public class ListarLibrosPropios extends AppCompatActivity {
             progressDialog.dismiss();
             //adapter
             //for y recorrer cantidad de libros
-            if (lstaLibros.isEmpty())
+            if (lstaLibros==null||lstaLibros.isEmpty())
             {
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 layout.setOrientation(LinearLayout.VERTICAL);

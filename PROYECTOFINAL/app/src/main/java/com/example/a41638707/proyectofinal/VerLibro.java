@@ -91,7 +91,7 @@ public class VerLibro extends AppCompatActivity {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         HttpClient httpClient = new DefaultHttpClient();
-        HttpDelete delRequest = new HttpDelete("http://daiuszw.hol.es/bd/EliminarLibro.php?Id=" + param);
+        HttpDelete delRequest = new HttpDelete("http://apicampus.azurewebsites.net/EliminarLibro.php?Id=" + param);
         delRequest.setHeader("content-type", "application/json");
         try {
             HttpResponse resp = httpClient.execute(delRequest);

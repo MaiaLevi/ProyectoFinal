@@ -37,8 +37,8 @@ public class AgregarLibro extends AppCompatActivity {
     MateriaEvento materiaSeleccionada;
     CheckBox chkVendido;
     int anioSeleccionado;
-    String url="http://daiuszw.hol.es/bd/AgregarLibro.php";
-    String url3="http://daiuszw.hol.es/bd/listarMateriaEvento.php";
+    String url="http://apicampus.azurewebsites.net/AgregarLibro.php";
+    String url3="http://apicampus.azurewebsites.net/listarMateriaEvento.php";
     ArrayList<Integer> anios = new ArrayList<Integer>();
     @Override
     protected void onCreate(Bundle savedInstanceState)

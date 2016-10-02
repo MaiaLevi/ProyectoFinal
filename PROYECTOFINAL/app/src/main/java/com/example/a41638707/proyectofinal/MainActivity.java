@@ -144,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
         });
         btnIniciarSesion.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                String url = "http://daiuszw.hol.es/bd/login.php?Mail=";
+                String url = "http://apicampus.azurewebsites.net/login.php?Mail=";
                 url += edtMail.getText().toString();
                 if (!edtMail.getText().toString().equals("")&&!edtMail.getText().toString().equals(" "))
                 {

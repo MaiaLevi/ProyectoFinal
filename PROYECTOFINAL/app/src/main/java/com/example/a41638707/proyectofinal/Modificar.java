@@ -56,7 +56,7 @@ public class Modificar extends AppCompatActivity {
         idEvento=datos.getInt(Listar.PARAMETRO1);
         ObtenerReferencias();
         progressDialog=new ProgressDialog(this);
-        String url="http://daiuszw.hol.es/bd/traerEvento.php?Evento=";
+        String url="http://apicampus.azurewebsites.net/traerEvento.php?Evento=";
         url=url+idEvento;
         new traerEvento().execute(url);
         calendario.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
@@ -93,7 +93,7 @@ public class Modificar extends AppCompatActivity {
         });
         btnGuardar.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                String url = "http://daiuszw.hol.es/bd/modificarevento.php";
+                String url = "http://apicampus.azurewebsites.net/modificarevento.php";
                 //se manda parametro? hace falta?
                 new modificarEvento().execute(url);
             }
@@ -202,9 +202,9 @@ public class Modificar extends AppCompatActivity {
         protected void onPostExecute(Evento evento) {
             super.onPostExecute(evento);
             progressDialog.dismiss();
-            String url="http://daiuszw.hol.es/bd/listarMateriaEvento.php";
+            String url="http://apicampus.azurewebsites.net/listarMateriaEvento.php";
             new traerMaterias().execute(url);
-            url="http://daiuszw.hol.es/bd/listarTipoEvento.php";
+            url="http://apicampus.azurewebsites.net/listarTipoEvento.php";
             new traerTipos().execute(url);
             Calendar cal = Calendar.getInstance();
             cal.setTime(MiEvento.getFecha());

@@ -56,12 +56,12 @@ public class ModificarLibro extends AppCompatActivity {
         progressDialog=new ProgressDialog(this);
         obtenerReferencias();
         idUsuario=Usuarios.getId();
-        String url="http://daiuszw.hol.es/bd/traerLibro.php?Id=";
+        String url="http://apicampus.azurewebsites.net/traerLibro.php?Id=";
         url+=idLibro;
         new traerLibro().execute(url);
         btnGuardar.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                String url = "http://daiuszw.hol.es/bd/modificarLibro.php" ;
+                String url = "http://apicampus.azurewebsites.net/modificarLibro.php" ;
                 new modificarEvento().execute(url);
             }
         });
@@ -234,7 +234,7 @@ public class ModificarLibro extends AppCompatActivity {
         protected void onPostExecute(Libros libros) {
             super.onPostExecute(libros);
             progressDialog.dismiss();
-            String url="http://daiuszw.hol.es/bd/listarMateriaEvento.php";
+            String url="http://apicampus.azurewebsites.net/listarMateriaEvento.php";
             new traerMaterias().execute(url);
             edtDescr.setText(libros.getDesc());
             edtNombre.setText(libros.getNombre());
