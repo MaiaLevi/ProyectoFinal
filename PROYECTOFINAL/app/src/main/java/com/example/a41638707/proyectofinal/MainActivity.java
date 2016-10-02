@@ -84,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
         nombre=prefs.getString("nombre","");
         mail=prefs.getString("email","");
         id=prefs.getInt("id",0);
+        Log.i("sesion", sesion.toString());
         //PROBAR ABAJO
         iddivision=prefs.getInt("iddivision",0);
         division=prefs.getString("division", "");
@@ -112,25 +113,35 @@ public class MainActivity extends AppCompatActivity {
         tabs.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
             @Override
             public void onTabChanged(String tabId) {
-                switch(tabId)
+                if (sesion)
                 {
-                    case ("eventos"):
-
-                        Intent nuevaActivity=new Intent(getApplicationContext(),Listar.class);
-                        startActivity(nuevaActivity);
-                        chau();
-                    break;
-                    case ("libros"):
-
-                        Intent nuevaActivity2=new Intent(getApplicationContext(),ListarLibrosPropios.class);
-                        startActivity(nuevaActivity2);
-                        chau();
-                    break;
-                    case ("horario"):
+                    switch(tabId)
                     {
-                        //todavia nada porque no esta la activity
+                        case ("eventos"):
+
+                            Intent nuevaActivity=new Intent(getApplicationContext(),Listar.class);
+                            startActivity(nuevaActivity);
+                            chau();
+                        break;
+                        case ("libros"):
+
+                            Intent nuevaActivity2=new Intent(getApplicationContext(),ListarLibrosPropios.class);
+                            startActivity(nuevaActivity2);
+                            chau();
+                        break;
+                        case ("horario"):
+                        {
+                            //todavia nada porque no esta la activity
+                        }
+                        break;
                     }
-                    break;
+                }
+                else
+                {
+                    if (!tabId.equals("usuario"))
+                    {
+                        Toast.makeText(getApplicationContext(), "Para acceder debe iniciar sesión", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });

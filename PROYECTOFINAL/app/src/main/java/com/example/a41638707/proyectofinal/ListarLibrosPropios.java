@@ -289,6 +289,7 @@ public class ListarLibrosPropios extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Contacto");
         builder.setMessage("¿Tiene en sus contactos al vendedor del libro ("+libro.getUsuario()+")?");
+        Log.i("1", libro.getUsuario());
         builder.setPositiveButton("Sí", new  DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 Log.i("Diálogos", "Confirmación Aceptada.");
@@ -299,7 +300,9 @@ public class ListarLibrosPropios extends AppCompatActivity {
         builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 Log.i("Diálogos", "Confirmación Cancelada.");
-                Usuarios miUsuario=new Usuarios("","","NombrePrueba",libro.getCelular());
+                //aca hay algo porque el parametro de nombre llega mal pero arriba se muestra bien
+                Usuarios miUsuario=new Usuarios(libro.getUsuario(),"","",libro.getCelular());
+                Log.i("2", libro.getUsuario());
                 contacto(v, miUsuario, libro.getNombre());
                 dialog.cancel();
             }
@@ -334,7 +337,7 @@ public class ListarLibrosPropios extends AppCompatActivity {
                 .build());
         try {
             getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);
-            Toast.makeText(getApplicationContext(), "Contacto agregado", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Contacto agregado ("+usuarios.getNombre()+")", Toast.LENGTH_SHORT).show();
             onClickWhatsApp(v,s);
         } catch (Exception e) {
             e.printStackTrace();
@@ -426,8 +429,11 @@ public class ListarLibrosPropios extends AppCompatActivity {
             super.onPostExecute(lista);
             progressDialog.dismiss();
             //adapter
-            ArrayAdapter<Libros> Adaptador=new ArrayAdapter<Libros>(ListarLibrosPropios.this, android.R.layout.simple_list_item_1, lista);
-            lstviewLibros.setAdapter(Adaptador);
+            if (lista!=null|| !lista.isEmpty())
+            {
+                ArrayAdapter<Libros> Adaptador=new ArrayAdapter<Libros>(ListarLibrosPropios.this, android.R.layout.simple_list_item_1, lista);
+                lstviewLibros.setAdapter(Adaptador);
+            }
         }
         @Override
         protected void onProgressUpdate(Void... values) {
