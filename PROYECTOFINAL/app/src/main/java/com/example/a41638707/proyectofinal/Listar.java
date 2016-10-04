@@ -133,7 +133,9 @@ public class Listar extends MainActivity {
                         chau();
                         break;
                     case ("horario"):
-                    //todavia nada porque no esta la activity
+                        Intent nuevaActivity3=new Intent(getApplicationContext(),ListarHorario.class);
+                        startActivity(nuevaActivity3);
+                        chau();
                     break;
                 }
             }
