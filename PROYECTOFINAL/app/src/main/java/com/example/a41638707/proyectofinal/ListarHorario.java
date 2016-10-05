@@ -129,7 +129,6 @@ public class ListarHorario extends AppCompatActivity {
     {
         Intent nuevaActivity3=new Intent(getApplicationContext(),AgregarHorario.class);
         startActivity(nuevaActivity3);
-        this.finish();
     }
     private void chau()
     {

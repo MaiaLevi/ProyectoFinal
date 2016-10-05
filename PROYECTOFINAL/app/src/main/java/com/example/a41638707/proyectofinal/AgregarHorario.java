@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
@@ -31,8 +32,9 @@ public class AgregarHorario extends AppCompatActivity {
     List<MateriaEvento> materias;
     Button btnAtras, btnGuardar;
     MateriaEvento materiaSeleccionada;
+    int numeroDia=0;
     String[] arrayDias = {"Lunes", "Martes", "Miercoles", "Jueves", "Viernes"};
-    int[] arrayBloques = {1,2,3, 4, 5, 6};
+    Integer[] arrayBloques = {1,2,3, 4, 5, 6};
     ArrayAdapter<MateriaEvento> adapterMaterias;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,10 +44,26 @@ public class AgregarHorario extends AppCompatActivity {
         String urlMateria="http://apicampus.azurewebsites.net/listarMateriaEvento.php";
         new traerMaterias().execute(urlMateria);
         //adapter de spinners de dias y bloques
+        ArrayAdapter<String> adapterDias = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, arrayDias);
+        adapterDias.setDropDownViewResource(R.layout.simple_spinner_dropdown_item);
+        spndia.setAdapter(adapterDias);
+        ArrayAdapter<Integer> adapterBloques = new ArrayAdapter<Integer>(this,android.R.layout.simple_spinner_item, arrayBloques);
+        adapterBloques.setDropDownViewResource(R.layout.simple_spinner_dropdown_item);
+        spnbloque.setAdapter(adapterBloques);
         spnMateria.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 materiaSeleccionada = materias.get(i);
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+        spndia.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                numeroDia=i+1;
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
@@ -81,6 +99,8 @@ public class AgregarHorario extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+            Toast.makeText(getApplicationContext(), "Los datos han sido guardados", Toast.LENGTH_SHORT).show();
+            chau();
         }
         @Override
         protected void onProgressUpdate(Void... values) {
@@ -100,8 +120,8 @@ public class AgregarHorario extends AppCompatActivity {
             JSONObject json = new JSONObject();
             try {
                 json.put("iddivision", Usuarios.getDivision().getId());
-                json.put("bloque", spnbloque.getSelectedItem().toString());
-                json.put("idsemana", spndia.getSelectedItem());
+                json.put("bloque", spnbloque.getSelectedItem());
+                json.put("idsemana", numeroDia);
                 json.put("idmateria", materiaSeleccionada.getId());
                 RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json.toString());
                 Request request = new Request.Builder()
