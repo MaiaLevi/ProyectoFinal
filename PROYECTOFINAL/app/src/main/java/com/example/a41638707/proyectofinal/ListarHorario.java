@@ -124,7 +124,11 @@ public class ListarHorario extends AppCompatActivity {
                 agregarHorario();
             }
         });
-    }
+    }@Override
+    public void onRestart(){
+        super.onRestart();
+        url="http://apicampus.azurewebsites.net/traerDia.php?IdDivision="+Usuarios.getDivision().getId()+"&Dia=1";
+        new listarEventos().execute(url);}
     private void agregarHorario()
     {
         Intent nuevaActivity3=new Intent(getApplicationContext(),AgregarHorario.class);
@@ -200,11 +204,9 @@ public class ListarHorario extends AppCompatActivity {
             if (lsHorario.isEmpty())
             {
                 Toast.makeText(getApplicationContext(), "No hay datos", Toast.LENGTH_SHORT).show();
-                progressDialog.hide();
             }
-                adaptador = new ArrayAdapter<Horario>(getApplicationContext(), android.R.layout.simple_list_item_1, lsHorario);
-                lstHorario.setAdapter(adaptador);
-
+            adaptador = new ArrayAdapter<Horario>(getApplicationContext(), android.R.layout.simple_list_item_1, lsHorario);
+            lstHorario.setAdapter(adaptador);
         }
         @Override
         protected void onProgressUpdate(Void... values) {
@@ -271,4 +273,3 @@ public class ListarHorario extends AppCompatActivity {
         return builder.create();
     }
 }
-
