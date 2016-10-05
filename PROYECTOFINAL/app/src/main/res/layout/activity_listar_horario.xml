@@ -21,6 +21,7 @@
                         android:orientation="vertical"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
+
                     </LinearLayout>
                     <LinearLayout android:id="@+id/tab2"
                         android:orientation="vertical"
@@ -36,6 +37,49 @@
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" >
+
+
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Lunes"
+                            android:id="@+id/btnLunes" />
+
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Martes"
+                            android:id="@+id/btnMartes" />
+
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Mierc"
+                            android:id="@+id/btnMierc" />
+
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Jueves"
+                            android:id="@+id/btnJueves" />
+
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Viernes"
+                            android:id="@+id/btnViernes" />
+                        <ListView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/listaHorario"
+                            android:background="#ff7b7b" />
+
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Agregar Horario"
+                            android:id="@+id/btnagregarHorario" />
+
                     </LinearLayout>
     </FrameLayout>
     </LinearLayout>

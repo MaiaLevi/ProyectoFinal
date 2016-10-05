@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.Toast;
@@ -46,36 +47,36 @@ public class ListarHorario extends AppCompatActivity {
     ArrayAdapter<Horario> adaptador;
     TabHost tabs;
     boolean click=false;
+    Button btnLunes, btnMartes, btnMierc, btnJueves, btnViernes, btnAgregar;
     Horario horarioSeleccionado;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listar_horario);
-        url="cambiar url";
-        new listarEventos().execute(url);
-        progressDialog=new ProgressDialog(this);
+        //por default, lunes
         obtenerReferencias();
-
-        lstHorario.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        progressDialog=new ProgressDialog(this);
+        //en cada on click listener se limpia la lista
+        url="http://apicampus.azurewebsites.net/traerDia.php?IdDivision="+Usuarios.getDivision().getId()+"&Dia=1";
+        new listarEventos().execute(url);
+        /*lstHorario.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> a, View v, int position, long id) {
                 horarioSeleccionado= listaHorario.get(position);
                 confirmarEliminar();
             }
-        });
+        });*/
         tabs.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
             @Override
             public void onTabChanged(String tabId) {
                 switch(tabId)
                 {
                     case ("usuario"):
-
                         Intent nuevaActivity=new Intent(ListarHorario.this,MainActivity.class);
                         startActivity(nuevaActivity);
                         chau();
                         break;
                     case ("libros"):
-
                         Intent nuevaActivity2=new Intent(ListarHorario.this,ListarLibrosPropios.class);
                         startActivity(nuevaActivity2);
                         chau();
@@ -88,6 +89,47 @@ public class ListarHorario extends AppCompatActivity {
                 }
             }
         });
+        btnLunes.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                url="http://apicampus.azurewebsites.net/traerDia.php?IdDivision="+Usuarios.getDivision().getId()+"&Dia=1";
+                new listarEventos().execute(url);
+            }
+        });
+        btnMartes.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                url="http://apicampus.azurewebsites.net/traerDia.php?IdDivision="+Usuarios.getDivision().getId()+"&Dia=2";
+                new listarEventos().execute(url);
+            }
+        });
+        btnMierc.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                url="http://apicampus.azurewebsites.net/traerDia.php?IdDivision="+Usuarios.getDivision().getId()+"&Dia=3";
+                new listarEventos().execute(url);
+            }
+        });
+        btnJueves.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                url="http://apicampus.azurewebsites.net/traerDia.php?IdDivision="+Usuarios.getDivision().getId()+"&Dia=4";
+                new listarEventos().execute(url);
+            }
+        });
+        btnViernes.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                url="http://apicampus.azurewebsites.net/traerDia.php?IdDivision="+Usuarios.getDivision().getId()+"&Dia=5";
+                new listarEventos().execute(url);
+            }
+        });
+        btnAgregar.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                agregarHorario();
+            }
+        });
+    }
+    private void agregarHorario()
+    {
+        Intent nuevaActivity3=new Intent(getApplicationContext(),AgregarHorario.class);
+        startActivity(nuevaActivity3);
+        this.finish();
     }
     private void chau()
     {
@@ -95,7 +137,13 @@ public class ListarHorario extends AppCompatActivity {
     }
     private void obtenerReferencias()
     {
-
+        btnAgregar=(Button)findViewById(R.id.btnagregarHorario);
+        btnLunes=(Button)findViewById(R.id.btnLunes);
+        btnMartes=(Button)findViewById(R.id.btnMartes);
+        btnMierc=(Button)findViewById(R.id.btnMierc);
+        btnJueves=(Button)findViewById(R.id.btnJueves);
+        btnViernes=(Button)findViewById(R.id.btnViernes);
+        lstHorario=(ListView)findViewById(R.id.listaHorario);
         Resources res = getResources();
         tabs=(TabHost)findViewById(android.R.id.tabhost);
         tabs.setup();
@@ -146,12 +194,18 @@ public class ListarHorario extends AppCompatActivity {
             progressDialog.show();
             listaHorario.clear();}
         @Override
-        protected void onPostExecute(ArrayList<Horario> listaMaterias) {
-            super.onPostExecute(listaMaterias);
+        protected void onPostExecute(ArrayList<Horario> lsHorario) {
+            super.onPostExecute(lsHorario);
             progressDialog.dismiss();
             //adapter
-            adaptador = new ArrayAdapter<Horario>(getApplicationContext(), android.R.layout.simple_list_item_1, listaHorario);
-            lstHorario.setAdapter(adaptador);
+            if (lsHorario.isEmpty())
+            {
+                Toast.makeText(getApplicationContext(), "No hay datos", Toast.LENGTH_SHORT).show();
+                progressDialog.hide();
+            }
+                adaptador = new ArrayAdapter<Horario>(getApplicationContext(), android.R.layout.simple_list_item_1, lsHorario);
+                lstHorario.setAdapter(adaptador);
+
         }
         @Override
         protected void onProgressUpdate(Void... values) {
@@ -163,20 +217,11 @@ public class ListarHorario extends AppCompatActivity {
             for (int i = 0; i < respJSON.length(); i++)
             {
                 JSONObject obj = respJSON.getJSONObject(i);
-                int idEvento = obj.getInt("Id");
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-                Date convertedDate = new Date();
-                try {
-                    convertedDate = dateFormat.parse(obj.getString("Fecha"));
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                String Dia = obj.getString("DIA");
-                int Bloque = obj.getInt("BLOQUE");
+                int Bloque = obj.getInt("Bloque");
                 String Materia = obj.getString("Materia");
                 int idMateria=obj.getInt("IdMateria");
                 MateriaEvento miMateria=new MateriaEvento(idMateria,Materia);
-                Horario unhorario =new Horario(Dia,Bloque,miMateria);
+                Horario unhorario =new Horario(Bloque,miMateria);
                 listaHorario.add(unhorario);
             }
             return listaHorario;
@@ -210,7 +255,7 @@ public class ListarHorario extends AppCompatActivity {
         builder.setPositiveButton("Eliminar", new  DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 Log.i("Diálogos", "Confirmación Aceptada.");
-                EliminarHorario(horarioSeleccionado.getId());
+                //EliminarHorario(horarioSeleccionado.getId());
                 click=false;
                 //no anda adaptador.notifyDataSetChanged();
                 //probar si el notify anda, onpostexecute

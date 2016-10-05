@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
@@ -26,33 +27,51 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AgregarHorario extends AppCompatActivity {
-
-    Spinner spndia;
-    Spinner spnbloque;
-    Spinner spnMateria;
+    Spinner spndia,spnbloque,spnMateria;
     List<MateriaEvento> materias;
+    Button btnAtras, btnGuardar;
     MateriaEvento materiaSeleccionada;
+    String[] arrayDias = {"Lunes", "Martes", "Miercoles", "Jueves", "Viernes"};
+    int[] arrayBloques = {1,2,3, 4, 5, 6};
     ArrayAdapter<MateriaEvento> adapterMaterias;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_agregar_horario);
         ObtenerRef();
+        String urlMateria="http://apicampus.azurewebsites.net/listarMateriaEvento.php";
+        new traerMaterias().execute(urlMateria);
+        //adapter de spinners de dias y bloques
         spnMateria.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 materiaSeleccionada = materias.get(i);
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
 
             }
         });
+        btnAtras.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                chau();
+            }
+        });
+        btnGuardar.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                String url="http://apicampus.azurewebsites.net/agregarHorario.php";
+                new agregarhorario().execute(url);
+            }
+        });
+    }
+    private void chau()
+    {
+        this.finish();
     }
     private void ObtenerRef()
     {
+        btnAtras=(Button)findViewById(R.id.btnAtras);
+        btnGuardar=(Button)findViewById(R.id.btnGuardar);
         spndia=(Spinner) findViewById(R.id.spndia);
         spnbloque=(Spinner) findViewById(R.id.spnBloque);
         spnMateria=(Spinner) findViewById(R.id.spnMateria);
@@ -77,7 +96,6 @@ public class AgregarHorario extends AppCompatActivity {
             }
             return null;
         }
-        // Convierte un JSON en un ArrayList de Direccion
         void enviarJSON(String url) throws JSONException {
             JSONObject json = new JSONObject();
             try {
@@ -91,7 +109,6 @@ public class AgregarHorario extends AppCompatActivity {
                         .post(body)
                         .build();
                 Response response = client.newCall(request).execute();
-
             } catch (JSONException e) {
                 e.printStackTrace();
             } catch (IOException e) {
