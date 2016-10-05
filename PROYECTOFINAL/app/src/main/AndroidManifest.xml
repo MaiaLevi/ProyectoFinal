@@ -32,7 +32,9 @@
         <activity android:name=".VerLibro" />
         <activity android:name=".AgregarLibro" />
         <activity android:name=".ModificarLibro" />
-        <activity android:name=".ListarHorario"></activity>
+        <activity android:name=".ListarHorario" />
+        <activity android:name=".AgregarHorario" />
+        <activity android:name=".EliminarHorario"></activity>
     </application>
 
 </manifest>

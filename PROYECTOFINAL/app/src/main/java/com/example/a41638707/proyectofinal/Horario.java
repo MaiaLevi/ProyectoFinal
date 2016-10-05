@@ -7,12 +7,15 @@ public class Horario {private int Id;
     private String dia;
     private int bloque;
     private MateriaEvento materia;
-    private Division division;
-    public Horario(String Dia, int Bloque, MateriaEvento materiaEvento, Division Division)
+    public Horario(String Dia, int Bloque, MateriaEvento materiaEvento)
     {
         dia=Dia;
         bloque=Bloque;
         materia=materiaEvento;
-        division=Division;
     }
+    public int getId()
+    {
+        return Id;
+    }
+
 }

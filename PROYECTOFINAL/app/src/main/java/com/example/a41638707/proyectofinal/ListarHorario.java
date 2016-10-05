@@ -1,21 +1,33 @@
 package com.example.a41638707.proyectofinal;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.AsyncTask;
+import android.os.StrictMode;
 import android.support.design.widget.TabLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TabHost;
+import android.widget.Toast;
 
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpDelete;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,6 +45,8 @@ public class ListarHorario extends AppCompatActivity {
     ListView lstHorario;
     ArrayAdapter<Horario> adaptador;
     TabHost tabs;
+    boolean click=false;
+    Horario horarioSeleccionado;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +55,14 @@ public class ListarHorario extends AppCompatActivity {
         new listarEventos().execute(url);
         progressDialog=new ProgressDialog(this);
         obtenerReferencias();
+
+        lstHorario.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> a, View v, int position, long id) {
+                horarioSeleccionado= listaHorario.get(position);
+                confirmarEliminar();
+            }
+        });
         tabs.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
             @Override
             public void onTabChanged(String tabId) {
@@ -154,14 +176,55 @@ public class ListarHorario extends AppCompatActivity {
                 String Materia = obj.getString("Materia");
                 int idMateria=obj.getInt("IdMateria");
                 MateriaEvento miMateria=new MateriaEvento(idMateria,Materia);
-                String Division=obj.getString("DIVISION");
-                int idDivision=obj.getInt("IdDivision");
-                Division miDivi=new Division(idDivision,Division);
-                Horario unhorario =new Horario(Dia,Bloque,miMateria,miDivi);
+                Horario unhorario =new Horario(Dia,Bloque,miMateria);
                 listaHorario.add(unhorario);
             }
             return listaHorario;
         }
+    }
+    private void EliminarHorario(int param)
+    {
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+        HttpClient httpClient = new DefaultHttpClient();
+        HttpDelete delRequest = new HttpDelete("hola" + param);
+        delRequest.setHeader("content-type", "application/json");
+        try {
+            HttpResponse resp = httpClient.execute(delRequest);
+            String respStr = EntityUtils.toString(resp.getEntity());
+            if(respStr.equals("true")) {
+                Toast toast1 = Toast.makeText(getApplicationContext(),"Eliminado OK.",Toast.LENGTH_SHORT);
+                toast1.show();
+            }
+        } catch(Exception ex) {
+            Log.e("ServicioRest","Error!", ex);
+            Toast toast2 = Toast.makeText(getApplicationContext(),ex.toString(),Toast.LENGTH_SHORT);
+            toast2.show();
+        }
+    }
+    private Dialog confirmarEliminar(){
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Alert Dialog");
+        builder.setMessage("¿Desea agregar un evento?");
+        builder.setPositiveButton("Eliminar", new  DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                Log.i("Diálogos", "Confirmación Aceptada.");
+                EliminarHorario(horarioSeleccionado.getId());
+                click=false;
+                //no anda adaptador.notifyDataSetChanged();
+                //probar si el notify anda, onpostexecute
+                new listarEventos().execute(url);
+                dialog.cancel();
+            }
+        });
+        builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                Log.i("Diálogos", "Confirmación Cancelada.");
+                dialog.cancel();
+            }
+        });
+        return builder.create();
     }
 }
 
