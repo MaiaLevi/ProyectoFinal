@@ -1,14 +1,19 @@
 package com.example.a41638707.proyectofinal;
 
 import android.app.Dialog;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.StrictMode;
 import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
+import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -47,11 +52,13 @@ public class Listar extends MainActivity {
     MateriaEvento materia;
     ArrayList<Evento> listaEventos=new ArrayList<Evento>();
     ArrayAdapter<Evento> adaptador;
+    NotificationManager mNotificationManager;
     ImageView imgAgregar, imgModificar, imgEliminar;
     ProgressDialog progressDialog;
     String url;
     TabHost tabs;
     boolean click=false;
+    NotificationCompat.Builder mBuilder;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,6 +81,7 @@ public class Listar extends MainActivity {
                 //Acciones necesarias al hacer click
             }
         });
+      //ERRO ACA  mNotificationManager.notify(NOTIF_ALERTA_ID, mBuilder.build());
         btnDivision.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -232,6 +240,30 @@ public class Listar extends MainActivity {
     {
         Intent nuevaActivity=new Intent(this,Agregar.class);
         startActivity(nuevaActivity);
+    }
+    private void notificacion()
+    {
+        mBuilder =
+                (NotificationCompat.Builder) new NotificationCompat.Builder(Listar.this)
+                        .setSmallIcon(android.R.drawable.stat_sys_warning)
+                        .setLargeIcon((((BitmapDrawable)getResources()
+                                .getDrawable(R.drawable.ic_assignment_black_24dp)).getBitmap()))
+                        .setContentTitle("Se acerca un evento")
+                        .setContentText("Informacion")
+                        .setContentInfo("4")
+                        .setTicker("Alerta!");
+        Intent notIntent =
+                new Intent(Listar.this, MainActivity.class);
+
+        PendingIntent contIntent =
+                PendingIntent.getActivity(
+                        Listar.this, 0, notIntent, 0);
+
+        mBuilder.setContentIntent(contIntent);
+        //.setWhen()
+        mNotificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
     }
     private Dialog confirmarEliminar(){
 
