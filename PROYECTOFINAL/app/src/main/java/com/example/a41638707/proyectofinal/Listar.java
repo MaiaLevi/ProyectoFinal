@@ -154,6 +154,7 @@ public class Listar extends MainActivity {
     }
     private void traerTodo()
     {
+        listaEventos.clear();
         url="http://apicampus.azurewebsites.net/listarEventos.php?IdUsuario=";
         //ver si lo de abajo anda
         url+= Usuarios.getId();
