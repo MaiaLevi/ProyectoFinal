@@ -128,12 +128,7 @@ public class MainActivity extends AppCompatActivity {
                 //Sacar layout que dice bienvenido y volver a mostrar el iniciar sesion
                 //En shared preferernces cambiar config
                 Dialog dialog = confirmarLogout();
-                //dialog.show();
-                currentIndex++;
-                // If index reaches maximum reset it
-                if(currentIndex==messageCount)
-                    currentIndex=0;
-                mSwitcher.setText(textoPrueba[currentIndex]);
+                dialog.show();
             }
         });
         btnIniciarSesion.setOnClickListener(new View.OnClickListener() {
