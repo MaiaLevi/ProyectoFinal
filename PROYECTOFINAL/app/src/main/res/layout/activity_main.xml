@@ -2,8 +2,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_height="match_parent"
-    android:layout_width="match_parent">
-        <TabHost android:id="@android:id/tabhost"
+    android:layout_width="match_parent"
+    android:baselineAligned="false">
+
+    <TextSwitcher
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textSwitcher"
+        android:layout_gravity="right" />
+
+    <TabHost android:id="@android:id/tabhost"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
                 <LinearLayout
@@ -69,14 +77,53 @@
                                                     android:layout_height="wrap_content"
                                                     android:layout_gravity="center_horizontal"
                                                     android:id="@+id/botones"
-                                                    android:visibility="invisible">
-
+                                                    android:visibility="visible">
                                                         <TextView
                                                             android:layout_width="wrap_content"
                                                             android:layout_height="wrap_content"
                                                             android:text="New Text"
                                                             android:id="@+id/tvwBienvenido"
                                                             android:textSize="20dp" />
+
+                                                    <LinearLayout
+                                                        android:orientation="horizontal"
+                                                        android:layout_width="match_parent"
+                                                        android:layout_height="match_parent">
+
+                                                        <TextSwitcher
+                                                            android:layout_width="195dp"
+                                                            android:layout_height="wrap_content"
+                                                            android:id="@+id/textSwitcher2"
+                                                            android:layout_gravity="center_horizontal" />
+
+                                                        <TextSwitcher
+                                                            android:layout_width="wrap_content"
+                                                            android:layout_height="wrap_content"
+                                                            android:id="@+id/textSwitcher3" />
+                                                    </LinearLayout>
+
+                                                    <LinearLayout
+                                                        android:orientation="horizontal"
+                                                        android:layout_width="match_parent"
+                                                        android:layout_height="match_parent">
+
+                                                        <TextSwitcher
+                                                            android:layout_width="wrap_content"
+                                                            android:layout_height="wrap_content"
+                                                            android:id="@+id/textSwitcher4" />
+
+                                                        <TextSwitcher
+                                                            android:layout_width="wrap_content"
+                                                            android:layout_height="wrap_content"
+                                                            android:id="@+id/textSwitcher5" />
+                                                    </LinearLayout>
+
+                                                    <Button
+                                                        android:layout_width="wrap_content"
+                                                        android:layout_height="wrap_content"
+                                                        android:text="Administrar datos"
+                                                        android:id="@+id/btnDatos"
+                                                        android:layout_gravity="center_horizontal" />
 
                                                     <Button
                                                             android:layout_width="wrap_content"
@@ -105,4 +152,10 @@
                         </FrameLayout>
                 </LinearLayout>
         </TabHost>
+
+    <ViewFlipper
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/viewFlipper"
+        android:layout_gravity="right" />
 </LinearLayout>

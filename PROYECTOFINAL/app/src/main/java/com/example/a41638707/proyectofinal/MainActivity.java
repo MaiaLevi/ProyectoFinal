@@ -1,8 +1,6 @@
 package com.example.a41638707.proyectofinal;
 
-import android.app.ActionBar;
 import android.app.Dialog;
-import android.app.DownloadManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -10,31 +8,22 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.AsyncTask;
-import android.os.Build;
-import android.os.StrictMode;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.MenuItem;
+import android.view.Gravity;
 import android.view.View;
-import android.widget.ArrayAdapter;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TabHost;
+import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ViewSwitcher;
 /*
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -44,24 +33,17 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
     // public static final ArrayList<Evento> PARAMETRO1=new ArrayList<Evento>();
     public ProgressDialog progressDialog;
-    Button  btnIniciarSesion, btnLogout;
+    Button btnIniciarSesion, btnLogout;
     EditText edtMail, edtContra;
     Usuarios miUsuario;
     Division miDivision;
@@ -70,7 +52,9 @@ public class MainActivity extends AppCompatActivity {
     Boolean sesion, blnMail;
     CheckBox chkMail;
     String nombre, mail, division;
-    int iddivision, id;
+    TextSwitcher mSwitcher;
+    String textoPrueba[]={"Hola", "LPM anda"};
+    int iddivision, id, messageCount=0, currentIndex;
     TabHost tabs;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,67 +63,61 @@ public class MainActivity extends AppCompatActivity {
         ObtenerReferencias();
         progressDialog = new ProgressDialog(this);
         SharedPreferences prefs =
-                getSharedPreferences("MisPreferencias",Context.MODE_PRIVATE);
-        sesion = prefs.getBoolean("sesion",false );
-        nombre=prefs.getString("nombre","");
-        mail=prefs.getString("email","");
-        id=prefs.getInt("id",0);
+                getSharedPreferences("MisPreferencias", Context.MODE_PRIVATE);
+        sesion = prefs.getBoolean("sesion", false);
+        nombre = prefs.getString("nombre", "");
+        mail = prefs.getString("email", "");
+        id = prefs.getInt("id", 0);
         Log.i("sesion", sesion.toString());
         //PROBAR ABAJO
-        iddivision=prefs.getInt("iddivision",0);
-        division=prefs.getString("division", "");
-        miDivision=new Division(iddivision,division);
-        miUsuario= new Usuarios(nombre,mail,"",0);
+        iddivision = prefs.getInt("iddivision", 0);
+        division = prefs.getString("division", "");
+        miDivision = new Division(iddivision, division);
+        miUsuario = new Usuarios(nombre, mail, "", 0);
         //CARGAR VALORES EN CLASE USUARIO
-        if (sesion)
-        {
-            tvwBienvenido.setText("Bienvenido/a "+nombre);
+        if (sesion) {
+            tvwBienvenido.setText("Bienvenido/a " + nombre);
             layoutLogin.setVisibility(View.GONE);
             layoutBotones.setVisibility(View.VISIBLE);
             Usuarios.setDivision(miDivision);
             Usuarios.setId(id);
-        }
-        else
-        {
-            if (!miUsuario.getMail().equals(""))
-            {
-                blnMail=prefs.getBoolean("mail", false);
-                if (blnMail)
-                {
+        } else {
+            if (!miUsuario.getMail().equals("")) {
+                blnMail = prefs.getBoolean("mail", false);
+                if (blnMail) {
                     //Mostrar miUsuario.getMail();
                 }
             }
         }
+        messageCount=textoPrueba.length;
+        currentIndex=-1;
+        // Declare the in and out animations and initialize them
+        Animation in = AnimationUtils.loadAnimation(this,android.R.anim.slide_in_left);
+        Animation out = AnimationUtils.loadAnimation(this,android.R.anim.slide_out_right);
         tabs.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
             @Override
             public void onTabChanged(String tabId) {
-                if (sesion)
-                {
-                    switch(tabId)
-                    {
+                if (sesion) {
+                    switch (tabId) {
                         case ("eventos"):
-                            Intent nuevaActivity=new Intent(getApplicationContext(),Listar.class);
+                            Intent nuevaActivity = new Intent(getApplicationContext(), Listar.class);
                             startActivity(nuevaActivity);
                             chau();
-                        break;
+                            break;
                         case ("libros"):
-                            Intent nuevaActivity2=new Intent(getApplicationContext(),ListarLibrosPropios.class);
+                            Intent nuevaActivity2 = new Intent(getApplicationContext(), ListarLibrosPropios.class);
                             startActivity(nuevaActivity2);
                             chau();
-                        break;
-                        case ("horario"):
-                        {
-                            Intent nuevaActivity3=new Intent(getApplicationContext(),ListarHorario.class);
+                            break;
+                        case ("horario"): {
+                            Intent nuevaActivity3 = new Intent(getApplicationContext(), ListarHorario.class);
                             startActivity(nuevaActivity3);
                             chau();
                         }
                         break;
                     }
-                }
-                else
-                {
-                    if (!tabId.equals("usuario"))
-                    {
+                } else {
+                    if (!tabId.equals("usuario")) {
                         Toast.makeText(getApplicationContext(), "Para acceder debe iniciar sesión", Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -149,32 +127,59 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //Sacar layout que dice bienvenido y volver a mostrar el iniciar sesion
                 //En shared preferernces cambiar config
-                Dialog dialog=confirmarLogout();
-                dialog.show();
+                Dialog dialog = confirmarLogout();
+                //dialog.show();
+                currentIndex++;
+                // If index reaches maximum reset it
+                if(currentIndex==messageCount)
+                    currentIndex=0;
+                mSwitcher.setText(textoPrueba[currentIndex]);
             }
         });
         btnIniciarSesion.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 String url = "http://apicampus.azurewebsites.net/login.php?Mail=";
                 url += edtMail.getText().toString();
-                if (!edtMail.getText().toString().equals("")&&!edtMail.getText().toString().equals(" "))
-                {
-                    if (!edtContra.getText().toString().equals("")&&!edtContra.getText().toString().equals(" "))
-                    {
+                if (!edtMail.getText().toString().equals("") && !edtMail.getText().toString().equals(" ")) {
+                    if (!edtContra.getText().toString().equals("") && !edtContra.getText().toString().equals(" ")) {
                         new traerUsuario().execute(url);
-                    }
-                    else {
+                    } else {
                         Toast.makeText(getApplicationContext(), "La contraseña no puede ser vacía", Toast.LENGTH_SHORT).show();
                     }
-                }
-                else
-                {
+                } else {
                     Toast.makeText(getApplicationContext(), "El mail no puede ser vacío", Toast.LENGTH_SHORT).show();
                 }
             }
         });
-       }
-        //CAMBIAR POR TAB
+        mSwitcher.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View v) {
+                // TODO Auto-generated method stubcurrentIndex++;
+                // If index reaches maximum reset it
+                currentIndex++;
+                if(currentIndex==messageCount)
+                    currentIndex=0;
+                mSwitcher.setText(textoPrueba[currentIndex]);
+            }
+        });
+        // Set the ViewFactory of the TextSwitcher that will create TextView object when asked
+        mSwitcher.setFactory(new ViewSwitcher.ViewFactory() {
+
+            public View makeView() {
+                // TODO Auto-generated method stub
+                // create new textView and set the properties like clolr, size etc
+                TextView myText = new TextView(MainActivity.this);
+                myText.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
+                myText.setTextSize(36);
+                //myText.setTextColor(Color.BLUE);
+                return myText;
+            }
+        });
+        // set the animation type of textSwitcher
+        mSwitcher.setInAnimation(in);
+        mSwitcher.setOutAnimation(out);
+    }
+    //CAMBIAR POR TAB
         /*navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -257,6 +262,7 @@ public class MainActivity extends AppCompatActivity {
         layoutLogin=findViewById(R.id.login);
         btnLogout=(Button)findViewById(R.id.btnLogout);
         chkMail=(CheckBox)findViewById(R.id.chkMail);
+        mSwitcher=(TextSwitcher)findViewById(R.id.textSwitcher2);
         //SETEO TABS
         Resources res = getResources();
         tabs=(TabHost)findViewById(android.R.id.tabhost);
