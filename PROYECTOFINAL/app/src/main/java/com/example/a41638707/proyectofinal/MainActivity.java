@@ -61,11 +61,10 @@ public class MainActivity extends AppCompatActivity {
     Animation in,out;
     String nombre, mail, division;
     TextSwitcher mSwitcher, mSwitcher2,mSwitcher3, mSwitcher4;
-    String texto3[]={"","",""};
-    String texto2[]={"","",""};
-    String texto4[]={"","",""};
-    String texto1[]={"","",""};
-    String textoPrueba[]={"Hola", "LPM anda"};
+    String texto3[]={"No hay eventos","No hay eventos"};
+    String texto2[]={"No hay eventos","No hay eventos"};
+    String texto4[]={"No hay eventos","No hay eventos"};
+    String texto1[]={"No hay eventos","No hay eventos"};
     int iddivision, id, messageCount=0, currentIndex, messageCount4=0, currentIndex4, messageCount3=0, currentIndex3, messageCount2=0, currentIndex2;
     TabHost tabs;
     @Override
@@ -136,6 +135,13 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+        /*Timer timer = new Timer("desired_name");
+        timer.scheduleAtFixedRate(
+                new TimerTask() {
+                    public void run() {
+                        //switch your text using either runOnUiThread() or sending alarm and receiving it in your gui thread
+                    }
+                }, 0, 2000);*/
         btnLogout.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 //Sacar layout que dice bienvenido y volver a mostrar el iniciar sesion
@@ -186,19 +192,6 @@ public class MainActivity extends AppCompatActivity {
                 mSwitcher2.setText(texto2[currentIndex2]);
             }
         });
-        // Set the ViewFactory of the TextSwitcher that will create TextView object when asked
-        mSwitcher2.setFactory(new ViewSwitcher.ViewFactory() {
-
-            public View makeView() {
-                // TODO Auto-generated method stub
-                // create new textView and set the properties like clolr, size etc
-                TextView myText = new TextView(MainActivity.this);
-                myText.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
-                myText.setTextSize(25);
-                //myText.setTextColor(Color.BLUE);
-                return myText;
-            }
-        });
         // set the animation type of textSwitcher
         mSwitcher2.setInAnimation(in);
         mSwitcher2.setOutAnimation(out);
@@ -211,19 +204,6 @@ public class MainActivity extends AppCompatActivity {
                 if(currentIndex3==messageCount3)
                     currentIndex3=0;
                 mSwitcher3.setText(texto3[currentIndex3]);
-            }
-        });
-        // Set the ViewFactory of the TextSwitcher that will create TextView object when asked
-        mSwitcher3.setFactory(new ViewSwitcher.ViewFactory() {
-
-            public View makeView() {
-                // TODO Auto-generated method stub
-                // create new textView and set the properties like clolr, size etc
-                TextView myText = new TextView(MainActivity.this);
-                myText.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
-                myText.setTextSize(25);
-                //myText.setTextColor(Color.BLUE);
-                return myText;
             }
         });
         // set the animation type of textSwitcher
@@ -242,6 +222,57 @@ public class MainActivity extends AppCompatActivity {
         });
         // Set the ViewFactory of the TextSwitcher that will create TextView object when asked
 
+        mSwitcher4.setFactory(new ViewSwitcher.ViewFactory() {
+
+            public View makeView() {
+                // TODO Auto-generated method stub
+                // create new textView and set the properties like clolr, size etc
+                TextView myText = new TextView(MainActivity.this);
+                myText.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
+                myText.setTextSize(25);
+                //myText.setTextColor(Color.BLUE);
+                return myText;
+            }
+        });
+        mSwitcher.setFactory(new ViewSwitcher.ViewFactory() {
+
+            public View makeView() {
+                // TODO Auto-generated method stub
+                // create new textView and set the properties like clolr, size etc
+                TextView myText = new TextView(MainActivity.this);
+                myText.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
+                myText.setTextSize(25);
+                //myText.setTextColor(Color.BLUE);
+                return myText;
+            }
+        });
+
+        // Set the ViewFactory of the TextSwitcher that will create TextView object when asked
+        mSwitcher2.setFactory(new ViewSwitcher.ViewFactory() {
+
+            public View makeView() {
+                // TODO Auto-generated method stub
+                // create new textView and set the properties like clolr, size etc
+                TextView myText = new TextView(MainActivity.this);
+                myText.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
+                myText.setTextSize(25);
+                //myText.setTextColor(Color.BLUE);
+                return myText;
+            }
+        });
+        // Set the ViewFactory of the TextSwitcher that will create TextView object when asked
+        mSwitcher3.setFactory(new ViewSwitcher.ViewFactory() {
+
+            public View makeView() {
+                // TODO Auto-generated method stub
+                // create new textView and set the properties like clolr, size etc
+                TextView myText = new TextView(MainActivity.this);
+                myText.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
+                myText.setTextSize(25);
+                //myText.setTextColor(Color.BLUE);
+                return myText;
+            }
+        });
         // set the animation type of textSwitcher
         mSwitcher4.setInAnimation(in);
         mSwitcher4.setOutAnimation(out);
@@ -468,67 +499,38 @@ public class MainActivity extends AppCompatActivity {
                     switch (i)
                     {
                         case 0:
-                            texto1[0]=listaEventos.get(i).getMateria().getNombre();
+                            texto1[0]=listaEventos.get(i).getTipo().getNombre()+" de "+listaEventos.get(i).getMateria().getNombre();
                             reportDate = df.format(listaEventos.get(i).getFecha());
-                            texto1[1]=listaEventos.get(i).getTipo().getNombre();
-                            texto1[2]=reportDate;
-                            messageCount=texto1.length;
+                            texto1[1]=reportDate;
                             currentIndex=-1;
                             break;
                         case 1:
                             //i=1
-                            texto2[0]=listaEventos.get(i).getMateria().getNombre();
+                            texto2[0]=listaEventos.get(i).getTipo().getNombre()+" de "+listaEventos.get(i).getMateria().getNombre();
                             reportDate = df.format(listaEventos.get(i).getFecha());
-                            texto2[1]=listaEventos.get(i).getTipo().getNombre();
-                            texto2[2]=reportDate;
-                            messageCount2=texto2.length;
-                            currentIndex2=0;
+                            texto2[1]=reportDate;
+                            currentIndex2=-1;
                             break;
                         case 2:
                             //i=2
-                            texto3[0]=listaEventos.get(i).getMateria().getNombre();
+                            texto3[0]=listaEventos.get(i).getTipo().getNombre()+" de "+listaEventos.get(i).getMateria().getNombre();
                             reportDate = df.format(listaEventos.get(i).getFecha());
-                            texto3[1]=listaEventos.get(i).getTipo().getNombre();
-                            texto3[2]=reportDate;
-                            messageCount3=texto3.length;
-                            currentIndex3=0;
+                            texto3[1]=reportDate;
+                            currentIndex3=-1;
                             break;
                         case 3:
                             //i=3
-                            texto4[0]=listaEventos.get(i).getMateria().getNombre();
+                            texto4[0]=listaEventos.get(i).getTipo().getNombre()+" de "+listaEventos.get(i).getMateria().getNombre();
                             reportDate = df.format(listaEventos.get(i).getFecha());
-                            texto4[1]=listaEventos.get(i).getTipo().getNombre();
-                            texto4[2]=reportDate;
-                            messageCount4=texto4.length;
-                            currentIndex4=0;
+                            texto4[1]=reportDate;
+                            currentIndex4=-1;
                     }
-
                 }
             }
-            mSwitcher4.setFactory(new ViewSwitcher.ViewFactory() {
-
-                public View makeView() {
-                    // TODO Auto-generated method stub
-                    // create new textView and set the properties like clolr, size etc
-                    TextView myText = new TextView(MainActivity.this);
-                    myText.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
-                    myText.setTextSize(25);
-                    //myText.setTextColor(Color.BLUE);
-                    return myText;
-                }
-            });
-            mSwitcher.setFactory(new ViewSwitcher.ViewFactory() {
-
-                public View makeView() {
-                    // TODO Auto-generated method stub
-                    // create new textView and set the properties like clolr, size etc
-                    TextView myText = new TextView(MainActivity.this);
-                    myText.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
-                    myText.setTextSize(25);
-                    //myText.setTextColor(Color.BLUE);
-                    return myText;
-                }
-            });
+            messageCount3=texto3.length;
+            messageCount2=texto2.length;
+            messageCount4=texto4.length;
+            messageCount=texto1.length;
         }
         ArrayList<Evento> parsearEventos(String JSONstring) throws JSONException {
              listaEventos=new ArrayList<>();
