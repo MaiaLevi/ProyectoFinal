@@ -33,28 +33,40 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
     // public static final ArrayList<Evento> PARAMETRO1=new ArrayList<Evento>();
     public ProgressDialog progressDialog;
     Button btnIniciarSesion, btnLogout;
     EditText edtMail, edtContra;
+    ArrayList<Evento> listaEventos;
     Usuarios miUsuario;
     Division miDivision;
     View layoutBotones, layoutLogin;
     TextView tvwBienvenido;
     Boolean sesion, blnMail;
     CheckBox chkMail;
+    Animation in,out;
     String nombre, mail, division;
-    TextSwitcher mSwitcher;
+    TextSwitcher mSwitcher, mSwitcher2,mSwitcher3, mSwitcher4;
+    String texto3[]={"","",""};
+    String texto2[]={"","",""};
+    String texto4[]={"","",""};
+    String texto1[]={"","",""};
     String textoPrueba[]={"Hola", "LPM anda"};
-    int iddivision, id, messageCount=0, currentIndex;
+    int iddivision, id, messageCount=0, currentIndex, messageCount4=0, currentIndex4, messageCount3=0, currentIndex3, messageCount2=0, currentIndex2;
     TabHost tabs;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +86,9 @@ public class MainActivity extends AppCompatActivity {
         division = prefs.getString("division", "");
         miDivision = new Division(iddivision, division);
         miUsuario = new Usuarios(nombre, mail, "", 0);
+        String urlEvento="http://apicampus.azurewebsites.net/listarEventosHome.php?IdUsuario="+id;
+        Log.i("sesion", String.valueOf(id));
+        new traerEventos().execute(urlEvento);
         //CARGAR VALORES EN CLASE USUARIO
         if (sesion) {
             tvwBienvenido.setText("Bienvenido/a " + nombre);
@@ -89,11 +104,9 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
-        messageCount=textoPrueba.length;
-        currentIndex=-1;
         // Declare the in and out animations and initialize them
-        Animation in = AnimationUtils.loadAnimation(this,android.R.anim.slide_in_left);
-        Animation out = AnimationUtils.loadAnimation(this,android.R.anim.slide_out_right);
+        in = AnimationUtils.loadAnimation(this,android.R.anim.slide_in_left);
+        out = AnimationUtils.loadAnimation(this,android.R.anim.slide_out_right);
         tabs.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
             @Override
             public void onTabChanged(String tabId) {
@@ -154,25 +167,84 @@ public class MainActivity extends AppCompatActivity {
                 currentIndex++;
                 if(currentIndex==messageCount)
                     currentIndex=0;
-                mSwitcher.setText(textoPrueba[currentIndex]);
+                mSwitcher.setText(texto1[currentIndex]);
             }
         });
         // Set the ViewFactory of the TextSwitcher that will create TextView object when asked
-        mSwitcher.setFactory(new ViewSwitcher.ViewFactory() {
+
+        // set the animation type of textSwitcher
+        mSwitcher.setInAnimation(in);
+        mSwitcher.setOutAnimation(out);
+        mSwitcher2.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View v) {
+                // TODO Auto-generated method stubcurrentIndex++;
+                // If index reaches maximum reset it
+                currentIndex2++;
+                if(currentIndex2==messageCount2)
+                    currentIndex2=0;
+                mSwitcher2.setText(texto2[currentIndex2]);
+            }
+        });
+        // Set the ViewFactory of the TextSwitcher that will create TextView object when asked
+        mSwitcher2.setFactory(new ViewSwitcher.ViewFactory() {
 
             public View makeView() {
                 // TODO Auto-generated method stub
                 // create new textView and set the properties like clolr, size etc
                 TextView myText = new TextView(MainActivity.this);
                 myText.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
-                myText.setTextSize(36);
+                myText.setTextSize(25);
                 //myText.setTextColor(Color.BLUE);
                 return myText;
             }
         });
         // set the animation type of textSwitcher
-        mSwitcher.setInAnimation(in);
-        mSwitcher.setOutAnimation(out);
+        mSwitcher2.setInAnimation(in);
+        mSwitcher2.setOutAnimation(out);
+        mSwitcher3.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View v) {
+                // TODO Auto-generated method stubcurrentIndex++;
+                // If index reaches maximum reset it
+                currentIndex3++;
+                if(currentIndex3==messageCount3)
+                    currentIndex3=0;
+                mSwitcher3.setText(texto3[currentIndex3]);
+            }
+        });
+        // Set the ViewFactory of the TextSwitcher that will create TextView object when asked
+        mSwitcher3.setFactory(new ViewSwitcher.ViewFactory() {
+
+            public View makeView() {
+                // TODO Auto-generated method stub
+                // create new textView and set the properties like clolr, size etc
+                TextView myText = new TextView(MainActivity.this);
+                myText.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
+                myText.setTextSize(25);
+                //myText.setTextColor(Color.BLUE);
+                return myText;
+            }
+        });
+        // set the animation type of textSwitcher
+        mSwitcher3.setInAnimation(in);
+        mSwitcher3.setOutAnimation(out);
+        mSwitcher4.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View v) {
+                // TODO Auto-generated method stubcurrentIndex++;
+                // If index reaches maximum reset it
+                currentIndex4++;
+                if(currentIndex4==messageCount4)
+                    currentIndex4=0;
+                mSwitcher4.setText(texto4[currentIndex4]);
+            }
+        });
+        // Set the ViewFactory of the TextSwitcher that will create TextView object when asked
+
+        // set the animation type of textSwitcher
+        mSwitcher4.setInAnimation(in);
+        mSwitcher4.setOutAnimation(out);
     }
     //CAMBIAR POR TAB
         /*navigationView.setNavigationItemSelectedListener(
@@ -258,6 +330,9 @@ public class MainActivity extends AppCompatActivity {
         btnLogout=(Button)findViewById(R.id.btnLogout);
         chkMail=(CheckBox)findViewById(R.id.chkMail);
         mSwitcher=(TextSwitcher)findViewById(R.id.textSwitcher2);
+        mSwitcher2=(TextSwitcher)findViewById(R.id.textSwitcher3);
+        mSwitcher3=(TextSwitcher)findViewById(R.id.textSwitcher4);
+        mSwitcher4=(TextSwitcher)findViewById(R.id.textSwitcher5);
         //SETEO TABS
         Resources res = getResources();
         tabs=(TabHost)findViewById(android.R.id.tabhost);
@@ -354,6 +429,132 @@ public class MainActivity extends AppCompatActivity {
             Usuarios.setId(id);
             Usuarios.setDivision(miDivi);
             return miUsuario;
+        }
+    }
+    private class traerEventos extends AsyncTask<String, Void, ArrayList<Evento>> {
+        private OkHttpClient client = new OkHttpClient();
+        @Override
+        protected ArrayList<Evento> doInBackground(String... params) {
+            String url = params[0];
+            Request request = new Request.Builder()
+                    .url(url)
+                    .build();
+            try {
+                Response response = client.newCall(request).execute();  // Llamado al API
+                return parsearEventos(response.body().string());      // Convierto el resultado en Evento
+
+            } catch (IOException | JSONException e) {
+                Log.d("Error", e.getMessage());                          // Error de Network o al parsear JSON
+                return null;
+            }
+        }
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            progressDialog.setMax(100);
+            progressDialog.show();}
+        @Override
+        protected void onPostExecute(ArrayList<Evento> evento) {
+            super.onPostExecute(evento);
+            progressDialog.dismiss();
+            if (listaEventos.size()>0)
+            {
+                //recorrer lista obtener fehca materia y tipo
+                for (int i=0; i<listaEventos.size(); i++)
+                {
+                    DateFormat df = new SimpleDateFormat("dd/MM");
+                    String reportDate="";
+                    switch (i)
+                    {
+                        case 0:
+                            texto1[0]=listaEventos.get(i).getMateria().getNombre();
+                            reportDate = df.format(listaEventos.get(i).getFecha());
+                            texto1[1]=listaEventos.get(i).getTipo().getNombre();
+                            texto1[2]=reportDate;
+                            messageCount=texto1.length;
+                            currentIndex=-1;
+                            break;
+                        case 1:
+                            //i=1
+                            texto2[0]=listaEventos.get(i).getMateria().getNombre();
+                            reportDate = df.format(listaEventos.get(i).getFecha());
+                            texto2[1]=listaEventos.get(i).getTipo().getNombre();
+                            texto2[2]=reportDate;
+                            messageCount2=texto2.length;
+                            currentIndex2=0;
+                            break;
+                        case 2:
+                            //i=2
+                            texto3[0]=listaEventos.get(i).getMateria().getNombre();
+                            reportDate = df.format(listaEventos.get(i).getFecha());
+                            texto3[1]=listaEventos.get(i).getTipo().getNombre();
+                            texto3[2]=reportDate;
+                            messageCount3=texto3.length;
+                            currentIndex3=0;
+                            break;
+                        case 3:
+                            //i=3
+                            texto4[0]=listaEventos.get(i).getMateria().getNombre();
+                            reportDate = df.format(listaEventos.get(i).getFecha());
+                            texto4[1]=listaEventos.get(i).getTipo().getNombre();
+                            texto4[2]=reportDate;
+                            messageCount4=texto4.length;
+                            currentIndex4=0;
+                    }
+
+                }
+            }
+            mSwitcher4.setFactory(new ViewSwitcher.ViewFactory() {
+
+                public View makeView() {
+                    // TODO Auto-generated method stub
+                    // create new textView and set the properties like clolr, size etc
+                    TextView myText = new TextView(MainActivity.this);
+                    myText.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
+                    myText.setTextSize(25);
+                    //myText.setTextColor(Color.BLUE);
+                    return myText;
+                }
+            });
+            mSwitcher.setFactory(new ViewSwitcher.ViewFactory() {
+
+                public View makeView() {
+                    // TODO Auto-generated method stub
+                    // create new textView and set the properties like clolr, size etc
+                    TextView myText = new TextView(MainActivity.this);
+                    myText.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
+                    myText.setTextSize(25);
+                    //myText.setTextColor(Color.BLUE);
+                    return myText;
+                }
+            });
+        }
+        ArrayList<Evento> parsearEventos(String JSONstring) throws JSONException {
+             listaEventos=new ArrayList<>();
+            JSONObject json = new JSONObject(JSONstring);
+            JSONArray respJSON = json.getJSONArray("result");
+            for (int i = 0; i < respJSON.length(); i++)
+            {
+                JSONObject obj = respJSON.getJSONObject(i);
+                int idEvento = obj.getInt("Id");SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                Date convertedDate = new Date();
+                try {
+                    convertedDate = dateFormat.parse(obj.getString("Fecha"));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                String descEvento = obj.getString("Descripcion");
+                int IdMateriaEvento = obj.getInt("IdMateria");
+                String MateriaEvento = obj.getString("Materia");
+                int IdTipo=obj.getInt("IdTipo");
+                String tipoEvento = obj.getString("Tipo");
+                TipoEvento tipo=new TipoEvento(IdTipo,tipoEvento);
+                MateriaEvento materia=new MateriaEvento(IdMateriaEvento,MateriaEvento);
+                Evento unEvento =new Evento(idEvento,materia,tipo,convertedDate, descEvento,Usuarios.getId(), null);
+                listaEventos.add(unEvento);
+            }
+            return listaEventos;
         }
     }
 }
