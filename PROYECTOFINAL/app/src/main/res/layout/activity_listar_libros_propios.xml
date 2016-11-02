@@ -39,11 +39,28 @@
                             android:id="@+id/layout01"
                             xmlns:android="http://schemas.android.com/apk/res/android"
                             android:background="@color/accent_material_dark">
-                            <EditText
-                                android:layout_width="263dp"
+                            <LinearLayout
+                                android:id="@+id/layoutBuscar"
+                                android:orientation="vertical"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:id="@+id/edtBusqueda"
-                                android:hint="Buscar Libros" />
+                                android:layout_gravity="center_horizontal"
+                                android:layout_weight="0.37">
+                                <EditText
+                                    android:layout_width="263dp"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/edtBusqueda"
+                                    android:hint="Buscar Libros" />
+                                <Button
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Buscar"
+                                    android:id="@+id/btnBuscar"
+                                    android:layout_alignParentBottom="true"
+                                    android:layout_alignParentRight="true"
+                                    android:layout_alignParentEnd="true"
+                                    android:layout_marginBottom="64dp" />
+                            </LinearLayout>
                             <LinearLayout
                                 android:id="@+id/linealLayout"
                                 android:orientation="vertical"

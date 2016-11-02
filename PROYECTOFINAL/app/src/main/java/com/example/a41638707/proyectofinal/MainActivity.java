@@ -45,6 +45,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
     // public static final ArrayList<Evento> PARAMETRO1=new ArrayList<Evento>();
@@ -56,8 +58,7 @@ public class MainActivity extends AppCompatActivity {
     Division miDivision;
     View layoutBotones, layoutLogin;
     TextView tvwBienvenido;
-    Boolean sesion, blnMail;
-    CheckBox chkMail;
+    Boolean sesion;
     Animation in,out;
     String nombre, mail, division;
     TextSwitcher mSwitcher, mSwitcher2,mSwitcher3, mSwitcher4;
@@ -77,7 +78,6 @@ public class MainActivity extends AppCompatActivity {
                 getSharedPreferences("MisPreferencias", Context.MODE_PRIVATE);
         sesion = prefs.getBoolean("sesion", false);
         nombre = prefs.getString("nombre", "");
-        mail = prefs.getString("email", "");
         id = prefs.getInt("id", 0);
         Log.i("sesion", sesion.toString());
         //PROBAR ABAJO
@@ -95,13 +95,6 @@ public class MainActivity extends AppCompatActivity {
             layoutBotones.setVisibility(View.VISIBLE);
             Usuarios.setDivision(miDivision);
             Usuarios.setId(id);
-        } else {
-            if (!miUsuario.getMail().equals("")) {
-                blnMail = prefs.getBoolean("mail", false);
-                if (blnMail) {
-                    //Mostrar miUsuario.getMail();
-                }
-            }
         }
         // Declare the in and out animations and initialize them
         in = AnimationUtils.loadAnimation(this,android.R.anim.slide_in_left);
@@ -135,13 +128,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-        /*Timer timer = new Timer("desired_name");
-        timer.scheduleAtFixedRate(
-                new TimerTask() {
-                    public void run() {
-                        //switch your text using either runOnUiThread() or sending alarm and receiving it in your gui thread
-                    }
-                }, 0, 2000);*/
         btnLogout.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 //Sacar layout que dice bienvenido y volver a mostrar el iniciar sesion
@@ -170,14 +156,10 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // TODO Auto-generated method stubcurrentIndex++;
                 // If index reaches maximum reset it
-                currentIndex++;
-                if(currentIndex==messageCount)
-                    currentIndex=0;
-                mSwitcher.setText(texto1[currentIndex]);
+                mensaje();
             }
         });
         // Set the ViewFactory of the TextSwitcher that will create TextView object when asked
-
         // set the animation type of textSwitcher
         mSwitcher.setInAnimation(in);
         mSwitcher.setOutAnimation(out);
@@ -186,10 +168,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // TODO Auto-generated method stubcurrentIndex++;
                 // If index reaches maximum reset it
-                currentIndex2++;
-                if(currentIndex2==messageCount2)
-                    currentIndex2=0;
-                mSwitcher2.setText(texto2[currentIndex2]);
+                mensaje2();
             }
         });
         // set the animation type of textSwitcher
@@ -200,28 +179,19 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // TODO Auto-generated method stubcurrentIndex++;
                 // If index reaches maximum reset it
-                currentIndex3++;
-                if(currentIndex3==messageCount3)
-                    currentIndex3=0;
-                mSwitcher3.setText(texto3[currentIndex3]);
+                mensaje3();
             }
         });
         // set the animation type of textSwitcher
         mSwitcher3.setInAnimation(in);
         mSwitcher3.setOutAnimation(out);
         mSwitcher4.setOnClickListener(new View.OnClickListener() {
-
             public void onClick(View v) {
                 // TODO Auto-generated method stubcurrentIndex++;
                 // If index reaches maximum reset it
-                currentIndex4++;
-                if(currentIndex4==messageCount4)
-                    currentIndex4=0;
-                mSwitcher4.setText(texto4[currentIndex4]);
+                mensaje4();
             }
         });
-        // Set the ViewFactory of the TextSwitcher that will create TextView object when asked
-
         mSwitcher4.setFactory(new ViewSwitcher.ViewFactory() {
 
             public View makeView() {
@@ -246,10 +216,7 @@ public class MainActivity extends AppCompatActivity {
                 return myText;
             }
         });
-
-        // Set the ViewFactory of the TextSwitcher that will create TextView object when asked
         mSwitcher2.setFactory(new ViewSwitcher.ViewFactory() {
-
             public View makeView() {
                 // TODO Auto-generated method stub
                 // create new textView and set the properties like clolr, size etc
@@ -260,7 +227,6 @@ public class MainActivity extends AppCompatActivity {
                 return myText;
             }
         });
-        // Set the ViewFactory of the TextSwitcher that will create TextView object when asked
         mSwitcher3.setFactory(new ViewSwitcher.ViewFactory() {
 
             public View makeView() {
@@ -276,6 +242,45 @@ public class MainActivity extends AppCompatActivity {
         // set the animation type of textSwitcher
         mSwitcher4.setInAnimation(in);
         mSwitcher4.setOutAnimation(out);
+        messageCount3=texto3.length;
+        messageCount2=texto2.length;
+        messageCount4=texto4.length;
+        messageCount=texto1.length;
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    while(true) {
+                        sleep(2500);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mensaje2();
+                                mensaje();
+                                mensaje3();
+                                mensaje4();
+                            }
+                        });
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        thread.start();
+        Thread threadNotifications = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    while(true) {
+                        sleep(25000);
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        threadNotifications.start();
     }
     //CAMBIAR POR TAB
         /*navigationView.setNavigationItemSelectedListener(
@@ -335,6 +340,34 @@ public class MainActivity extends AppCompatActivity {
         });
         return builder.create();
     }
+    private void mensaje()
+    {
+        currentIndex++;
+        if(currentIndex==messageCount)
+            currentIndex=0;
+        mSwitcher.setText(texto1[currentIndex]);
+    }
+    private void mensaje2()
+    {
+        currentIndex2++;
+        if(currentIndex2==messageCount2)
+            currentIndex2=0;
+        mSwitcher2.setText(texto2[currentIndex2]);
+    }
+    private void mensaje3()
+    {
+        currentIndex3++;
+        if(currentIndex3==messageCount3)
+            currentIndex3=0;
+        mSwitcher3.setText(texto3[currentIndex3]);
+    }
+    private void mensaje4()
+    {
+        currentIndex4++;
+        if(currentIndex4==messageCount4)
+            currentIndex4=0;
+        mSwitcher4.setText(texto4[currentIndex4]);
+    }
     public String iniciarSesion()
     {
         MessageDigest crypt = null;
@@ -359,7 +392,6 @@ public class MainActivity extends AppCompatActivity {
         layoutBotones=findViewById(R.id.botones);
         layoutLogin=findViewById(R.id.login);
         btnLogout=(Button)findViewById(R.id.btnLogout);
-        chkMail=(CheckBox)findViewById(R.id.chkMail);
         mSwitcher=(TextSwitcher)findViewById(R.id.textSwitcher2);
         mSwitcher2=(TextSwitcher)findViewById(R.id.textSwitcher3);
         mSwitcher3=(TextSwitcher)findViewById(R.id.textSwitcher4);
@@ -434,10 +466,6 @@ public class MainActivity extends AppCompatActivity {
                     editor.putString("division", Usuarios.getDivision().getNombre());
                     editor.putInt("id", Usuarios.getId());
                     editor.putBoolean("sesion", sesion);
-                    if (chkMail.isChecked())
-                    {
-                        editor.putBoolean("mail", true);
-                    }
                     editor.commit();
                 }
                 else {
@@ -527,10 +555,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             }
-            messageCount3=texto3.length;
-            messageCount2=texto2.length;
-            messageCount4=texto4.length;
-            messageCount=texto1.length;
         }
         ArrayList<Evento> parsearEventos(String JSONstring) throws JSONException {
              listaEventos=new ArrayList<>();

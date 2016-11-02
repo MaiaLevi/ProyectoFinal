@@ -57,12 +57,6 @@
                                                             android:id="@+id/edtContrasena"
                                                             android:hint="Ingrese la contraseña" />
 
-                                                        <CheckBox
-                                                            android:layout_width="wrap_content"
-                                                            android:layout_height="wrap_content"
-                                                            android:text="Recordar mail"
-                                                            android:id="@+id/chkMail" />
-
                                                         <Button
                                                             android:layout_width="wrap_content"
                                                             android:layout_height="wrap_content"

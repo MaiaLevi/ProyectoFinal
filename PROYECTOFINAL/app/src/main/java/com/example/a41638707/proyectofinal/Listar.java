@@ -321,6 +321,7 @@ public class Listar extends MainActivity {
             //adapter
             adaptador = new ArrayAdapter<Evento>(getApplicationContext(), android.R.layout.simple_list_item_1, listaEventos);
             lstEventos.setAdapter(adaptador);
+            lstEventos.deferNotifyDataSetChanged();
         }
         @Override
         protected void onProgressUpdate(Void... values) {

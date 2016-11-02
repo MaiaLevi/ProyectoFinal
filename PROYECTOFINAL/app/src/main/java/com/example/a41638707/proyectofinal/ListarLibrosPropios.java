@@ -26,6 +26,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -57,7 +58,8 @@ public class ListarLibrosPropios extends AppCompatActivity {
     EditText edtBuscar;
     View layoutPpal;
     LinearLayout layout;
-    int idUsuario, contador=0, contadorBuscar=0;
+    int idUsuario, contador=0;
+    Button btnBuscar;
     Libros libroSeleccionado;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +84,6 @@ public class ListarLibrosPropios extends AppCompatActivity {
                 ActivityVerL();
             }
         });
-
         tabs.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
             @Override
             public void onTabChanged(String tabId) {
@@ -119,15 +120,19 @@ public class ListarLibrosPropios extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String texto=edtBuscar.getText().toString();
-                if (texto.equals(""))
+                if (!texto.equals(""))
                 {
-                    layoutPpal.setVisibility(View.VISIBLE);
-                    layout.setVisibility(View.GONE);
-                    //sacar el otro layout
+                    btnBuscar.setText("Atras");
                 }
-                else
+            }
+        });
+        btnBuscar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String boton=btnBuscar.getText().toString();
+                String texto=edtBuscar.getText().toString();
+                if (boton.equals("Buscar"))
                 {
-                    //PROBAR ESTA API ACA
                     layoutPpal.setVisibility(View.GONE);
                     url="http://apicampus.azurewebsites.net/buscarLibros.php?Busqueda=";
                     url+=texto;
@@ -136,9 +141,15 @@ public class ListarLibrosPropios extends AppCompatActivity {
                     new buscarLibros().execute(url);
                     layout.setVisibility(View.VISIBLE);
                 }
+                else
+                {
+                    layoutPpal.setVisibility(View.VISIBLE);
+                    layout.setVisibility(View.GONE);
+                }
             }
         });
     }
+
     private void IniciarAgregarActividad()
     {
         Intent nuevaActivity=new Intent(ListarLibrosPropios.this,AgregarLibro.class);
@@ -225,6 +236,7 @@ public class ListarLibrosPropios extends AppCompatActivity {
             }
             else
             {
+                ScrollView scrollView= new ScrollView(getApplicationContext());
                 for (int i=0;i<lstaLibros.size();i++)
                 {
                     final int numerito=i;
@@ -257,6 +269,7 @@ public class ListarLibrosPropios extends AppCompatActivity {
                         }
                     });
                 }
+                scrollView.addView(layout);
             }
         }
         @Override
@@ -370,6 +383,7 @@ public class ListarLibrosPropios extends AppCompatActivity {
     }
     private void ObtenerReferencias()
     {
+        btnBuscar=(Button)findViewById(R.id.btnBuscar);
         lstviewLibros=(ListView)findViewById(R.id.lstLibros);
         imgAgregar=(ImageView)findViewById(R.id.imgAgregar);
         edtBuscar=(EditText)findViewById(R.id.edtBusqueda);
