@@ -241,30 +241,6 @@ public class Listar extends MainActivity {
         Intent nuevaActivity=new Intent(this,Agregar.class);
         startActivity(nuevaActivity);
     }
-    private void notificacion()
-    {
-        mBuilder =
-                (NotificationCompat.Builder) new NotificationCompat.Builder(Listar.this)
-                        .setSmallIcon(android.R.drawable.stat_sys_warning)
-                        .setLargeIcon((((BitmapDrawable)getResources()
-                                .getDrawable(R.drawable.ic_assignment_black_24dp)).getBitmap()))
-                        .setContentTitle("Se acerca un evento")
-                        .setContentText("Informacion")
-                        .setContentInfo("4")
-                        .setTicker("Alerta!");
-        Intent notIntent =
-                new Intent(Listar.this, MainActivity.class);
-
-        PendingIntent contIntent =
-                PendingIntent.getActivity(
-                        Listar.this, 0, notIntent, 0);
-
-        mBuilder.setContentIntent(contIntent);
-        //.setWhen()
-        mNotificationManager =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-    }
     private Dialog confirmarEliminar(){
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
