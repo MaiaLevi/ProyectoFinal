@@ -5,7 +5,7 @@
     android:layout_centerVertical="true"
     android:layout_centerHorizontal="true"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="@color/accent_material_dark"
+    android:background="#ffffff"
     android:weightSum="1">
 
     <EditText
@@ -30,7 +30,8 @@
     <Spinner
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/spnAnios" />
+        android:id="@+id/spnAnios"
+        android:background="#ff7b7b" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -43,7 +44,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/spnMateria"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:background="#ff7b7b" />
 
     <CheckBox
         android:layout_width="wrap_content"

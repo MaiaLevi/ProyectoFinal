@@ -38,25 +38,25 @@
                             android:weightSum="1"
                             android:id="@+id/layout01"
                             xmlns:android="http://schemas.android.com/apk/res/android"
-                            android:background="@color/accent_material_dark">
+                            android:background="#ffffff">
                             <LinearLayout
                                 android:id="@+id/layoutBuscar"
-                                android:orientation="vertical"
+                                android:orientation="horizontal"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
+                                android:layout_height="54dp"
                                 android:layout_gravity="center_horizontal"
-                                android:layout_weight="0.37">
+                                android:weightSum="1">
                                 <EditText
-                                    android:layout_width="263dp"
+                                    android:layout_width="169dp"
                                     android:layout_height="wrap_content"
                                     android:id="@+id/edtBusqueda"
-                                    android:hint="Buscar Libros" />
+                                    android:hint="Buscar Libros"
+                                    android:layout_weight="0.74" />
                                 <Button
                                     android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
+                                    android:layout_height="50dp"
                                     android:text="Buscar"
                                     android:id="@+id/btnBuscar"
-                                    android:layout_alignParentBottom="true"
                                     android:layout_alignParentRight="true"
                                     android:layout_alignParentEnd="true"
                                     android:layout_marginBottom="64dp" />
@@ -67,7 +67,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_horizontal"
-                                android:layout_weight="0.37"></LinearLayout>
+                                android:layout_weight="0"></LinearLayout>
                             <LinearLayout
                                 android:id="@+id/layoutPrincipal"
                                 android:orientation="horizontal"
@@ -84,20 +84,19 @@
                                             android:textAppearance="?android:attr/textAppearanceMedium"
                                             android:text="Mis Libros:"
                                             android:id="@+id/tvwTitulo"
-                                            android:textColor="#ffffff"
                                             android:textSize="25dp" />
                                     <ListView
                                         android:layout_width="298dp"
                                         android:layout_height="347dp"
                                         android:id="@+id/lstLibros"
-                                        android:visibility="visible"/>
+                                        android:visibility="visible"
+                                        android:background="#ff7b7b" />
                                 </LinearLayout>
-                                    <ImageView
-                                        android:id="@+id/imgAgregar"
-                                        android:layout_width="49dp"
-                                        android:layout_height="wrap_content"
-                                        android:src="@drawable/ic_add_white_24dp"
-                                        android:layout_weight="0.64" />
+                                <ImageView
+                                    android:id="@+id/imgAgregar"
+                                    android:layout_width="42dp"
+                                    android:layout_height="65dp"
+                                    android:src="@android:drawable/ic_menu_add" />
                             </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>

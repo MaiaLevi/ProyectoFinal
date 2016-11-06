@@ -79,15 +79,19 @@ public class MainActivity extends AppCompatActivity {
         sesion = prefs.getBoolean("sesion", false);
         nombre = prefs.getString("nombre", "");
         id = prefs.getInt("id", 0);
+        if (id!=0)
+        {
+            //si la sesion ya esta iniciada
+            String urlEvento="http://apicampus.azurewebsites.net/listarEventosHome.php?IdUsuario="+id;
+            Log.i("sesion", String.valueOf(id));
+            new traerEventos().execute(urlEvento);
+        }
         Log.i("sesion", sesion.toString());
         //PROBAR ABAJO
         iddivision = prefs.getInt("iddivision", 0);
         division = prefs.getString("division", "");
         miDivision = new Division(iddivision, division);
         miUsuario = new Usuarios(nombre, mail, "", 0);
-        String urlEvento="http://apicampus.azurewebsites.net/listarEventosHome.php?IdUsuario="+id;
-        Log.i("sesion", String.valueOf(id));
-        new traerEventos().execute(urlEvento);
         //CARGAR VALORES EN CLASE USUARIO
         if (sesion) {
             tvwBienvenido.setText("Bienvenido/a " + nombre);
@@ -467,6 +471,9 @@ public class MainActivity extends AppCompatActivity {
                     editor.putInt("id", Usuarios.getId());
                     editor.putBoolean("sesion", sesion);
                     editor.commit();
+                    String urlEvento="http://apicampus.azurewebsites.net/listarEventosHome.php?IdUsuario="+Usuarios.getId();
+                    Log.i("sesion", String.valueOf(id));
+                    new traerEventos().execute(urlEvento);
                 }
                 else {
                     Toast.makeText(getApplicationContext(), "Contraseña incorrecta", Toast.LENGTH_SHORT).show();
@@ -517,41 +524,40 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(ArrayList<Evento> evento) {
             super.onPostExecute(evento);
             progressDialog.dismiss();
-            if (listaEventos.size()>0)
-            {
-                //recorrer lista obtener fehca materia y tipo
-                for (int i=0; i<listaEventos.size(); i++)
-                {
-                    DateFormat df = new SimpleDateFormat("dd/MM");
-                    String reportDate="";
-                    switch (i)
-                    {
-                        case 0:
-                            texto1[0]=listaEventos.get(i).getTipo().getNombre()+" de "+listaEventos.get(i).getMateria().getNombre();
-                            reportDate = df.format(listaEventos.get(i).getFecha());
-                            texto1[1]=reportDate;
-                            currentIndex=-1;
-                            break;
-                        case 1:
-                            //i=1
-                            texto2[0]=listaEventos.get(i).getTipo().getNombre()+" de "+listaEventos.get(i).getMateria().getNombre();
-                            reportDate = df.format(listaEventos.get(i).getFecha());
-                            texto2[1]=reportDate;
-                            currentIndex2=-1;
-                            break;
-                        case 2:
-                            //i=2
-                            texto3[0]=listaEventos.get(i).getTipo().getNombre()+" de "+listaEventos.get(i).getMateria().getNombre();
-                            reportDate = df.format(listaEventos.get(i).getFecha());
-                            texto3[1]=reportDate;
-                            currentIndex3=-1;
-                            break;
-                        case 3:
-                            //i=3
-                            texto4[0]=listaEventos.get(i).getTipo().getNombre()+" de "+listaEventos.get(i).getMateria().getNombre();
-                            reportDate = df.format(listaEventos.get(i).getFecha());
-                            texto4[1]=reportDate;
-                            currentIndex4=-1;
+            if (listaEventos!=null) {
+                if (listaEventos.size() > 0) {
+                    //recorrer lista obtener fehca materia y tipo
+                    for (int i = 0; i < listaEventos.size(); i++) {
+                        DateFormat df = new SimpleDateFormat("dd/MM");
+                        String reportDate = "";
+                        switch (i) {
+                            case 0:
+                                texto1[0] = listaEventos.get(i).getTipo().getNombre() + " de " + listaEventos.get(i).getMateria().getNombre();
+                                reportDate = df.format(listaEventos.get(i).getFecha());
+                                texto1[1] = reportDate;
+                                currentIndex = -1;
+                                break;
+                            case 1:
+                                //i=1
+                                texto2[0] = listaEventos.get(i).getTipo().getNombre() + " de " + listaEventos.get(i).getMateria().getNombre();
+                                reportDate = df.format(listaEventos.get(i).getFecha());
+                                texto2[1] = reportDate;
+                                currentIndex2 = -1;
+                                break;
+                            case 2:
+                                //i=2
+                                texto3[0] = listaEventos.get(i).getTipo().getNombre() + " de " + listaEventos.get(i).getMateria().getNombre();
+                                reportDate = df.format(listaEventos.get(i).getFecha());
+                                texto3[1] = reportDate;
+                                currentIndex3 = -1;
+                                break;
+                            case 3:
+                                //i=3
+                                texto4[0] = listaEventos.get(i).getTipo().getNombre() + " de " + listaEventos.get(i).getMateria().getNombre();
+                                reportDate = df.format(listaEventos.get(i).getFecha());
+                                texto4[1] = reportDate;
+                                currentIndex4 = -1;
+                        }
                     }
                 }
             }

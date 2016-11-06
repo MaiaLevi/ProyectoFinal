@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ContentProviderOperation;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -17,8 +18,11 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -119,11 +123,7 @@ public class ListarLibrosPropios extends AppCompatActivity {
         edtBuscar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String texto=edtBuscar.getText().toString();
-                if (!texto.equals(""))
-                {
-                    btnBuscar.setText("Atras");
-                }
+                    btnBuscar.setText("Buscar");
             }
         });
         btnBuscar.setOnClickListener(new View.OnClickListener() {
@@ -133,18 +133,33 @@ public class ListarLibrosPropios extends AppCompatActivity {
                 String texto=edtBuscar.getText().toString();
                 if (boton.equals("Buscar"))
                 {
-                    layoutPpal.setVisibility(View.GONE);
-                    url="http://apicampus.azurewebsites.net/buscarLibros.php?Busqueda=";
-                    url+=texto;
-                    url+="&id=";
-                    url+=Usuarios.getId();
-                    new buscarLibros().execute(url);
-                    layout.setVisibility(View.VISIBLE);
+                    if (!(texto.contains(" ")|| texto.matches(""))&&texto.trim().length()>0)
+                    {
+                        btnBuscar.setText("Atras");
+                        layoutPpal.setVisibility(View.GONE);
+                        url="http://apicampus.azurewebsites.net/buscarLibros.php?Busqueda=";
+                        url+=texto;
+                        url+="&id=";
+                        url+=Usuarios.getId();
+                        new buscarLibros().execute(url);
+                        layout.setVisibility(View.VISIBLE);
+                    }
+                    else
+                    {
+                        Toast.makeText(getApplicationContext(), "No se pueden hacer búsquedas con espacios", Toast.LENGTH_SHORT)
+                                .show();
+                    }
                 }
                 else
                 {
+                    btnBuscar.setText("Buscar");
                     layoutPpal.setVisibility(View.VISIBLE);
                     layout.setVisibility(View.GONE);
+                }
+                View view = getCurrentFocus();
+                if (view != null) {
+                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 }
             }
         });
@@ -185,7 +200,7 @@ public class ListarLibrosPropios extends AppCompatActivity {
             startActivity(Intent.createChooser(waIntent, "Share with"));
 
         } catch (PackageManager.NameNotFoundException e) {
-            Toast.makeText(this, "WhatsApp not Installed el libro es "+s, Toast.LENGTH_SHORT)
+            Toast.makeText(this, "WhatsApp no está instalado", Toast.LENGTH_SHORT)
                     .show();
         }
     }
@@ -247,9 +262,9 @@ public class ListarLibrosPropios extends AppCompatActivity {
                     //add textView
                     TextView tvwNombre = new TextView(getApplicationContext());
                     tvwNombre.setText(lstaLibros.get(i).getNombre()+"\n"+lstaLibros.get(i).getDesc()+
-                            "\n Año:"+lstaLibros.get(i).getAño()+
-                            "\n Materia:"+lstaLibros.get(i).getMateria().getNombre()+
-                            "\n Vendedor:"+lstaLibros.get(i).getUsuario());
+                            "\nAño:"+lstaLibros.get(i).getAño()+
+                            "\nMateria:"+lstaLibros.get(i).getMateria().getNombre()+
+                            "\nVendedor:"+lstaLibros.get(i).getUsuario());
                     tvwNombre.setTextColor(Color.parseColor("#000000"));
                     tvwNombre.setId(contador);
                     tvwNombre.setLayoutParams(params);
@@ -269,7 +284,7 @@ public class ListarLibrosPropios extends AppCompatActivity {
                         }
                     });
                 }
-                scrollView.addView(layout);
+//                scrollView.addView(layout);
             }
         }
         @Override

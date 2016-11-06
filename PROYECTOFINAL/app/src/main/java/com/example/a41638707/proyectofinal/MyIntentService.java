@@ -22,6 +22,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * An {@link IntentService} subclass for handling asynchronous task requests in
@@ -32,8 +33,8 @@ import java.io.IOException;
  */
 public class MyIntentService extends IntentService {
     public boolean refresh = false;
-    private OkHttpClient cli=new OkHttpClient();
-
+    String url="";
+    ArrayList<Evento> lista = new ArrayList<Evento>();
     public MyIntentService() {
         super("MyIntentService");
     }
@@ -41,13 +42,11 @@ public class MyIntentService extends IntentService {
     protected void onHandleIntent(final Intent workIntent) {
 //devolver lista de eventos
         SinEstoNoFunca();
-        ArrayList<NotiChat> lista = new ArrayList<NotiChat>();
-        Usuario devolver = new Usuario();
         OkHttpClient client = new OkHttpClient();
-        String url ="http://alfacare.esy.es/DB/NotificacionMensaje1.php";
+        url ="http://apicampus.azurewebsites.net/notificaciones.php?IdDivision=";
+        url+=Usuarios.getDivision().getId();
         JSONObject json = new JSONObject();
         try {
-           json.put("usuario", Main2Activity.idUsuario);
             RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json.toString());
             Request request = new Request.Builder()
                     .url(url)
@@ -59,60 +58,63 @@ public class MyIntentService extends IntentService {
         } catch (IOException e) {
             //e.printStackTrace();
             Log.e("IOIOIOIO", "ERROR", e);
-        } catch (JSONException e) {
-            e.printStackTrace();
         }
         if(lista.size() > 0)
         {
-            int acum = 0;
-            for(int i = 0; i< lista.size(); i++)
-            {
-                acum += lista.get(i).cont;
-            }
             Notification n  = null;
-            Intent intent = new Intent(getApplicationContext(), verChats.class);
+            Intent intent = new Intent(getApplicationContext(), Listar.class);
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
                 Bitmap icon = BitmapFactory.decodeResource(getApplicationContext().getResources(),
                         R.drawable.ic_assignment_black_24dp);
+                //hacer if con tamao lista, si hay mas de uno hacer for
                 PendingIntent pIntent = PendingIntent.getActivity(getApplicationContext(), (int) System.currentTimeMillis(), intent, 0);
-                n = new Notification.Builder(getApplicationContext())
-                        .setContentTitle("En una semana hay prueba de lengua")
-                        //si hay mas de una cosa que no especifique
-                        .setContentText("Ver eventos")
-                        .setSmallIcon(R.drawable.ic_assignment_black_24dp)
-                        .setContentIntent(pIntent)
-                        .setAutoCancel(true)
-                        .setLargeIcon(icon)
-                        .setVibrate(new long[] { 1000, 1000, 1000, 1000, 1000 })
-                        //.addAction(R.drawable.logoproyecto, "Call", pIntent)
-                        .build();
+                if (lista.size()==1)
+                {
+                    Evento miEvento=new Evento(lista.get(0).getId(),lista.get(0).getMateria(),lista.get(0).getTipo(), null, "",0,null);
+                    n = new Notification.Builder(getApplicationContext())
+                            .setContentTitle("En una semana hay "+ miEvento.getTipo().getNombre()+" de "+miEvento.getMateria().getNombre())
+                            //si hay mas de una cosa que no especifique
+                            .setContentText("Ver eventos")
+                            .setSmallIcon(R.drawable.ic_assignment_black_24dp)
+                            .setContentIntent(pIntent)
+                            .setAutoCancel(true)
+                            .setLargeIcon(icon)
+                            .setVibrate(new long[] { 1000, 1000, 1000, 1000, 1000 })
+                            //.addAction(R.drawable.logoproyecto, "Call", pIntent)
+                            .build();
+                }
+                else
+                {
+                    String principio="";
+                    for (int i=0;i<lista.size();i++)
+                    {
+                        if (i==0)
+                        {
+                            principio="En una semana tenés: ";
+                        }
+                        else
+                        {
+                            principio=" ,";
+                        }
+                        Evento miEvento=new Evento(lista.get(i).getId(),lista.get(i).getMateria(),lista.get(i).getTipo(), null, "",0,null);
+                        n = new Notification.Builder(getApplicationContext())
+                                .setContentTitle(principio+ miEvento.getTipo().getNombre()+" de "+miEvento.getMateria().getNombre())
+                                //si hay mas de una cosa que no especifique
+                                .setContentText("Ver eventos")
+                                .setSmallIcon(R.drawable.ic_assignment_black_24dp)
+                                .setContentIntent(pIntent)
+                                .setAutoCancel(true)
+                                .setLargeIcon(icon)
+                                .setVibrate(new long[] { 1000, 1000, 1000, 1000, 1000 })
+                                //.addAction(R.drawable.logoproyecto, "Call", pIntent)
+                                .build();
+                    }
+                }
+
             }
             NotificationManager notificationManager =
                     (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
             notificationManager.notify(0, n);
-            client = new OkHttpClient();
-            url ="http://alfacare.esy.es/DB/NotificacionMensaje2.php";
-            JSONArray jsonArray = new JSONArray();
-            try {
-                for (int i = 0; i < lista.size(); i++)
-                {
-                    json = new JSONObject();
-                    json.put("idchat",lista.get(i).idchat);
-                    json.put("idusuario", Main2Activity.idUsuario);
-                    jsonArray.put(i,json);
-                }
-                RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), jsonArray.toString());
-                Request request = new Request.Builder()
-                        .url(url)
-                        .post(body)
-                        .build();
-                Response response = client.newCall(request).execute();
-            } catch (IOException e) {
-                //e.printStackTrace();
-                Log.e("IOIOIOIO", "ERROR", e);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
         }
     }
     private void SinEstoNoFunca()
@@ -122,18 +124,24 @@ public class MyIntentService extends IntentService {
             StrictMode.setThreadPolicy(policy);
         }
     }
-    private ArrayList<NotiChat> ParsearResultado(String JSONstr)
+    private ArrayList<Evento> ParsearResultado(String JSONstr)
     {
-        NotiChat devolver;
-        ArrayList<NotiChat> lista = new ArrayList<NotiChat>();
+        Evento devolver;
+        ArrayList<Evento> lista = new ArrayList<Evento>();
         try {
-            JSONArray JsonTurnos = new JSONArray(JSONstr);
-            for (int i = 0; i < JsonTurnos.length(); i++)
+            JSONArray JsonEventos = new JSONArray(JSONstr);
+            for (int i = 0; i < JsonEventos.length(); i++)
             {
-                devolver = new NotiChat();
-                JSONObject JsonTurno = JsonTurnos.getJSONObject(i);
-                devolver.idchat= JsonTurno.getInt("idchat");
-                devolver.cont = JsonTurno.getInt("cont");
+                JSONObject Json = JsonEventos.getJSONObject(i);
+                int idEvento= Json.getInt("Id");
+                int idMateria = Json.getInt("IdMateria");
+                //fecha al fadi y descripcion tambien
+                String materia=Json.getString("Materia");
+                int idTipo=Json.getInt("IdTipo");
+                String tipo=Json.getString("Tipo");
+                MateriaEvento miMat=new MateriaEvento(idMateria,materia);
+                TipoEvento miTipo=new TipoEvento(idTipo,tipo);
+                devolver = new Evento(idEvento, miMat,miTipo,null,"",0,null);
                 lista.add(devolver);
             }
         } catch (JSONException e) {

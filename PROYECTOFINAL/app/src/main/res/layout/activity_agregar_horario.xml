@@ -26,7 +26,8 @@
         android:id="@+id/spndia"
         android:layout_below="@+id/textView3"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:background="#ff7b7b" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -44,7 +45,8 @@
         android:id="@+id/spnBloque"
         android:layout_below="@+id/textView4"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:background="#ff7b7b" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -62,7 +64,8 @@
         android:id="@+id/spnMateria"
         android:layout_below="@+id/textView5"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:background="#ff7b7b" />
 
     <LinearLayout
         android:orientation="horizontal"

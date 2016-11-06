@@ -34,7 +34,6 @@
         <activity android:name=".ModificarLibro" />
         <activity android:name=".ListarHorario" />
         <activity android:name=".AgregarHorario" />
-        <activity android:name=".EliminarHorario" />
 
         <service
             android:name=".MyIntentService"
