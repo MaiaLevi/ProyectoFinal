@@ -192,6 +192,7 @@ public class Listar extends MainActivity {
         Intent nuevaActivity=new Intent(this,ListarDivision.class);
         startActivity(nuevaActivity);
     }
+    /*
     private void EliminarEvento(int param)
     {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -214,14 +215,14 @@ public class Listar extends MainActivity {
             // TODO Auto-generated catch block
             Log.e("TAG",e.toString());
         }
-    }
+    }*/
     class eliminar extends AsyncTask<String, Void, Void>
     {
         OkHttpClient client = new OkHttpClient();
 //esta hecho para el orto pero si anda no importa. Con amor, Daiu<3
         protected Void doInBackground(String... urls) {
             try {Request request = new Request.Builder()
-                    .url("http://apicampus.azurewebsites.net/EliminarLibro.php?Id=" + param)
+                    .url("http://apicampus.azurewebsites.net/EliminarEvento.php?Id=" + param)
                     .build();
                 try
                 {

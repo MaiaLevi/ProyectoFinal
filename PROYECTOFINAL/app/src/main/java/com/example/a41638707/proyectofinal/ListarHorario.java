@@ -49,6 +49,7 @@ public class ListarHorario extends AppCompatActivity {
     boolean click=false;
     Button btnLunes, btnMartes, btnMierc, btnJueves, btnViernes, btnAgregar;
     Horario horarioSeleccionado;
+    //meter en variable num de dia seleccionado y cuando es on restart cambiar parametro
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -226,26 +227,6 @@ public class ListarHorario extends AppCompatActivity {
                 listaHorario.add(unhorario);
             }
             return listaHorario;
-        }
-    }
-    private void EliminarHorario(int param)
-    {
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-        HttpClient httpClient = new DefaultHttpClient();
-        HttpDelete delRequest = new HttpDelete("hola" + param);
-        delRequest.setHeader("content-type", "application/json");
-        try {
-            HttpResponse resp = httpClient.execute(delRequest);
-            String respStr = EntityUtils.toString(resp.getEntity());
-            if(respStr.equals("true")) {
-                Toast toast1 = Toast.makeText(getApplicationContext(),"Eliminado OK.",Toast.LENGTH_SHORT);
-                toast1.show();
-            }
-        } catch(Exception ex) {
-            Log.e("ServicioRest","Error!", ex);
-            Toast toast2 = Toast.makeText(getApplicationContext(),ex.toString(),Toast.LENGTH_SHORT);
-            toast2.show();
         }
     }
     private Dialog confirmarEliminar(){

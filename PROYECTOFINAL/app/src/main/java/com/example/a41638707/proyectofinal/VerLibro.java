@@ -3,6 +3,7 @@ package com.example.a41638707.proyectofinal;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.StrictMode;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -14,11 +15,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+
+import java.io.IOException;
 
 public class VerLibro extends AppCompatActivity {
     ImageView imgEliminar, imgModificar;
@@ -26,6 +33,7 @@ public class VerLibro extends AppCompatActivity {
     public static final String PARAMETROLIBRO2="com.example.a41638707.proyectofinal.PARAMETROLIBRO";
     TextView edtNombre, txvDesc, txvImg, txvidmat, txvvendido;
     Button btnAtras;
+    int param=0;
     Libros miLibro;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +82,8 @@ public class VerLibro extends AppCompatActivity {
         builder.setPositiveButton("Eliminar", new  DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 Log.i("Diálogos", "Confirmación Aceptada.");
-                iniciarEliminar(miLibro.getId());
+                param=miLibro.getId();
+                new eliminar().execute("NO ANDA");
                 dialog.cancel();
             }
         });
@@ -86,6 +95,7 @@ public class VerLibro extends AppCompatActivity {
         });
         return builder.create();
     }
+    /*
     public void iniciarEliminar(int param)
     {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -104,6 +114,36 @@ public class VerLibro extends AppCompatActivity {
             Log.e("ServicioRest","Error!", ex);
             Toast toast2 = Toast.makeText(getApplicationContext(),ex.toString(),Toast.LENGTH_SHORT);
             toast2.show();
+        }
+    }*/
+    class eliminar extends AsyncTask<String, Void, Void>
+    {
+        OkHttpClient client = new OkHttpClient();
+        //esta hecho para el orto pero si anda no importa. Con amor, Daiu<3
+        protected Void doInBackground(String... urls) {
+            try {Request request = new Request.Builder()
+                    .url("http://apicampus.azurewebsites.net/EliminarLibro.php?Id=" + param)
+                    .build();
+                try
+                {
+                    Response response = client.newCall(request).execute();
+                    Log.d("ANSWER", response.body().string());
+                }
+                catch (IOException e)
+                {
+                    Log.e("ERROR",e.toString());
+                }
+                return null;
+            } catch (Exception e) {
+
+                Log.e("ERROR",e.toString());
+                return null;
+            }
+        }
+
+        protected void onPostExecute(Void nada) {
+            // TODO: check this.exception
+            // TODO: do something with the feed
         }
     }
     private void irAtras() {
