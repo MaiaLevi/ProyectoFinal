@@ -285,6 +285,10 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         threadNotifications.start();
+    } @Override
+    public void onRestart(){
+        super.onRestart();
+        progressDialog=new ProgressDialog(getApplicationContext());
     }
     private void chau()
     {
