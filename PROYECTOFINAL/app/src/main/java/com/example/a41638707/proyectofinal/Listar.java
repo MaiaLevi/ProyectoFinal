@@ -51,6 +51,7 @@ import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 public class Listar extends MainActivity {
@@ -82,8 +83,18 @@ public class Listar extends MainActivity {
         alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent alarmIntent = new Intent(getApplicationContext(), MyIntentService.class);
         pending = PendingIntent.getService(getApplicationContext(), 0, alarmIntent, 0);
-        alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                SystemClock.elapsedRealtime(), 30000, pending);
+        // Set the alarm to start at 8:30 a.m.
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, 8);
+        calendar.set(Calendar.MINUTE, 30);
+
+// setRepeating() lets you specify a precise custom interval--in this case,
+// 20 minutes.
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                1000 * 60 * 20 * 60, pending);
+        //alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+         //       SystemClock.elapsedRealtime(), 30, pending);
         lstEventos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> a, View v, int position, long id) {

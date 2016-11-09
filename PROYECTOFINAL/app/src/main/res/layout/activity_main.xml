@@ -103,19 +103,19 @@
                                                             android:background="#ff6161" />
 
                                                     <TextSwitcher
-                                                        android:layout_width="match_parent"
-                                                        android:layout_height="48dp"
-                                                        android:id="@+id/textSwitcher5"
-                                                        android:animateFirstView="false"
-                                                        android:background="#ff7b7b" />
-
-                                                    <TextSwitcher
                                                             android:layout_width="match_parent"
                                                             android:layout_height="50dp"
                                                             android:id="@+id/textSwitcher4"
                                                             android:animateFirstView="false"
                                                             android:background="#ff6161" />
 
+
+                                                    <TextSwitcher
+                                                        android:layout_width="match_parent"
+                                                        android:layout_height="48dp"
+                                                        android:id="@+id/textSwitcher5"
+                                                        android:animateFirstView="false"
+                                                        android:background="#ff7b7b" />
                                                     <Button
                                                         android:layout_width="wrap_content"
                                                         android:layout_height="wrap_content"

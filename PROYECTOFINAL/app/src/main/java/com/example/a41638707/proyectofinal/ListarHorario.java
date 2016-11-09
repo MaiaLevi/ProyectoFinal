@@ -46,7 +46,7 @@ public class ListarHorario extends AppCompatActivity {
     ListView lstHorario;
     ArrayAdapter<Horario> adaptador;
     TabHost tabs;
-    boolean click=false;
+    boolean boton1=false,boton2=false,boton3=false,boton4=false,boton5=false;
     Button btnLunes, btnMartes, btnMierc, btnJueves, btnViernes, btnAgregar;
     Horario horarioSeleccionado;
     //meter en variable num de dia seleccionado y cuando es on restart cambiar parametro
@@ -94,30 +94,81 @@ public class ListarHorario extends AppCompatActivity {
             public void onClick(View v) {
                 url="http://apicampus.azurewebsites.net/traerDia.php?IdDivision="+Usuarios.getDivision().getId()+"&Dia=1";
                 new listarEventos().execute(url);
+                boton1=true;
+                boton2=false;
+                boton5=false;
+                boton4=false;
+                boton3=false;
+                if (boton1)
+                {
+                    // If you're in an activity:
+                    btnLunes.setBackgroundColor(0xff7b7b);
+                }
             }
         });
         btnMartes.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 url="http://apicampus.azurewebsites.net/traerDia.php?IdDivision="+Usuarios.getDivision().getId()+"&Dia=2";
                 new listarEventos().execute(url);
+                boton2=true;
+                boton1=false;
+                boton5=false;
+                boton4=false;
+                boton3=false;
+                if (boton2)
+                {
+                    // If you're in an activity:
+                    btnLunes.setBackgroundColor(0xff7b7b);
+                }
             }
         });
         btnMierc.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 url="http://apicampus.azurewebsites.net/traerDia.php?IdDivision="+Usuarios.getDivision().getId()+"&Dia=3";
                 new listarEventos().execute(url);
+                boton3=true;
+                boton2=false;
+                boton5=false;
+                boton4=false;
+                boton1=false;
+                if (boton3)
+                {
+                    // If you're in an activity:
+                    btnLunes.setBackgroundColor(0xff7b7b);
+                }
             }
         });
         btnJueves.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 url="http://apicampus.azurewebsites.net/traerDia.php?IdDivision="+Usuarios.getDivision().getId()+"&Dia=4";
                 new listarEventos().execute(url);
+                boton4=true;
+                boton2=false;
+                boton5=false;
+                boton1=false;
+                boton3=false;
+                if (boton4)
+                {
+                    // If you're in an activity:
+                    btnLunes.setBackgroundColor(0xff7b7b);
+                }
+                //volver a stear con color orignal
             }
         });
         btnViernes.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 url="http://apicampus.azurewebsites.net/traerDia.php?IdDivision="+Usuarios.getDivision().getId()+"&Dia=5";
                 new listarEventos().execute(url);
+                boton5=true;
+                boton2=false;
+                boton1=false;
+                boton4=false;
+                boton3=false;
+                if (boton5)
+                {
+                    // If you're in an activity:
+                    btnLunes.setBackgroundColor(0xff7b7b);
+                }
             }
         });
         btnAgregar.setOnClickListener(new View.OnClickListener() {
@@ -238,7 +289,6 @@ public class ListarHorario extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 Log.i("Diálogos", "Confirmación Aceptada.");
                 //EliminarHorario(horarioSeleccionado.getId());
-                click=false;
                 //no anda adaptador.notifyDataSetChanged();
                 //probar si el notify anda, onpostexecute
                 new listarEventos().execute(url);

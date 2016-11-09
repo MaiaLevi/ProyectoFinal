@@ -54,7 +54,7 @@ public class MyIntentService extends IntentService {
                     .build();
             Response response = client.newCall(request).execute();
             String JSONstr = response.body().string();
-            lista = ParsearResultado(JSONstr);
+            ParsearResultado(JSONstr);
         } catch (IOException e) {
             //e.printStackTrace();
             Log.e("IOIOIOIO", "ERROR", e);
@@ -124,21 +124,21 @@ public class MyIntentService extends IntentService {
             StrictMode.setThreadPolicy(policy);
         }
     }
-    private ArrayList<Evento> ParsearResultado(String JSONstr)
+    private void ParsearResultado(String JSONstr)
     {
         Evento devolver;
-        ArrayList<Evento> lista = new ArrayList<Evento>();
         try {
-            JSONArray JsonEventos = new JSONArray(JSONstr);
-            for (int i = 0; i < JsonEventos.length(); i++)
+            JSONObject json = new JSONObject(JSONstr);
+            JSONArray respJSON = json.getJSONArray("result");
+            for (int i = 0; i < respJSON.length(); i++)
             {
-                JSONObject Json = JsonEventos.getJSONObject(i);
-                int idEvento= Json.getInt("Id");
-                int idMateria = Json.getInt("IdMateria");
+                JSONObject obj = respJSON.getJSONObject(i);
+                int idEvento= obj.getInt("Id");
+                int idMateria = obj.getInt("IdMateria");
                 //fecha al fadi y descripcion tambien
-                String materia=Json.getString("Materia");
-                int idTipo=Json.getInt("IdTipo");
-                String tipo=Json.getString("Tipo");
+                String materia=obj.getString("Materia");
+                int idTipo=obj.getInt("IdTipo");
+                String tipo=obj.getString("Tipo");
                 MateriaEvento miMat=new MateriaEvento(idMateria,materia);
                 TipoEvento miTipo=new TipoEvento(idTipo,tipo);
                 devolver = new Evento(idEvento, miMat,miTipo,null,"",0,null);
@@ -147,6 +147,5 @@ public class MyIntentService extends IntentService {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return lista;
     }
 }
