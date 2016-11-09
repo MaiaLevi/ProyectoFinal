@@ -31,7 +31,7 @@ public class VerLibro extends AppCompatActivity {
     ImageView imgEliminar, imgModificar;
     //MAIU FIJATE QUE YA TE PUSE UNA VARIABLE PARA TU ONCLICK LISTENER
     public static final String PARAMETROLIBRO2="com.example.a41638707.proyectofinal.PARAMETROLIBRO";
-    TextView edtNombre, txvDesc, txvImg, txvidmat, txvvendido;
+    TextView edtNombre, txvDesc, txvImg, txvidmat, txvvendido, tvwAnio;
     Button btnAtras;
     int param=0;
     Libros miLibro;
@@ -51,6 +51,7 @@ public class VerLibro extends AppCompatActivity {
             txvvendido.setText("Vendido");
         }
         txvDesc.setText(miLibro.getDesc());
+        tvwAnio.setText("Año: "+miLibro.getAño());
         //No tiene imagen txvImg.setText(miLibro.getImg());
         txvidmat.setText(miLibro.getMateria().getNombre());
         imgModificar.setOnClickListener(new View.OnClickListener() {
@@ -159,6 +160,7 @@ public class VerLibro extends AppCompatActivity {
     }
     public void obtenerReferencias()
     {
+        tvwAnio=(TextView)findViewById(R.id.tvwAnio);
         imgEliminar=(ImageView)findViewById(R.id.imgEliminar);
         edtNombre = (TextView) findViewById(R.id.edtNombre);
         txvDesc=(TextView) findViewById(R.id.txvDesc);

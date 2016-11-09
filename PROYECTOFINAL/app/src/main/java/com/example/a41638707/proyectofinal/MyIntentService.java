@@ -72,7 +72,7 @@ public class MyIntentService extends IntentService {
                 {
                     Evento miEvento=new Evento(lista.get(0).getId(),lista.get(0).getMateria(),lista.get(0).getTipo(), null, "",0,null);
                     n = new Notification.Builder(getApplicationContext())
-                            .setContentTitle("En una semana hay "+ miEvento.getTipo().getNombre()+" de "+miEvento.getMateria().getNombre())
+                            .setContentTitle(miEvento.getTipo().getNombre()+" de "+miEvento.getMateria().getNombre()+" en una semana")
                             //si hay mas de una cosa que no especifique
                             .setContentText("Ver eventos")
                             .setSmallIcon(R.drawable.ic_assignment_black_24dp)

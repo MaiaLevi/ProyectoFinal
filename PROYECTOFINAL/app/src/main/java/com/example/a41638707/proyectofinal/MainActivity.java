@@ -62,10 +62,10 @@ public class MainActivity extends AppCompatActivity {
     Animation in,out;
     String nombre, mail, division;
     TextSwitcher mSwitcher, mSwitcher2,mSwitcher3, mSwitcher4;
-    String texto3[]={"No hay eventos","No hay eventos"};
+    String texto1[]={"No hay eventos","No hay eventos"};
     String texto2[]={"No hay más eventos","No hay más eventos"};
     String texto4[]={"No hay más eventos","No hay más eventos"};
-    String texto1[]={"No hay más eventos","No hay más eventos"};
+    String texto3[]={"No hay más eventos","No hay más eventos"};
     int iddivision, id, messageCount=0, currentIndex, messageCount4=0, currentIndex4, messageCount3=0, currentIndex3, messageCount2=0, currentIndex2;
     TabHost tabs;
     @Override
@@ -286,34 +286,6 @@ public class MainActivity extends AppCompatActivity {
         };
         threadNotifications.start();
     }
-    //CAMBIAR POR TAB
-        /*navigationView.setNavigationItemSelectedListener(
-                new NavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(MenuItem menuItem) {
-                        boolean blnMenu=false;
-                        switch (menuItem.getItemId()) {
-                            case R.id.Eventos:
-                                IniciarListarActividad();
-                                blnMenu=true;
-                                break;
-                            case R.id.Libros:
-                                blnMenu=true;
-                                IniciarListarLActividad();
-                                break;
-                            case R.id.Horario:
-                                blnMenu=true;
-                                break;
-                        }
-                        if (blnMenu){
-                            menuItem.setChecked(true);
-                            getSupportActionBar().setTitle(menuItem.getTitle());
-                        }
-                        drawerLayout.closeDrawers();
-                        return true;
-                    }
-                });
-    }*/
     private void chau()
     {
         this.finish();

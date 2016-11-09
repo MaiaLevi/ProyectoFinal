@@ -1,5 +1,6 @@
 package com.example.a41638707.proyectofinal;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -41,15 +42,18 @@ public class AgregarHorario extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_agregar_horario);
         ObtenerRef();
+        Intent intent = getIntent();
+        int value = intent.getIntExtra(ListarHorario.PARAMETROHORARIO,0);
         String urlMateria="http://apicampus.azurewebsites.net/listarMateriaEvento.php";
         new traerMaterias().execute(urlMateria);
         //adapter de spinners de dias y bloques
-        ArrayAdapter<String> adapterDias = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, arrayDias);
+        ArrayAdapter<String> adapterDias = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, arrayDias);
         adapterDias.setDropDownViewResource(R.layout.simple_spinner_dropdown_item);
         spndia.setAdapter(adapterDias);
-        ArrayAdapter<Integer> adapterBloques = new ArrayAdapter<Integer>(this,android.R.layout.simple_spinner_item, arrayBloques);
+        ArrayAdapter<Integer> adapterBloques = new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_item, arrayBloques);
         adapterBloques.setDropDownViewResource(R.layout.simple_spinner_dropdown_item);
         spnbloque.setAdapter(adapterBloques);
+        spndia.setSelection(value);
         spnMateria.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {

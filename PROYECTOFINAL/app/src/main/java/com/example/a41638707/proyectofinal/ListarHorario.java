@@ -40,13 +40,15 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class ListarHorario extends AppCompatActivity {
+    public static final String PARAMETROHORARIO="com.example.a41638707.proyectofinal.HORARIO";
     String url;
     ProgressDialog progressDialog;
     ArrayList<Horario> listaHorario=new ArrayList<Horario>();
     ListView lstHorario;
     ArrayAdapter<Horario> adaptador;
+    int dia=0;
     TabHost tabs;
-    boolean boton1=false,boton2=false,boton3=false,boton4=false,boton5=false;
+    boolean boton1=true,boton2=false,boton3=false,boton4=false,boton5=false;
     Button btnLunes, btnMartes, btnMierc, btnJueves, btnViernes, btnAgregar;
     Horario horarioSeleccionado;
     //meter en variable num de dia seleccionado y cuando es on restart cambiar parametro
@@ -67,6 +69,7 @@ public class ListarHorario extends AppCompatActivity {
                 confirmarEliminar();
             }
         });*/
+        btnLunes.setBackgroundColor(0xff7b7b);
         tabs.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
             @Override
             public void onTabChanged(String tabId) {
@@ -101,6 +104,7 @@ public class ListarHorario extends AppCompatActivity {
                 boton3=false;
                 if (boton1)
                 {
+                    coloresBotones();
                     // If you're in an activity:
                     btnLunes.setBackgroundColor(0xff7b7b);
                 }
@@ -117,8 +121,9 @@ public class ListarHorario extends AppCompatActivity {
                 boton3=false;
                 if (boton2)
                 {
+                    coloresBotones();
                     // If you're in an activity:
-                    btnLunes.setBackgroundColor(0xff7b7b);
+                    btnMartes.setBackgroundColor(0xff7b7b);
                 }
             }
         });
@@ -133,8 +138,9 @@ public class ListarHorario extends AppCompatActivity {
                 boton1=false;
                 if (boton3)
                 {
+                    coloresBotones();
                     // If you're in an activity:
-                    btnLunes.setBackgroundColor(0xff7b7b);
+                    btnMierc.setBackgroundColor(0xff7b7b);
                 }
             }
         });
@@ -149,8 +155,9 @@ public class ListarHorario extends AppCompatActivity {
                 boton3=false;
                 if (boton4)
                 {
+                    coloresBotones();
                     // If you're in an activity:
-                    btnLunes.setBackgroundColor(0xff7b7b);
+                    btnJueves.setBackgroundColor(0xff7b7b);
                 }
                 //volver a stear con color orignal
             }
@@ -166,17 +173,53 @@ public class ListarHorario extends AppCompatActivity {
                 boton3=false;
                 if (boton5)
                 {
+                    coloresBotones();
                     // If you're in an activity:
-                    btnLunes.setBackgroundColor(0xff7b7b);
+                    btnViernes.setBackgroundColor(0xff7b7b);
                 }
             }
         });
         btnAgregar.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                if (boton2)
+                {
+                    dia=1;
+                }
+                else
+                {
+                    if (boton3)
+                    {
+                        dia=2;
+                    }
+                    else
+                    {
+                        if (boton4)
+                        {
+                            dia=3;
+                        }
+                        else
+                        {
+                            if (boton5)
+                            {
+                                dia=4;
+                            }
+                        }
+                    }
+                }
                 agregarHorario();
             }
         });
-    }@Override
+    }
+    private void coloresBotones()
+    {
+        //cambia color de todos los botones
+        btnLunes.setBackgroundResource(android.R.drawable.btn_default);
+        btnViernes.setBackgroundResource(android.R.drawable.btn_default);
+        btnJueves.setBackgroundResource(android.R.drawable.btn_default);
+        btnMierc.setBackgroundResource(android.R.drawable.btn_default);
+        btnMartes.setBackgroundResource(android.R.drawable.btn_default);
+    }
+    @Override
     public void onRestart(){
         super.onRestart();
         url="http://apicampus.azurewebsites.net/traerDia.php?IdDivision="+Usuarios.getDivision().getId()+"&Dia=1";
@@ -184,6 +227,7 @@ public class ListarHorario extends AppCompatActivity {
     private void agregarHorario()
     {
         Intent nuevaActivity3=new Intent(getApplicationContext(),AgregarHorario.class);
+        nuevaActivity3.putExtra(ListarHorario.PARAMETROHORARIO, dia); //Optional parameters
         startActivity(nuevaActivity3);
     }
     private void chau()
@@ -279,28 +323,5 @@ public class ListarHorario extends AppCompatActivity {
             }
             return listaHorario;
         }
-    }
-    private Dialog confirmarEliminar(){
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Alert Dialog");
-        builder.setMessage("¿Desea agregar un evento?");
-        builder.setPositiveButton("Eliminar", new  DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                Log.i("Diálogos", "Confirmación Aceptada.");
-                //EliminarHorario(horarioSeleccionado.getId());
-                //no anda adaptador.notifyDataSetChanged();
-                //probar si el notify anda, onpostexecute
-                new listarEventos().execute(url);
-                dialog.cancel();
-            }
-        });
-        builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                Log.i("Diálogos", "Confirmación Cancelada.");
-                dialog.cancel();
-            }
-        });
-        return builder.create();
     }
 }
