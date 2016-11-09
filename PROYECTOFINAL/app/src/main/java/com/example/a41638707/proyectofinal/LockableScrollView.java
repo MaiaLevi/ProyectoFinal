@@ -1,7 +1,6 @@
 package com.example.a41638707.proyectofinal;
 
 import android.content.Context;
-import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ScrollView;
@@ -11,22 +10,14 @@ class LockableScrollView extends ScrollView {
         super(context);
         // TODO Auto-generated constructor stub
     }
-
-    public LockableScrollView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-    }
-
-    @Override
-    public void addView(View child) {
-        super.addView(child);
-    }
-
     // true if we can scroll (not locked)
     // false if we cannot scroll (locked)
     private boolean mScrollable = true;
+
     public void setScrollingEnabled(boolean enabled) {
         mScrollable = enabled;
     }
+
     public boolean isScrollable() {
         return mScrollable;
     }
@@ -42,6 +33,7 @@ class LockableScrollView extends ScrollView {
                 return super.onTouchEvent(ev);
         }
     }
+
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         // Don't do anything with intercepted touch events if
@@ -49,4 +41,5 @@ class LockableScrollView extends ScrollView {
         if (!mScrollable) return false;
         else return super.onInterceptTouchEvent(ev);
     }
+
 }

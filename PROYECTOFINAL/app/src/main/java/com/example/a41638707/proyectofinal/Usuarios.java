@@ -10,6 +10,7 @@ import java.io.Serializable;
 public class Usuarios implements Serializable  {
     private static int Id;
     private String Nombre;
+    private String Apellido;
     private String Mail;
     private String Contra;
     private static Division Division;
@@ -24,6 +25,19 @@ public class Usuarios implements Serializable  {
         Contra=contra;
         Telefono=telefono;
     }
+    public void setNombre(String nombre)
+    {
+        Nombre=nombre;
+    }
+    public void setContra(String contra)
+    {
+        Contra=contra;
+    }
+    public void setApellido(String apellido)
+    {
+        Apellido=apellido;
+    }
+    public void setMail(String mail){Mail=mail;}
     public static int getId()
     {
         return Id;
@@ -31,6 +45,10 @@ public class Usuarios implements Serializable  {
     public String getNombre()
     {
         return  Nombre;
+    }
+    public String getApellido()
+    {
+        return  Apellido;
     }
     public String getMail()
     {
