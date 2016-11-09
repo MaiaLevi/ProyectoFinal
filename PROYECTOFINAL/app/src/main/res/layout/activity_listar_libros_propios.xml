@@ -68,11 +68,6 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_horizontal"
                                 android:layout_weight="0">
-                                <com.example.a41638707.proyectofinal.LockableScrollView
-                                android:id="@+id/ScrollViewBuscar"
-                                android:layout_height="fill_parent"
-                                android:layout_width="fill_parent">
-                                </com.example.a41638707.proyectofinal.LockableScrollView>
                             </LinearLayout>
                             <LinearLayout
                                 android:id="@+id/layoutPrincipal"

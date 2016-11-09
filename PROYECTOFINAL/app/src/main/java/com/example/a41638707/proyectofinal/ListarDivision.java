@@ -138,26 +138,30 @@ public class ListarDivision extends AppCompatActivity {
         {adaptador.notifyDataSetChanged();
         }
     }
-    private void EliminarEvento(int param)
+    class eliminar extends AsyncTask<String, Void, Void>
     {
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-        HttpClient httpClient = new DefaultHttpClient();
-        HttpDelete delRequest = new HttpDelete("http://apicampus.azurewebsites.net/eliminarevento.php?Id=" + param);
-        delRequest.setHeader("content-type", "application/json");
-        try {
-            HttpResponse resp = httpClient.execute(delRequest);
-            String respStr = EntityUtils.toString(resp.getEntity());
-            if(respStr.equals("true")) {
-                Toast toast1 = Toast.makeText(getApplicationContext(),"Eliminado OK.",Toast.LENGTH_SHORT);
-                toast1.show();
+        OkHttpClient client = new OkHttpClient();
+        //esta hecho para el orto pero si anda no importa. Con amor, Daiu<3
+        protected Void doInBackground(String... urls) {
+            try {Request request = new Request.Builder()
+                    .url("http://apicampus.azurewebsites.net/EliminarEvento.php?Id=" + param)
+                    .build();
+                try
+                {
+                    Response response = client.newCall(request).execute();
+                    Log.d("ANSWER", response.body().string());
+                }
+                catch (IOException e)
+                {
+                    Log.e("ERROR",e.toString());
+                }
+                return null;
+            } catch (Exception e) {
+
+                Log.e("ERROR",e.toString());
+                return null;
             }
-        } catch(Exception ex) {
-            Log.e("ServicioRest","Error!", ex);
-            Toast toast2 = Toast.makeText(getApplicationContext(),ex.toString(),Toast.LENGTH_SHORT);
-            toast2.show();
         }
-    }
     private void ObtenerReferencias()
     {
         lstEventos=(ListView)findViewById(R.id.lstEventos);

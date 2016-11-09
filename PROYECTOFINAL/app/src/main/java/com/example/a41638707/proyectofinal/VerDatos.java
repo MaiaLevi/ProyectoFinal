@@ -23,7 +23,7 @@ import java.util.Date;
 
 public class VerDatos extends AppCompatActivity {
 
-    TextView TxtNombre, TxtApellido, TxtMail, TxtFecha, TxtCelular;
+    TextView TxtNombre, TxtMail, TxtCelular;
     String url="http://apicampus.azurewebsites.net/traerUsuario.php?idusuario=";
     Button btnModificar, btncancel;
     Usuarios Miusu;

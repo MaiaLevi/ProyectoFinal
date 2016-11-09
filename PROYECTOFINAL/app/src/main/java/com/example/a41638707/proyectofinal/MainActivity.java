@@ -51,7 +51,7 @@ import java.util.TimerTask;
 public class MainActivity extends AppCompatActivity {
     // public static final ArrayList<Evento> PARAMETRO1=new ArrayList<Evento>();
     public ProgressDialog progressDialog;
-    Button btnIniciarSesion, btnLogout;
+    Button btnIniciarSesion, btnLogout, btnRegistrarme, btnDatos;
     EditText edtMail, edtContra;
     ArrayList<Evento> listaEventos;
     Usuarios miUsuario;
@@ -153,6 +153,16 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     Toast.makeText(getApplicationContext(), "El mail no puede ser vacío", Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+        btnDatos.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                IniciarDatosActivity();
+            }
+        });
+        btnRegistrarme.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                IniciarRegActivity();
             }
         });
         mSwitcher.setOnClickListener(new View.OnClickListener() {
@@ -290,6 +300,15 @@ public class MainActivity extends AppCompatActivity {
         super.onRestart();
         progressDialog=new ProgressDialog(getApplicationContext());
     }
+    public void IniciarDatosActivity()
+    {
+        Intent nuevaActivity = new Intent(this, VerDatos.class);
+        startActivity(nuevaActivity);
+    }
+    public void IniciarRegActivity() {
+        Intent nuevaActivity = new Intent(this, Registrarme.class);
+        startActivity(nuevaActivity);
+    }
     private void chau()
     {
         this.finish();
@@ -372,6 +391,8 @@ public class MainActivity extends AppCompatActivity {
         layoutBotones=findViewById(R.id.botones);
         layoutLogin=findViewById(R.id.login);
         btnLogout=(Button)findViewById(R.id.btnLogout);
+        btnDatos=(Button) findViewById(R.id.btnDatos);
+        btnRegistrarme=(Button)findViewById(R.id.btnRegistrarme);
         mSwitcher=(TextSwitcher)findViewById(R.id.textSwitcher2);
         mSwitcher2=(TextSwitcher)findViewById(R.id.textSwitcher3);
         mSwitcher3=(TextSwitcher)findViewById(R.id.textSwitcher4);

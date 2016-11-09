@@ -40,7 +40,8 @@
             android:exported="false" />
 
         <activity android:name=".ModificarDatos" />
-        <activity android:name=".VerDatos"></activity>
+        <activity android:name=".VerDatos" />
+        <activity android:name=".Registrarme"></activity>
     </application>
 
 </manifest>

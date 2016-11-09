@@ -61,7 +61,7 @@ public class ListarLibrosPropios extends AppCompatActivity {
     TabHost tabs;
     EditText edtBuscar;
     View layoutPpal;
-    LockableScrollView scrollView;
+    //LockableScrollView scrollView;
     LinearLayout layout;
     int idUsuario, contador=0;
     Button btnBuscar;
@@ -75,7 +75,7 @@ public class ListarLibrosPropios extends AppCompatActivity {
         ObtenerReferencias();
         idUsuario=Usuarios.getId();
         progressDialog=new ProgressDialog(this);
-        scrollView.setScrollingEnabled(false);
+        //scrollView.setScrollingEnabled(false);
         url="http://apicampus.azurewebsites.net/listarLibrosPropios.php?IdUsuario=";
         url+=idUsuario;
         new listarLibros().execute(url);
@@ -157,7 +157,7 @@ public class ListarLibrosPropios extends AppCompatActivity {
                     btnBuscar.setText("Buscar");
                     layoutPpal.setVisibility(View.VISIBLE);
                     layout.setVisibility(View.GONE);
-                    scrollView.setScrollingEnabled(false);
+                  // scrollView.setScrollingEnabled(false);
                 }
                 View view = getCurrentFocus();
                 if (view != null) {
@@ -288,7 +288,7 @@ public class ListarLibrosPropios extends AppCompatActivity {
                 }
                 if (lstaLibros.size()>3)
                 {
-                    scrollView.setScrollingEnabled(true);
+                  //  scrollView.setScrollingEnabled(true);
                 }
             }
         }
@@ -403,7 +403,7 @@ public class ListarLibrosPropios extends AppCompatActivity {
     }
     private void ObtenerReferencias()
     {
-        scrollView=((LockableScrollView)findViewById(R.id.ScrollViewBuscar));
+       // scrollView=((LockableScrollView)findViewById(R.id.ScrollViewBuscar));
         btnBuscar=(Button)findViewById(R.id.btnBuscar);
         lstviewLibros=(ListView)findViewById(R.id.lstLibros);
         imgAgregar=(ImageView)findViewById(R.id.imgAgregar);
