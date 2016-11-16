@@ -181,27 +181,34 @@ public class ListarHorario extends AppCompatActivity {
         });
         btnAgregar.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                if (boton2)
+                if (boton1)
                 {
                     dia=1;
                 }
                 else
                 {
-                    if (boton3)
+                    if (boton2)
                     {
                         dia=2;
                     }
                     else
                     {
-                        if (boton4)
+                        if (boton3)
                         {
                             dia=3;
                         }
                         else
                         {
-                            if (boton5)
+                            if (boton4)
                             {
                                 dia=4;
+                            }
+                            else
+                            {
+                                if (boton5)
+                                {
+                                    dia=5;
+                                }
                             }
                         }
                     }
@@ -222,7 +229,11 @@ public class ListarHorario extends AppCompatActivity {
     @Override
     public void onRestart(){
         super.onRestart();
-        url="http://apicampus.azurewebsites.net/traerDia.php?IdDivision="+Usuarios.getDivision().getId()+"&Dia=1";
+        if (dia==0)
+        {
+            dia=1;
+        }
+        url="http://apicampus.azurewebsites.net/traerDia.php?IdDivision="+Usuarios.getDivision().getId()+"&Dia="+dia;
         new listarEventos().execute(url);}
     private void agregarHorario()
     {

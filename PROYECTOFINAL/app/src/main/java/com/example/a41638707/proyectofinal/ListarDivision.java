@@ -74,7 +74,6 @@ int param=0;
                 //Desea eliminar o modificar?
                 //Modificar
                 eventoSeleccionado = listaEventos.get(position);
-                param=position;
                 click = true;
             }
         });
@@ -179,6 +178,7 @@ int param=0;
             builder.setPositiveButton("Eliminar", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     Log.i("Diálogos", "Confirmación Aceptada.");
+                    param=eventoSeleccionado.getId();
                     new eliminar().execute("anda");
                     new listarEventos().execute(url);
                     dialog.cancel();

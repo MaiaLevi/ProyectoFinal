@@ -53,7 +53,7 @@ public class AgregarHorario extends AppCompatActivity {
         ArrayAdapter<Integer> adapterBloques = new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_item, arrayBloques);
         adapterBloques.setDropDownViewResource(R.layout.simple_spinner_dropdown_item);
         spnbloque.setAdapter(adapterBloques);
-        spndia.setSelection(value);
+        spndia.setSelection(value-1);
         spnMateria.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
