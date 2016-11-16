@@ -1,5 +1,6 @@
 package com.example.a41638707.proyectofinal;
 
+import android.app.ActionBar;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ContentProviderOperation;
@@ -57,13 +58,13 @@ public class ListarLibrosPropios extends AppCompatActivity {
     ArrayAdapter<Libros> adaptador=null;
     ImageView imgAgregar;
     ProgressDialog progressDialog;
+    private Button[] btns;
     String url;
     TabHost tabs;
     EditText edtBuscar;
     View layoutPpal;
-    //LockableScrollView scrollView;
-    LinearLayout layout;
-    int idUsuario, contador=0;
+    LinearLayout layout, layoutLibros;
+    int idUsuario, contador=0, cantPags=0;
     Button btnBuscar;
     Libros libroSeleccionado;
     @Override
@@ -144,6 +145,7 @@ public class ListarLibrosPropios extends AppCompatActivity {
                         url+="&id=";
                         url+=Usuarios.getId();
                         new buscarLibros().execute(url);
+                        layoutLibros.setVisibility(View.VISIBLE);
                         layout.setVisibility(View.VISIBLE);
                     }
                     else
@@ -157,6 +159,7 @@ public class ListarLibrosPropios extends AppCompatActivity {
                     btnBuscar.setText("Buscar");
                     layoutPpal.setVisibility(View.VISIBLE);
                     layout.setVisibility(View.GONE);
+                    layoutLibros.setVisibility(View.GONE);
                   // scrollView.setScrollingEnabled(false);
                 }
                 View view = getCurrentFocus();
@@ -228,6 +231,7 @@ public class ListarLibrosPropios extends AppCompatActivity {
         protected void onPreExecute() {
             //limpiar layout
             layout.removeAllViews();
+            layoutLibros.removeAllViews();
             lstLibros.clear();
             super.onPreExecute();
             progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
@@ -254,42 +258,20 @@ public class ListarLibrosPropios extends AppCompatActivity {
             }
             else
             {
-                for (int i=0;i<lstaLibros.size();i++)
+                if (lstaLibros.size()%3==0)
                 {
-                    final int numerito=i;
-                    //para que tenga id unico
-                    contador++;
-                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                    layout.setOrientation(LinearLayout.VERTICAL);
-                    //add textView
-                    TextView tvwNombre = new TextView(getApplicationContext());
-                    tvwNombre.setText(lstaLibros.get(i).getNombre()+"\n"+lstaLibros.get(i).getDesc()+
-                            "\nAño:"+lstaLibros.get(i).getAño()+
-                            "\nMateria:"+lstaLibros.get(i).getMateria().getNombre()+
-                            "\nVendedor:"+lstaLibros.get(i).getUsuario());
-                    tvwNombre.setTextColor(Color.parseColor("#000000"));
-                    tvwNombre.setId(contador);
-                    tvwNombre.setLayoutParams(params);
-                    layout.addView(tvwNombre);
-                    Button btnTag = new Button(getApplicationContext());
-                    // btnTag.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-                    btnTag.setText("Comprar");
-                    btnTag.setId(contador*2);
-                    btnTag.setTag(lstaLibros.get(i).getId());
-                    layout.addView(btnTag);
-                    btnTag.setOnClickListener(new View.OnClickListener() {
-                        public void onClick(View v) {
-                            Log.i("TAG", "The index is" + contador);
-                            //preguntar si tiene al contacto
-                            Dialog dialogo=agregarContacto(v, lstaLibros.get(numerito));
-                            dialogo.show();
-                        }
-                    });
+                    cantPags=lstaLibros.size()/3;
                 }
-                if (lstaLibros.size()>3)
-                {
-                  //  scrollView.setScrollingEnabled(true);
+                else {
+                    cantPags=lstaLibros.size()/3+1;
                 }
+                Toast.makeText(getApplicationContext(),"Cantidad de paginas"+ String.valueOf(cantPags),
+                        Toast.LENGTH_LONG).show();
+                //cada 3 libros una pagina, switch para mostrar o no
+                    setearFooter();
+                    cargarLibros(0);
+                    CheckBtnBackGroud(0);
+                    //e un layout va botones y en otro van libros
             }
         }
         @Override
@@ -343,6 +325,87 @@ public class ListarLibrosPropios extends AppCompatActivity {
             }
         });
         return builder.create();
+    }
+    private void setearFooter()
+    {
+        btns =new Button[cantPags];
+        for(int i=0;i<cantPags;i++)
+        {
+            final int j = i;
+            btns[i] =   new Button(ListarLibrosPropios.this);
+            btns[i].setBackgroundColor(getResources().getColor(android.R.color.transparent));
+            btns[i].setText(""+(i+1));
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ActionBar.LayoutParams.WRAP_CONTENT, ActionBar.LayoutParams.WRAP_CONTENT);
+            layout.addView(btns[i], lp);
+            btns[j].setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v)
+                {
+                    cargarLibros(j);
+                    CheckBtnBackGroud(j);
+                }
+            });
+        }
+    }
+    private void CheckBtnBackGroud(int index)
+    {
+        for(int i=0;i<cantPags;i++)
+        {
+            if(i==index)
+            {
+                btns[index].setBackgroundColor(getResources().getColor(android.R.color.holo_green_dark));
+                btns[i].setTextColor(getResources().getColor(android.R.color.white));
+            }
+            else
+            {
+                btns[i].setBackgroundColor(getResources().getColor(android.R.color.transparent));
+                btns[i].setTextColor(getResources().getColor(android.R.color.black));
+            }
+        }
+    }
+    private void cargarLibros(int num)
+    {
+            //agregar 3 libros o menos
+            int start = num * 3;
+        layoutLibros.removeAllViews();
+            for(int i=start;i<(start)+3;i++)
+            {
+                if(i<lstLibros.size()&&lstLibros.size()>i)
+                {
+                    final int numerito=i;
+                    //para que tenga id unico
+                    contador++;
+                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    layoutLibros.setOrientation(LinearLayout.VERTICAL);
+                    //add textView
+                    TextView tvwNombre = new TextView(getApplicationContext());
+                    tvwNombre.setText(lstLibros.get(i).getNombre()+"\n"+lstLibros.get(i).getDesc()+
+                            "\nAño:"+lstLibros.get(i).getAño()+
+                            "\nMateria:"+lstLibros.get(i).getMateria().getNombre()+
+                            "\nVendedor:"+lstLibros.get(i).getUsuario());
+                    tvwNombre.setTextColor(Color.parseColor("#000000"));
+                    tvwNombre.setId(contador);
+                    tvwNombre.setLayoutParams(params);
+                    layoutLibros.addView(tvwNombre);
+                    Button btnTag = new Button(getApplicationContext());
+                    // btnTag.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+                    btnTag.setText("Comprar");
+                    btnTag.setId(contador*2);
+                    btnTag.setTag(lstLibros.get(i).getId());
+                    layoutLibros.addView(btnTag);
+                    btnTag.setOnClickListener(new View.OnClickListener() {
+                        public void onClick(View v) {
+                            Log.i("TAG", "The index is" + contador);
+                            //preguntar si tiene al contacto
+                            Dialog dialogo=agregarContacto(v, lstLibros.get(numerito));
+                            dialogo.show();
+                        }
+                    });
+                }
+                else
+                {
+                    break;
+                }
+            }
     }
     private void contacto(View v, Usuarios usuarios, String s)
     {
@@ -403,7 +466,7 @@ public class ListarLibrosPropios extends AppCompatActivity {
     }
     private void ObtenerReferencias()
     {
-       // scrollView=((LockableScrollView)findViewById(R.id.ScrollViewBuscar));
+        layoutLibros=(LinearLayout)findViewById(R.id.layoutLibros);
         btnBuscar=(Button)findViewById(R.id.btnBuscar);
         lstviewLibros=(ListView)findViewById(R.id.lstLibros);
         imgAgregar=(ImageView)findViewById(R.id.imgAgregar);
