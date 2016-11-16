@@ -51,9 +51,8 @@ public class ListarDivision extends AppCompatActivity {
     ProgressDialog progressDialog;
     String url;
     Integer idCreador;
-    Usuarios miUsuario;
     boolean click = false;
-
+int param=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,6 +74,7 @@ public class ListarDivision extends AppCompatActivity {
                 //Desea eliminar o modificar?
                 //Modificar
                 eventoSeleccionado = listaEventos.get(position);
+                param=position;
                 click = true;
             }
         });
@@ -118,7 +118,6 @@ public class ListarDivision extends AppCompatActivity {
             }
         });
     }
-
     @Override
     public void onRestart() {
         super.onRestart();
@@ -129,8 +128,7 @@ public class ListarDivision extends AppCompatActivity {
             adaptador.notifyDataSetChanged();
         }
     }
-
-    /*class eliminar extends AsyncTask<String, Void, Void> {
+    class eliminar extends AsyncTask<String, Void, Void> {
         OkHttpClient client = new OkHttpClient();
 
         //esta hecho para el orto pero si anda no importa. Con amor, Daiu<3
@@ -153,7 +151,6 @@ public class ListarDivision extends AppCompatActivity {
             }
         }
     }
-*/
         private void ObtenerReferencias() {
             lstEventos = (ListView) findViewById(R.id.lstEventos);
             imgAgregar = (ImageView) findViewById(R.id.imgAgregar);
@@ -182,7 +179,7 @@ public class ListarDivision extends AppCompatActivity {
             builder.setPositiveButton("Eliminar", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     Log.i("Diálogos", "Confirmación Aceptada.");
-                    //EliminarEvento(eventoSeleccionado.getId());
+                    new eliminar().execute("anda");
                     new listarEventos().execute(url);
                     dialog.cancel();
                 }
