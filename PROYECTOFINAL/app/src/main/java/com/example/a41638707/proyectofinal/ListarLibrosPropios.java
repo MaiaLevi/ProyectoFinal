@@ -265,8 +265,8 @@ public class ListarLibrosPropios extends AppCompatActivity {
                 else {
                     cantPags=lstaLibros.size()/3+1;
                 }
-                Toast.makeText(getApplicationContext(),"Cantidad de paginas"+ String.valueOf(cantPags),
-                        Toast.LENGTH_LONG).show();
+                //Toast.makeText(getApplicationContext(),"Cantidad de paginas"+ String.valueOf(cantPags),
+                 //       Toast.LENGTH_LONG).show();
                 //cada 3 libros una pagina, switch para mostrar o no
                     setearFooter();
                     cargarLibros(0);

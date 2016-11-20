@@ -315,7 +315,7 @@ public class MainActivity extends AppCompatActivity {
     }
     private Dialog confirmarLogout(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Alert Dialog");
+        builder.setTitle("Cerrar sesión");
         builder.setMessage("¿Está seguro que desea cerrar sesión?");
         builder.setPositiveButton("Cerrar sesión", new  DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {

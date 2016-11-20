@@ -305,7 +305,7 @@ public class Listar extends MainActivity {
     private Dialog confirmarEliminar(){
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Alert Dialog");
+        builder.setTitle("Eliminar evento");
         builder.setMessage("¿Está seguro que desea eliminar el evento?");
         builder.setPositiveButton("Eliminar", new  DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {

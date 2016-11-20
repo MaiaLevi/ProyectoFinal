@@ -78,7 +78,7 @@ public class VerLibro extends AppCompatActivity {
     private Dialog confirmarEliminar(){
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Alert Dialog");
+        builder.setTitle("Eliminar libro");
         builder.setMessage("¿Está seguro que desea eliminar el libro?");
         builder.setPositiveButton("Eliminar", new  DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
