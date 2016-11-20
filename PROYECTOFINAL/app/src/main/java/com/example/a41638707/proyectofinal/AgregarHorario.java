@@ -33,7 +33,7 @@ public class AgregarHorario extends AppCompatActivity {
     List<MateriaEvento> materias;
     Button btnAtras, btnGuardar;
     MateriaEvento materiaSeleccionada;
-    int numeroDia=0;
+    int numeroDia=0, cod=0;
     String[] arrayDias = {"Lunes", "Martes", "Miercoles", "Jueves", "Viernes"};
     Integer[] arrayBloques = {1,2,3, 4, 5, 6};
     ArrayAdapter<MateriaEvento> adapterMaterias;
@@ -82,6 +82,9 @@ public class AgregarHorario extends AppCompatActivity {
         btnGuardar.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 String url="http://apicampus.azurewebsites.net/agregarHorario.php";
+                url+="?iddivision="+Usuarios.getDivision().getId();
+                url+="&bloque="+spnbloque.getSelectedItem();
+                url+="&idsemana="+numeroDia;
                 new agregarhorario().execute(url);
             }
         });
@@ -103,8 +106,17 @@ public class AgregarHorario extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            Toast.makeText(getApplicationContext(), "Los datos han sido guardados", Toast.LENGTH_SHORT).show();
-            chau();
+            if (cod==401)
+            {
+                Toast.makeText(getApplicationContext(), "Los datos ya existen", Toast.LENGTH_SHORT).show();
+
+            }
+            else
+            {
+                Toast.makeText(getApplicationContext(), "Los datos han sido guardados", Toast.LENGTH_SHORT).show();
+                chau();
+            }
+
         }
         @Override
         protected void onProgressUpdate(Void... values) {
@@ -133,6 +145,7 @@ public class AgregarHorario extends AppCompatActivity {
                         .post(body)
                         .build();
                 Response response = client.newCall(request).execute();
+                cod=response.code();
             } catch (JSONException e) {
                 e.printStackTrace();
             } catch (IOException e) {

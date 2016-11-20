@@ -423,7 +423,7 @@ public class MainActivity extends AppCompatActivity {
         tabs.addTab(spec);
         tabs.setCurrentTab(0);
     }
-    private class traerUsuario extends AsyncTask<String, Void, Usuarios> {
+    private class traerUsuario extends AsyncTask<String, String, Usuarios> {
         private OkHttpClient client = new OkHttpClient();
         @Override
         protected Usuarios doInBackground(String... params) {
@@ -446,6 +446,10 @@ public class MainActivity extends AppCompatActivity {
             progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
             progressDialog.setMax(100);
             progressDialog.show();}
+        @Override
+        protected void onProgressUpdate(String... values) {
+            progressDialog.setMessage(values[0]);
+        }
         @Override
         protected void onPostExecute(Usuarios usu) {
             super.onPostExecute(usu);
@@ -494,7 +498,7 @@ public class MainActivity extends AppCompatActivity {
             return miUsuario;
         }
     }
-    private class traerEventos extends AsyncTask<String, Void, ArrayList<Evento>> {
+    private class traerEventos extends AsyncTask<String, String, ArrayList<Evento>> {
         private OkHttpClient client = new OkHttpClient();
         @Override
         protected ArrayList<Evento> doInBackground(String... params) {
@@ -517,6 +521,10 @@ public class MainActivity extends AppCompatActivity {
             progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
             progressDialog.setMax(100);
             progressDialog.show();}
+        @Override
+        protected void onProgressUpdate(String... values) {
+            progressDialog.setMessage(values[0]);
+        }
         @Override
         protected void onPostExecute(ArrayList<Evento> evento) {
             super.onPostExecute(evento);
