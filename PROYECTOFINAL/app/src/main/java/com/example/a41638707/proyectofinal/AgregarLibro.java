@@ -1,5 +1,6 @@
 package com.example.a41638707.proyectofinal;
 
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -37,6 +38,7 @@ public class AgregarLibro extends AppCompatActivity {
     MateriaEvento materiaSeleccionada;
     CheckBox chkVendido;
     int anioSeleccionado;
+    ProgressDialog progressDialog;
     String url="http://apicampus.azurewebsites.net/AgregarLibro.php";
     String url3="http://apicampus.azurewebsites.net/listarMateriaEvento.php";
     ArrayList<Integer> anios = new ArrayList<Integer>();
@@ -53,6 +55,7 @@ public class AgregarLibro extends AppCompatActivity {
         anios.add(4);
         anios.add(5);
         anios.add(6);
+        progressDialog=new ProgressDialog(this);
         ArrayAdapter<Integer> adaptador = new ArrayAdapter<Integer>(
                 getApplicationContext(),
                 android.R.layout.simple_spinner_item,
@@ -120,20 +123,32 @@ public class AgregarLibro extends AppCompatActivity {
     {
         this.finish();
     }
-    private class agregarLibro extends AsyncTask<String, Void, Void> {
+    private class agregarLibro extends AsyncTask<String, Integer, Void> {
         public OkHttpClient client = new OkHttpClient();
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+            progressDialog.dismiss();
         }
         @Override
-        protected void onProgressUpdate(Void... values) {
-            super.onProgressUpdate(values);
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog.show();
+        }
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            progressDialog.setMessage("Cargando...");
         }
         @Override
         protected Void doInBackground(String... params) {
             String url = params[0];
             try {
+                int count = params.length;
+                for (int i = 0; i < count; i++) {
+                    publishProgress((int) ((i / (float) count) * 100));
+                    // Escape early if cancel() is called
+                    if (isCancelled()) break;
+                }
                 enviarJSON(url);
             } catch (JSONException e) {
                 Log.d("Error", e.getMessage());
@@ -165,7 +180,7 @@ public class AgregarLibro extends AppCompatActivity {
         }
     }
 
-    private class traerMaterias extends AsyncTask<String, Void, List<MateriaEvento>> {
+    private class traerMaterias extends AsyncTask<String, Integer, List<MateriaEvento>> {
         public OkHttpClient client = new OkHttpClient();
         @Override
         protected void onPostExecute(List<MateriaEvento> list) {
@@ -174,16 +189,32 @@ public class AgregarLibro extends AppCompatActivity {
                     android.R.layout.simple_spinner_item, materias);
             adapterMaterias.setDropDownViewResource(R.layout.simple_spinner_dropdown_item);
             spnMateria.setAdapter(adapterMaterias);
+            progressDialog.dismiss();
         }
         @Override
         protected List<MateriaEvento> doInBackground(String... params) {
             String url = params[0];
             try {
+                int count = params.length;
+                for (int i = 0; i < count; i++) {
+                    publishProgress((int) ((i / (float) count) * 100));
+                    // Escape early if cancel() is called
+                    if (isCancelled()) break;
+                }
                 return enviarJSON(url);
             } catch (JSONException e) {
                 Log.d("Error", e.getMessage());
                 return null;
             }
+        }
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog.show();
+        }
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            progressDialog.setMessage("Cargando...");
         }
         // Convierte un JSON en un ArrayList de Direccion
         List<MateriaEvento>  enviarJSON(String url) throws JSONException {

@@ -327,7 +327,7 @@ public class Listar extends MainActivity {
             });
             return builder.create();
         }
-    private class listarEventos extends AsyncTask<String, Void, ArrayList<Evento>> {
+    private class listarEventos extends AsyncTask<String, Integer, ArrayList<Evento>> {
         private OkHttpClient client = new OkHttpClient();
         @Override
         protected ArrayList<Evento> doInBackground(String... params) {
@@ -336,6 +336,12 @@ public class Listar extends MainActivity {
                     //error aca
                     .url(url)
                     .build();
+            int count = params.length;
+            for (int i = 0; i < count; i++) {
+                publishProgress((int) ((i / (float) count) * 100));
+                // Escape early if cancel() is called
+                if (isCancelled()) break;
+            }
             try {
                 Response response = client.newCall(request).execute();  // Llamado al API
                 return parsearEventos(response.body().string());      // Convierto el resultado en Evento
@@ -346,10 +352,12 @@ public class Listar extends MainActivity {
             }
         }
         @Override
+        protected void onProgressUpdate(Integer... values) {
+            progressDialog.setMessage("Cargando...");
+        }
+        @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-            progressDialog.setMax(100);
             progressDialog.show();
             listaEventos.clear();}
         @Override
@@ -360,10 +368,6 @@ public class Listar extends MainActivity {
             adaptador = new ArrayAdapter<Evento>(getApplicationContext(), android.R.layout.simple_list_item_1, listaEventos);
             lstEventos.setAdapter(adaptador);
             lstEventos.deferNotifyDataSetChanged();
-        }
-        @Override
-        protected void onProgressUpdate(Void... values) {
-            super.onProgressUpdate(values);
         }
         ArrayList<Evento> parsearEventos(String JSONstring) throws JSONException {
             JSONObject json = new JSONObject(JSONstring);

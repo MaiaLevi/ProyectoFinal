@@ -279,7 +279,7 @@ public class ListarHorario extends AppCompatActivity {
         tabs.addTab(spec);
         tabs.setCurrentTab(3);
     }
-    private class listarEventos extends AsyncTask<String, Void, ArrayList<Horario>> {
+    private class listarEventos extends AsyncTask<String, Integer, ArrayList<Horario>> {
         private OkHttpClient client = new OkHttpClient();
         @Override
         protected ArrayList<Horario> doInBackground(String... params) {
@@ -287,6 +287,12 @@ public class ListarHorario extends AppCompatActivity {
             Request request = new Request.Builder()
                     .url(url)
                     .build();
+            int count = params.length;
+            for (int i = 0; i < count; i++) {
+                publishProgress((int) ((i / (float) count) * 100));
+                // Escape early if cancel() is called
+                if (isCancelled()) break;
+            }
             try {
                 Response response = client.newCall(request).execute();
                 return parsearEventos(response.body().string());
@@ -299,8 +305,6 @@ public class ListarHorario extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-            progressDialog.setMax(100);
             progressDialog.show();
             listaHorario.clear();}
         @Override
@@ -316,10 +320,9 @@ public class ListarHorario extends AppCompatActivity {
             lstHorario.setAdapter(adaptador);
         }
         @Override
-        protected void onProgressUpdate(Void... values) {
-            super.onProgressUpdate(values);
-        }
-        ArrayList<Horario> parsearEventos(String JSONstring) throws JSONException {
+        protected void onProgressUpdate(Integer... values) {
+            progressDialog.setMessage("Cargando...");
+        } ArrayList<Horario> parsearEventos(String JSONstring) throws JSONException {
             JSONObject json = new JSONObject(JSONstring);
             JSONArray respJSON = json.getJSONArray("result");
             for (int i = 0; i < respJSON.length(); i++)

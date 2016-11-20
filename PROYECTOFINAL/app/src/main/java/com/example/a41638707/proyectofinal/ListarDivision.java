@@ -193,9 +193,8 @@ int param=0;
             return builder.create();
         }
 
-        private class listarEventos extends AsyncTask<String, Void, ArrayList<Evento>> {
+        private class listarEventos extends AsyncTask<String, Integer, ArrayList<Evento>> {
             private OkHttpClient client = new OkHttpClient();
-
             @Override
             protected ArrayList<Evento> doInBackground(String... params) {
                 String url = params[0];
@@ -203,6 +202,12 @@ int param=0;
                         //error aca
                         .url(url)
                         .build();
+                int count = params.length;
+                for (int i = 0; i < count; i++) {
+                    publishProgress((int) ((i / (float) count) * 100));
+                    // Escape early if cancel() is called
+                    if (isCancelled()) break;
+                }
                 try {
                     Response response = client.newCall(request).execute();  // Llamado al API
                     return parsearEventos(response.body().string());      // Convierto el resultado en Evento
@@ -212,16 +217,12 @@ int param=0;
                     return null;
                 }
             }
-
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                progressDialog.setMax(100);
                 progressDialog.show();
                 listaEventos.clear();
             }
-
             @Override
             protected void onPostExecute(ArrayList<Evento> listaMaterias) {
                 super.onPostExecute(listaMaterias);
@@ -230,12 +231,10 @@ int param=0;
                 adaptador = new ArrayAdapter<Evento>(getApplicationContext(), android.R.layout.simple_list_item_1, listaEventos);
                 lstEventos.setAdapter(adaptador);
             }
-
             @Override
-            protected void onProgressUpdate(Void... values) {
-                super.onProgressUpdate(values);
+            protected void onProgressUpdate(Integer... values) {
+                progressDialog.setMessage("Cargando...");
             }
-
             ArrayList<Evento> parsearEventos(String JSONstring) throws JSONException {
                 JSONObject json = new JSONObject(JSONstring);
                 JSONArray respJSON = json.getJSONArray("result");

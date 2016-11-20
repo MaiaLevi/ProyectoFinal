@@ -1,5 +1,6 @@
 package com.example.a41638707.proyectofinal;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.StrictMode;
@@ -50,6 +51,7 @@ public class Agregar extends AppCompatActivity {
     List<MateriaEvento> materias;
     TipoEvento tipoSeleccionado;
     MateriaEvento materiaSeleccionada;
+    ProgressDialog  progressDialog;
     CalendarView calendar;
     Calendar calen;
     String url ="http://apicampus.azurewebsites.net/agregarevento.php";
@@ -61,6 +63,7 @@ public class Agregar extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_agregar);
         ObtenerReferencias();
+        progressDialog=new ProgressDialog(this);
         // traerTipos();
         //traerMaterias();
         new traerTipos().execute(url2);
@@ -133,27 +136,38 @@ public class Agregar extends AppCompatActivity {
     {
         this.finish();
     }
-    private class agregarEvento extends AsyncTask<String, Void, Void> {
+    private class agregarEvento extends AsyncTask<String, Integer, Void> {
         private OkHttpClient client = new OkHttpClient();
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+            progressDialog.dismiss();
         }
-
         @Override
-        protected void onProgressUpdate(Void... values) {
-            super.onProgressUpdate(values);
+        protected void onProgressUpdate(Integer... values) {
+            progressDialog.setMessage("Cargando...");
         }
-
         @Override
         protected Void doInBackground(String... params) {
             String url = params[0];
             try {
                 enviarJSON(url);
+                int count = params.length;
+                for (int i = 0; i < count; i++) {
+                    publishProgress((int) ((i / (float) count) * 100));
+                    // Escape early if cancel() is called
+                    if (isCancelled()) break;
+                }
+
             } catch (JSONException e) {
                 Log.d("Error", e.getMessage());
             }
             return null;
+        }
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog.show();
         }
         void enviarJSON(String url) throws JSONException {
 
@@ -182,7 +196,7 @@ public class Agregar extends AppCompatActivity {
             }
         }
     }
-    private class traerTipos extends AsyncTask<String, Void, List<TipoEvento>> {
+    private class traerTipos extends AsyncTask<String, Integer, List<TipoEvento>> {
         public OkHttpClient client = new OkHttpClient();
 
         @Override
@@ -192,16 +206,33 @@ public class Agregar extends AppCompatActivity {
                     android.R.layout.simple_spinner_item, tipos);
             adapterTipos.setDropDownViewResource(R.layout.simple_spinner_dropdown_item);
             spnTipos.setAdapter(adapterTipos);
+            progressDialog.dismiss();
         }
         @Override
         protected List<TipoEvento> doInBackground(String... params) {
             String url = params[0];
             try {
+                int count = params.length;
+                for (int i = 0; i < count; i++) {
+                    publishProgress((int) ((i / (float) count) * 100));
+                    // Escape early if cancel() is called
+                    if (isCancelled()) break;
+                }
+
                 return enviarJSON(url);
             } catch (JSONException e) {
                 Log.d("Error", e.getMessage());
                 return null;
             }
+        }
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog.show();
+        }
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            progressDialog.setMessage("Cargando...");
         }
         // Convierte un JSON en un ArrayList de Direccion
         List<TipoEvento>  enviarJSON(String url) throws JSONException {
@@ -233,11 +264,12 @@ public class Agregar extends AppCompatActivity {
             return tipos;
         }
     }
-    private class traerMaterias extends AsyncTask<String, Void, List<MateriaEvento>> {
+    private class traerMaterias extends AsyncTask<String, Integer, List<MateriaEvento>> {
         public OkHttpClient client = new OkHttpClient();
         @Override
         protected void onPostExecute(List<MateriaEvento> list) {
             super.onPostExecute(list);
+            progressDialog.dismiss();
             adapterMaterias = new ArrayAdapter<MateriaEvento>(getApplicationContext(),
                     android.R.layout.simple_spinner_item, materias);
             adapterMaterias.setDropDownViewResource(R.layout.simple_spinner_dropdown_item);
@@ -247,11 +279,28 @@ public class Agregar extends AppCompatActivity {
         protected List<MateriaEvento> doInBackground(String... params) {
             String url = params[0];
             try {
+                int count = params.length;
+                for (int i = 0; i < count; i++) {
+                    publishProgress((int) ((i / (float) count) * 100));
+                    // Escape early if cancel() is called
+                    if (isCancelled()) break;
+                }
+
                 return enviarJSON(url);
             } catch (JSONException e) {
                 Log.d("Error", e.getMessage());
                 return null;
             }
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog.show();
+        }
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            progressDialog.setMessage("Cargando...");
         }
         // Convierte un JSON en un ArrayList de Direccion
         List<MateriaEvento>  enviarJSON(String url) throws JSONException {
