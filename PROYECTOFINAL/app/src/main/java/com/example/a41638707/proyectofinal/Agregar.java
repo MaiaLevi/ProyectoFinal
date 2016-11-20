@@ -105,7 +105,7 @@ public class Agregar extends AppCompatActivity {
             public void onClick(View v) {
                 if (spnMaterias.getSelectedItem().toString()!="") {
                     if (spnTipos.getSelectedItem().toString()!="") {
-                            new agregarEvento().execute(url);
+                        new agregarEvento().execute(url);
                             Toast msg = Toast.makeText(getApplicationContext(), "Evento guardado", Toast.LENGTH_LONG);
                             msg.show();
                             irAtras();
@@ -136,29 +136,17 @@ public class Agregar extends AppCompatActivity {
     {
         this.finish();
     }
-    private class agregarEvento extends AsyncTask<String, Integer, Void> {
+    private class agregarEvento extends AsyncTask<String, Void, Void> {
         private OkHttpClient client = new OkHttpClient();
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            progressDialog.dismiss();
-        }
-        @Override
-        protected void onProgressUpdate(Integer... values) {
-            progressDialog.setMessage("Cargando...");
         }
         @Override
         protected Void doInBackground(String... params) {
             String url = params[0];
             try {
                 enviarJSON(url);
-                int count = params.length;
-                for (int i = 0; i < count; i++) {
-                    publishProgress((int) ((i / (float) count) * 100));
-                    // Escape early if cancel() is called
-                    if (isCancelled()) break;
-                }
-
             } catch (JSONException e) {
                 Log.d("Error", e.getMessage());
             }
@@ -167,7 +155,6 @@ public class Agregar extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            progressDialog.show();
         }
         void enviarJSON(String url) throws JSONException {
 

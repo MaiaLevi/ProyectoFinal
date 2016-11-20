@@ -179,6 +179,7 @@ public class Listar extends MainActivity {
     @Override
     public void onRestart(){
         super.onRestart();
+        progressDialog.dismiss();
         click=false;
         progressDialog=new ProgressDialog(this);
         traerTodo();
