@@ -1,6 +1,5 @@
 package com.example.a41638707.proyectofinal;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -38,7 +37,6 @@ public class AgregarHorario extends AppCompatActivity {
     String[] arrayDias = {"Lunes", "Martes", "Miercoles", "Jueves", "Viernes"};
     Integer[] arrayBloques = {1,2,3, 4, 5, 6};
     ArrayAdapter<MateriaEvento> adapterMaterias;
-    ProgressDialog progressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,7 +44,6 @@ public class AgregarHorario extends AppCompatActivity {
         ObtenerRef();
         Intent intent = getIntent();
         int value = intent.getIntExtra(ListarHorario.PARAMETROHORARIO,0);
-        progressDialog=new ProgressDialog(this);
         String urlMateria="http://apicampus.azurewebsites.net/listarMateriaEvento.php";
         new traerMaterias().execute(urlMateria);
         //adapter de spinners de dias y bloques
@@ -104,12 +101,11 @@ public class AgregarHorario extends AppCompatActivity {
         spnbloque=(Spinner) findViewById(R.id.spnBloque);
         spnMateria=(Spinner) findViewById(R.id.spnMateria);
     }
-    private class agregarhorario extends AsyncTask<String, Integer, Void> {
+    private class agregarhorario extends AsyncTask<String, Void, Void> {
         public OkHttpClient client = new OkHttpClient();
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            progressDialog.dismiss();
             if (cod==401)
             {
                 Toast.makeText(getApplicationContext(), "Los datos ya existen", Toast.LENGTH_SHORT).show();
@@ -122,27 +118,15 @@ public class AgregarHorario extends AppCompatActivity {
             }
 
         }
-
         @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            progressDialog.show();
-        }
-        @Override
-        protected void onProgressUpdate(Integer... values) {
-            progressDialog.setMessage("Cargando...");
+        protected void onProgressUpdate(Void... values) {
+            super.onProgressUpdate(values);
         }
         @Override
         protected Void doInBackground(String... params) {
             String url = params[0];
             try {
                 enviarJSON(url);
-                int count = params.length;
-                for (int i = 0; i < count; i++) {
-                    publishProgress((int) ((i / (float) count) * 100));
-                    // Escape early if cancel() is called
-                    if (isCancelled()) break;
-                }
             } catch (JSONException e) {
                 Log.d("Error", e.getMessage());
             }
@@ -169,7 +153,7 @@ public class AgregarHorario extends AppCompatActivity {
             }
         }
     }
-    private class traerMaterias extends AsyncTask<String, Integer, List<MateriaEvento>> {
+    private class traerMaterias extends AsyncTask<String, Void, List<MateriaEvento>> {
         public OkHttpClient client = new OkHttpClient();
         @Override
         protected void onPostExecute(List<MateriaEvento> list) {
@@ -178,24 +162,11 @@ public class AgregarHorario extends AppCompatActivity {
                     android.R.layout.simple_spinner_item, materias);
             adapterMaterias.setDropDownViewResource(R.layout.simple_spinner_dropdown_item);
             spnMateria.setAdapter(adapterMaterias);
-            progressDialog.dismiss();
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            progressDialog.show();
         }
         @Override
         protected List<MateriaEvento> doInBackground(String... params) {
             String url = params[0];
             try {
-                int count = params.length;
-                for (int i = 0; i < count; i++) {
-                    publishProgress((int) ((i / (float) count) * 100));
-                    // Escape early if cancel() is called
-                    if (isCancelled()) break;
-                }
                 return enviarJSON(url);
             } catch (JSONException e) {
                 Log.d("Error", e.getMessage());

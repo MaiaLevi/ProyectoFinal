@@ -114,40 +114,28 @@ public class Modificar extends AppCompatActivity {
     private void irAtras() {
         this.finish();
     }
-    private class modificarEvento extends AsyncTask<String, Integer, Void> {
+    private class modificarEvento extends AsyncTask<String, Void, Void> {
         private OkHttpClient client = new OkHttpClient();
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             Toast.makeText(getApplicationContext(), "Se ha guardado el evento", Toast.LENGTH_SHORT).show();
             GuardarEvento();
-            progressDialog.dismiss();
         }
         @Override
-        protected void onProgressUpdate(Integer... values) {
-            progressDialog.setMessage("Cargando...");
-        }@Override
+        protected void onProgressUpdate(Void... values) {
+            super.onProgressUpdate(values);
+        }
+        @Override
         protected Void doInBackground(String... params) {
             String url = params[0];
             try {
                 enviarJSON(url);
-                int count = params.length;
-                for (int i = 0; i < count; i++) {
-                    publishProgress((int) ((i / (float) count) * 100));
-                    // Escape early if cancel() is called
-                    if (isCancelled()) break;
-                }
             } catch (JSONException e) {
                 Log.d("Error", e.getMessage());
             }
             return null;
         }
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            progressDialog.show();
-        }
-
         void enviarJSON(String url) throws JSONException {
             try {
                 JSONObject dato = new JSONObject();
@@ -178,27 +166,23 @@ public class Modificar extends AppCompatActivity {
                         .url(url)
                         .post(body)
                         .build();
+
                 Response response = client.newCall(request).execute();
             } catch (IOException | JSONException e) {
                 Log.d("Error", e.getMessage());
             }
         }
     }
-    private class traerEvento extends AsyncTask<String, Integer, Evento> {
+    private class traerEvento extends AsyncTask<String, Void, Evento> {
         private OkHttpClient client = new OkHttpClient();
         @Override
         protected Evento doInBackground(String... params) {
             String url = params[0];
+
             Request request = new Request.Builder()
                     //error aca
                     .url(url)
                     .build();
-            int count = params.length;
-            for (int i = 0; i < count; i++) {
-                publishProgress((int) ((i / (float) count) * 100));
-                // Escape early if cancel() is called
-                if (isCancelled()) break;
-            }
             try {
                 Response response = client.newCall(request).execute();  // Llamado al API
                 return parsearEvento(response.body().string());      // Convierto el resultado en Evento
@@ -211,11 +195,9 @@ public class Modificar extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            progressDialog.setMax(100);
             progressDialog.show();}
-        @Override
-        protected void onProgressUpdate(Integer... values) {
-            progressDialog.setMessage("Cargando...");
-        }
         @Override
         protected void onPostExecute(Evento evento) {
             super.onPostExecute(evento);
@@ -268,7 +250,7 @@ public class Modificar extends AppCompatActivity {
             return MiEvento;
         }
     }
-    private class traerMaterias extends AsyncTask<String, Integer, ArrayList<MateriaEvento>> {
+    private class traerMaterias extends AsyncTask<String, Void, ArrayList<MateriaEvento>> {
         private OkHttpClient client = new OkHttpClient();
         @Override
         protected ArrayList<MateriaEvento> doInBackground(String... params) {
@@ -277,12 +259,6 @@ public class Modificar extends AppCompatActivity {
                     //error aca
                     .url(url)
                     .build();
-            int count = params.length;
-            for (int i = 0; i < count; i++) {
-                publishProgress((int) ((i / (float) count) * 100));
-                // Escape early if cancel() is called
-                if (isCancelled()) break;
-            }
             try {
                 Response response = client.newCall(request).execute();  // Llamado al API
                 return parsearMaterias(response.body().string());      // Convierto el resultado en Evento
@@ -295,6 +271,8 @@ public class Modificar extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            progressDialog.setMax(100);
             progressDialog.show();
         }
         @Override
@@ -312,8 +290,8 @@ public class Modificar extends AppCompatActivity {
             }
         }
         @Override
-        protected void onProgressUpdate(Integer... values) {
-            progressDialog.setMessage("Cargando...");
+        protected void onProgressUpdate(Void... values) {
+            super.onProgressUpdate(values);
         }
         ArrayList<MateriaEvento> parsearMaterias(String JSONstring) throws JSONException {
             JSONObject json = new JSONObject(JSONstring);
@@ -329,7 +307,7 @@ public class Modificar extends AppCompatActivity {
             return materias;
         }
     }
-    private class traerTipos extends AsyncTask<String, Integer, ArrayList<TipoEvento>> {
+    private class traerTipos extends AsyncTask<String, Void, ArrayList<TipoEvento>> {
         private OkHttpClient client = new OkHttpClient();
         @Override
         protected ArrayList<TipoEvento> doInBackground(String... params) {
@@ -338,12 +316,6 @@ public class Modificar extends AppCompatActivity {
                     //error aca
                     .url(url)
                     .build();
-            int count = params.length;
-            for (int i = 0; i < count; i++) {
-                publishProgress((int) ((i / (float) count) * 100));
-                // Escape early if cancel() is called
-                if (isCancelled()) break;
-            }
             try {
                 Response response = client.newCall(request).execute();  // Llamado al API
                 return parsearTipos(response.body().string());      // Convierto el resultado en Evento
@@ -356,6 +328,8 @@ public class Modificar extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            progressDialog.setMax(100);
             progressDialog.show();
         }
         @Override
@@ -373,9 +347,10 @@ public class Modificar extends AppCompatActivity {
             }
         }
         @Override
-        protected void onProgressUpdate(Integer... values) {
-            progressDialog.setMessage("Cargando...");
-        }ArrayList<TipoEvento> parsearTipos(String JSONstring) throws JSONException {
+        protected void onProgressUpdate(Void... values) {
+            super.onProgressUpdate(values);
+        }
+        ArrayList<TipoEvento> parsearTipos(String JSONstring) throws JSONException {
             JSONObject json = new JSONObject(JSONstring);
             JSONArray respJSON = json.getJSONArray("result");
             for (int i=0;i<respJSON.length();i++)

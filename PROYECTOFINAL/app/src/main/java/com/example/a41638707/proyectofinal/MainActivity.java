@@ -423,7 +423,7 @@ public class MainActivity extends AppCompatActivity {
         tabs.addTab(spec);
         tabs.setCurrentTab(0);
     }
-    private class traerUsuario extends AsyncTask<String, Integer, Usuarios> {
+    private class traerUsuario extends AsyncTask<String, String, Usuarios> {
         private OkHttpClient client = new OkHttpClient();
         @Override
         protected Usuarios doInBackground(String... params) {
@@ -431,12 +431,6 @@ public class MainActivity extends AppCompatActivity {
             Request request = new Request.Builder()
                     .url(url)
                     .build();
-            int count = params.length;
-            for (int i = 0; i < count; i++) {
-                publishProgress((int) ((i / (float) count) * 100));
-                // Escape early if cancel() is called
-                if (isCancelled()) break;
-            }
             try {
                 Response response = client.newCall(request).execute();  // Llamado al API
                 return parsearUsuario(response.body().string());      // Convierto el resultado en Evento
@@ -449,11 +443,12 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            progressDialog.setMax(100);
             progressDialog.show();}
         @Override
-        protected void onProgressUpdate(Integer... values) {
-            progressDialog.setMessage("Cargando...");
-//setProgress(values[0]);
+        protected void onProgressUpdate(String... values) {
+            progressDialog.setMessage(values[0]);
         }
         @Override
         protected void onPostExecute(Usuarios usu) {
@@ -503,7 +498,7 @@ public class MainActivity extends AppCompatActivity {
             return miUsuario;
         }
     }
-    private class traerEventos extends AsyncTask<String, Integer, ArrayList<Evento>> {
+    private class traerEventos extends AsyncTask<String, String, ArrayList<Evento>> {
         private OkHttpClient client = new OkHttpClient();
         @Override
         protected ArrayList<Evento> doInBackground(String... params) {
@@ -511,12 +506,6 @@ public class MainActivity extends AppCompatActivity {
             Request request = new Request.Builder()
                     .url(url)
                     .build();
-            int count = params.length;
-            for (int i = 0; i < count; i++) {
-                publishProgress((int) ((i / (float) count) * 100));
-                // Escape early if cancel() is called
-                if (isCancelled()) break;
-            }
             try {
                 Response response = client.newCall(request).execute();  // Llamado al API
                 return parsearEventos(response.body().string());      // Convierto el resultado en Evento
@@ -529,11 +518,12 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            progressDialog.setMax(100);
             progressDialog.show();}
         @Override
-        protected void onProgressUpdate(Integer... values) {
-            progressDialog.setMessage("Cargando...");
-//setProgress(values[0]);
+        protected void onProgressUpdate(String... values) {
+            progressDialog.setMessage(values[0]);
         }
         @Override
         protected void onPostExecute(ArrayList<Evento> evento) {

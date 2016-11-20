@@ -210,7 +210,7 @@ public class ListarLibrosPropios extends AppCompatActivity {
                     .show();
         }
     }
-    private class buscarLibros extends AsyncTask<String, Integer, ArrayList<Libros>> {
+    private class buscarLibros extends AsyncTask<String, Void, ArrayList<Libros>> {
         private OkHttpClient client = new OkHttpClient();
         @Override
         protected ArrayList<Libros> doInBackground(String... params) {
@@ -218,12 +218,6 @@ public class ListarLibrosPropios extends AppCompatActivity {
             Request request = new Request.Builder()
                     .url(url)
                     .build();
-            int count = params.length;
-            for (int i = 0; i < count; i++) {
-                publishProgress((int) ((i / (float) count) * 100));
-                // Escape early if cancel() is called
-                if (isCancelled()) break;
-            }
             try {
                 Response response = client.newCall(request).execute();  // Llamado al API
                 return parsearLibros(response.body().string());      // Convierto el resultado en Evento
@@ -240,11 +234,9 @@ public class ListarLibrosPropios extends AppCompatActivity {
             layoutLibros.removeAllViews();
             lstLibros.clear();
             super.onPreExecute();
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            progressDialog.setMax(100);
             progressDialog.show();}
-        @Override
-        protected void onProgressUpdate(Integer... values) {
-            progressDialog.setMessage("Cargando...");
-        }
         @Override
         protected void onPostExecute(final ArrayList<Libros> lstaLibros) {
             super.onPostExecute(lstaLibros);
@@ -281,6 +273,10 @@ public class ListarLibrosPropios extends AppCompatActivity {
                     CheckBtnBackGroud(0);
                     //e un layout va botones y en otro van libros
             }
+        }
+        @Override
+        protected void onProgressUpdate(Void... values) {
+            super.onProgressUpdate(values);
         }
         ArrayList<Libros> parsearLibros (String JSONstring) throws JSONException {
             JSONObject json = new JSONObject(JSONstring);
@@ -502,7 +498,7 @@ public class ListarLibrosPropios extends AppCompatActivity {
         tabs.addTab(spec);
         tabs.setCurrentTab(2);
     }
-    private class listarLibros extends AsyncTask<String, Integer, ArrayList<Libros>> {
+    private class listarLibros extends AsyncTask<String, Void, ArrayList<Libros>> {
         private OkHttpClient client = new OkHttpClient();
         @Override
         protected ArrayList<Libros> doInBackground(String... params) {
@@ -511,12 +507,6 @@ public class ListarLibrosPropios extends AppCompatActivity {
                     //error aca
                     .url(url)
                     .build();
-            int count = params.length;
-            for (int i = 0; i < count; i++) {
-                publishProgress((int) ((i / (float) count) * 100));
-                // Escape early if cancel() is called
-                if (isCancelled()) break;
-            }
             try {
                 Response response = client.newCall(request).execute();  // Llamado al API
                 return parsearLibros(response.body().string());      // Convierto el resultado en Evento
@@ -529,6 +519,8 @@ public class ListarLibrosPropios extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            progressDialog.setMax(100);
             progressDialog.show();
             listaLibros.clear();
         }
@@ -544,9 +536,10 @@ public class ListarLibrosPropios extends AppCompatActivity {
             }
         }
         @Override
-        protected void onProgressUpdate(Integer... values) {
-            progressDialog.setMessage("Cargando...");
-        } ArrayList<Libros> parsearLibros (String JSONstring) throws JSONException {
+        protected void onProgressUpdate(Void... values) {
+            super.onProgressUpdate(values);
+        }
+        ArrayList<Libros> parsearLibros (String JSONstring) throws JSONException {
             JSONObject json = new JSONObject(JSONstring);
             JSONArray respJSON = json.getJSONArray("result");
             for (int i = 0; i < respJSON.length(); i++)

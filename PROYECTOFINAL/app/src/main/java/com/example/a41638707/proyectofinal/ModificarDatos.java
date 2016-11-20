@@ -26,7 +26,8 @@ import java.util.Date;
 
 public class ModificarDatos extends AppCompatActivity {
 
-    EditText edtNombre, edtApellido, edtMail, edtCelular;
+    EditText edtNombre, edtApellido, edtMail, edtContra, edtCelular;
+    DatePicker datepicker;
     Usuarios Miusu;
     Button btnGuardar, btnCancelar;
     @Override
