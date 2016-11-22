@@ -27,12 +27,13 @@ public class VerDatos extends AppCompatActivity {
     String url="http://apicampus.azurewebsites.net/traerUsuario.php?idusuario=";
     Button btnModificar, btncancel;
     Usuarios Miusu;
+    int idUsu;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ver_datos);
         Obtnerref();
-        int idUsu=Usuarios.getId();
+        idUsu=Usuarios.getId();
         String url="http://apicampus.azurewebsites.net/traerUsuario.php?idusuario=";
         url=url+idUsu;
         new traerUsuario().execute(url);
@@ -69,7 +70,6 @@ public class VerDatos extends AppCompatActivity {
             String url = params[0];
 
             Request request = new Request.Builder()
-                    //error aca
                     .url(url)
                     .build();
             try {
@@ -91,10 +91,8 @@ public class VerDatos extends AppCompatActivity {
             super.onPostExecute(usuario);
             Log.d("entro","entro");
             TxtNombre.setText(Miusu.getNombre());
-            //TxtApellido.setText(usuario.getApellido());
             TxtCelular.setText(String.valueOf(Miusu.getTelefono()));
             TxtMail.setText(Miusu.getMail());
-            //TxtFecha.setText(Miusu.getContra());
             Log.d("entro2","entro2");
 
         }
@@ -123,6 +121,7 @@ public class VerDatos extends AppCompatActivity {
             return Miusu;
         }
     }
+    //mostrar fecha nacimiento!!!
     /*  public void TraerUsuario()
       {
           int id = Usuarios.getId();

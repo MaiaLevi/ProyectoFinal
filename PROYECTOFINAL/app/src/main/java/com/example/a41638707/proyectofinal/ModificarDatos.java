@@ -1,5 +1,6 @@
 package com.example.a41638707.proyectofinal;
 
+import android.content.Intent;
 import android.net.ParseException;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -7,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CalendarView;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -22,14 +24,19 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class ModificarDatos extends AppCompatActivity {
 
-    EditText edtNombre, edtApellido, edtMail, edtContra, edtCelular;
-    DatePicker datepicker;
+    EditText edtNombre, edtApellido, edtMail, edtCelular;
+    CalendarView miCalen;
+    Calendar calen;
+    Boolean calendarioToco=false;
     Usuarios Miusu;
     Button btnGuardar, btnCancelar;
+    Date convertedDate;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,10 +46,23 @@ public class ModificarDatos extends AppCompatActivity {
         int id=Usuarios.getId();
         url=url+id;
         new traerUsuario().execute(url);
+        miCalen.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
+                calen = new GregorianCalendar(year, month, dayOfMonth);
+                calendarioToco=true;
+            }//met
+        });
         btnGuardar.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                String url = "http://apicampus.azurewebsites.net/modificarUsuario.php";
-                new modificarUsuario().execute(url);
+                if(calendarioToco) {
+                    String url = "http://apicampus.azurewebsites.net/modificarUsuario.php";
+                    new modificarUsuario().execute(url);
+                    ActivityPrincipal();
+                }
+                else
+                {
+                    Toast.makeText(getApplicationContext(), "Seleccione una fecha", Toast.LENGTH_SHORT).show();
+                }
             }
         });
         btnCancelar.setOnClickListener(new View.OnClickListener() {
@@ -51,8 +71,13 @@ public class ModificarDatos extends AppCompatActivity {
             }
         });
     }
+    private void ActivityPrincipal(){
+        Intent nuevaActivity = new Intent(this, MainActivity.class);
+        startActivity(nuevaActivity);
+    }
     public void ObtenerRef()
     {
+        miCalen=(CalendarView)findViewById(R.id.nacimiento);
         edtNombre = (EditText) findViewById(R.id.edtNombre);
         edtApellido = (EditText) findViewById(R.id.edtApellido);
         edtMail = (EditText) findViewById(R.id.edtMail);
@@ -89,6 +114,9 @@ public class ModificarDatos extends AppCompatActivity {
                 dato.put("apellido", (edtApellido.getText().toString()));
                 dato.put("mail", edtMail.getText().toString());
                 dato.put("celular", Integer.valueOf(edtCelular.getText().toString()));
+                SimpleDateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                String reportDate = df.format(calen.getTime());
+                dato.put("fechanacimiento", reportDate);
                 dato.put("idUsuario", Miusu.getId());
                 RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), dato.toString());
                 Request request = new Request.Builder()
@@ -138,6 +166,19 @@ public class ModificarDatos extends AppCompatActivity {
             edtApellido.setText(Miusu.getApellido());
             edtCelular.setText(String.valueOf(Miusu.getTelefono()));
             edtMail.setText(Miusu.getMail());
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(convertedDate);
+            int month = cal.get(Calendar.MONTH);
+            int day = cal.get(Calendar.DAY_OF_MONTH);
+            int year = cal.get(Calendar.YEAR);
+            //seteo la fecha
+            Calendar calendar = new GregorianCalendar();
+            calendar.set(Calendar.DAY_OF_MONTH, day);
+            calendar.set(Calendar.MONTH, month);
+            calendar.set(Calendar.YEAR, year);
+            long milliTime = calendar.getTimeInMillis();
+            //hacer try catch porque si hay una fecha rara se rompe
+            miCalen.setDate(milliTime, true, true);
         }
         Usuarios parsearUsu(String JSONstring) throws JSONException {
             JSONObject json = new JSONObject(JSONstring);                 // Convierto el String recibido a JSONObject
@@ -147,7 +188,7 @@ public class ModificarDatos extends AppCompatActivity {
             String mail = json.getString("mail");
             String contrasena=json.getString("contrasena");
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-            Date convertedDate = new Date();
+            convertedDate = new Date();
             try {
                 convertedDate = dateFormat.parse(json.getString("fechanacimiento"));
             } catch (java.text.ParseException e) {

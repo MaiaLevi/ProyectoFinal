@@ -52,6 +52,7 @@ public class Agregar extends AppCompatActivity {
     MateriaEvento materiaSeleccionada;
     CalendarView calendar;
     Calendar calen;
+    Boolean calentoco=false;
     String url ="http://apicampus.azurewebsites.net/agregarevento.php";
     String url2="http://apicampus.azurewebsites.net/listarTipoEvento.php";
     String url3="http://apicampus.azurewebsites.net/listarMateriaEvento.php";
@@ -85,6 +86,7 @@ public class Agregar extends AppCompatActivity {
         calendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
                 calen = new GregorianCalendar(year, month, dayOfMonth);
+                calentoco=true;
             }//met
         });
         spnTipos.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -102,10 +104,18 @@ public class Agregar extends AppCompatActivity {
             public void onClick(View v) {
                 if (spnMaterias.getSelectedItem().toString()!="") {
                     if (spnTipos.getSelectedItem().toString()!="") {
-                        new agregarEvento().execute(url);
+                        if (calentoco)
+                        {
+                            new agregarEvento().execute(url);
                             Toast msg = Toast.makeText(getApplicationContext(), "Evento guardado", Toast.LENGTH_LONG);
                             msg.show();
                             irAtras();
+                        }
+                        else
+                        {
+                            Toast.makeText(getApplicationContext(), "Seleccione una fecha", Toast.LENGTH_SHORT).show();
+                        }
+
                     }
                     else {
                         Toast msg = Toast.makeText(getApplicationContext(), "Seleccione un tipo", Toast.LENGTH_LONG);

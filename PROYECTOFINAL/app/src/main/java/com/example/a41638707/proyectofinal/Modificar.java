@@ -43,6 +43,7 @@ public class Modificar extends AppCompatActivity {
     MateriaEvento eventoMateria, materiaSeleccionada;
     CalendarView calendario;
     int idEvento;
+    Boolean calenToco=false;
     Calendar calen;
     public ProgressDialog progressDialog;
     ArrayList<MateriaEvento> materias = new ArrayList<MateriaEvento>();
@@ -62,6 +63,7 @@ public class Modificar extends AppCompatActivity {
         calendario.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
                 calen = new GregorianCalendar(year, month, dayOfMonth);
+                calenToco=true;
             }//met
         });
         spnMaterias.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -93,9 +95,16 @@ public class Modificar extends AppCompatActivity {
         });
         btnGuardar.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                String url = "http://apicampus.azurewebsites.net/modificarevento.php";
-                //se manda parametro? hace falta?
-                new modificarEvento().execute(url);
+                if (calenToco)
+                {
+                    String url = "http://apicampus.azurewebsites.net/modificarevento.php";
+                    //se manda parametro? hace falta?
+                    new modificarEvento().execute(url);
+                }
+                else
+                {
+                    Toast.makeText(getApplicationContext(), "Seleccione una fecha", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

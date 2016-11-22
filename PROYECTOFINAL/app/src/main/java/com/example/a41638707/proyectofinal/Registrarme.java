@@ -1,11 +1,13 @@
 package com.example.a41638707.proyectofinal;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CalendarView;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -20,12 +22,18 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 public class Registrarme extends AppCompatActivity {
     String url;
     EditText edtNombre, edtApellido, edtMail, edtContra, edtCel, edtDivi;
-    DatePicker datePicker;
+    CalendarView miCalen;
     Button btnListo;
+    Calendar calen;
     Button btnCancel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +42,11 @@ public class Registrarme extends AppCompatActivity {
         ObtRef();
         url="http://apicampus.azurewebsites.net/agregarUsuario.php";
         final String mail = edtMail.getText().toString();
+        miCalen.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
+                calen = new GregorianCalendar(year, month, dayOfMonth);
+            }//met
+        });
         btnListo.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (edtNombre.getText().toString()!="")
@@ -95,8 +108,8 @@ public class Registrarme extends AppCompatActivity {
         edtApellido= (EditText) findViewById(R.id.edtApellido);
         edtMail= (EditText) findViewById(R.id.edtMail);
         edtContra= (EditText) findViewById(R.id.edtContra);
-        datePicker= (DatePicker) findViewById(R.id.datePicker);
         edtCel= (EditText) findViewById(R.id.edtNombre);
+        miCalen=(CalendarView)findViewById(R.id.calendarView);
         btnListo=(Button) findViewById(R.id.btnListo);
         edtDivi=(EditText) findViewById(R.id.edtDivision);
         btnCancel=(Button) findViewById(R.id.btnCancelar);
@@ -106,13 +119,19 @@ public class Registrarme extends AppCompatActivity {
         this.finish();
     }
 
+    private void ActivityMain()
+    {
+        Intent nuevaActivity = new Intent(this, MainActivity.class);
+        startActivity(nuevaActivity);
+    }
+
     private class agregarUsuario extends AsyncTask<String, Void, Void> {
         public OkHttpClient client = new OkHttpClient();
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            Toast.makeText(getApplicationContext(), "YA ESTÁ REGISTRADO, INICIE SESIÓN", Toast.LENGTH_SHORT).show();
-            //QUE SE CIERRE
+            Toast.makeText(getApplicationContext(), "YA ESTÁ REGISTRADO, INICIE SESIÓN", Toast.LENGTH_LONG).show();
+            ActivityMain();
         }
         @Override
         protected void onProgressUpdate(Void... values) {
@@ -134,8 +153,12 @@ public class Registrarme extends AppCompatActivity {
                 json.put("nombre", edtNombre.getText());
                 json.put("apellido", edtApellido.getText());
                 json.put("mail", edtMail.getText());
-                json.put("fechanacimiento",datePicker.getDayOfMonth());//NO,TODO
+                json.put("contrasena",contrasenaE());
+                SimpleDateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                String reportDate = df.format(calen.getTime());
+                json.put("fechanacimiento", reportDate);
                 json.put("celular", edtCel.getText());
+                json.put("iddivision", edtDivi.getText());
                 RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json.toString());
                 Request request = new Request.Builder()
                         .url(url)
@@ -148,5 +171,20 @@ public class Registrarme extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+    }
+    public String contrasenaE()
+    {
+        MessageDigest crypt = null;
+        try {
+            crypt = java.security.MessageDigest.getInstance("MD5");
+        } catch (NoSuchAlgorithmException e) {
+            System.out.println("MD5 not supported");
+        }
+        byte[] digested = crypt.digest(edtContra.getText().toString().getBytes());
+        String crypt_password = new String();
+        // Converts bytes to string
+        for (byte b : digested)
+            crypt_password += Integer.toHexString(0xFF & b);
+        return crypt_password;
     }
 }
