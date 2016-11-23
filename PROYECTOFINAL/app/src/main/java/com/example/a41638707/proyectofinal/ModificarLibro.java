@@ -144,6 +144,7 @@ public class ModificarLibro extends AppCompatActivity {
                 }
             }
         }
+
         @Override
         protected void onProgressUpdate(Void... values) {
             super.onProgressUpdate(values);
@@ -161,6 +162,9 @@ public class ModificarLibro extends AppCompatActivity {
             }
             return materias;
         }
+    }
+    @Override
+    public void onBackPressed() {
     }
     private class modificarEvento extends AsyncTask<String, Void, Void> {
         public OkHttpClient client = new OkHttpClient();

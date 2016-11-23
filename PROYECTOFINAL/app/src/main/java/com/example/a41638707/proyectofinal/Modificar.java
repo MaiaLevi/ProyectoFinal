@@ -120,6 +120,9 @@ public class Modificar extends AppCompatActivity {
         spnTipos = (Spinner) findViewById(R.id.spnTipos);
         edtDescr = (EditText) findViewById(R.id.edtDescr);
     }
+    @Override
+    public void onBackPressed() {
+    }
     private void irAtras() {
         this.finish();
     }
@@ -222,12 +225,14 @@ public class Modificar extends AppCompatActivity {
             int year = cal.get(Calendar.YEAR);
             //seteo la fecha
             Calendar calendar = new GregorianCalendar();
+            //Calendar calendar = Calendar.getInstance();
             calendar.set(Calendar.DAY_OF_MONTH, day);
             calendar.set(Calendar.MONTH, month);
             calendar.set(Calendar.YEAR, year);
             long milliTime = calendar.getTimeInMillis();
             //hacer try catch porque si hay una fecha rara se rompe
-            calendario.setDate(milliTime, true, true);
+            calendario.setDate(milliTime, false, false);
+           // calendario.setMinDate(milliTime);
             edtDescr.setText(MiEvento.getDescripcion());
         }
         Evento parsearEvento(String JSONstring) throws JSONException {

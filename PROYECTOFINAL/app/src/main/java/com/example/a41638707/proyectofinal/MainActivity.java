@@ -74,6 +74,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ObtenerReferencias();
         progressDialog = new ProgressDialog(this);
+        progressDialog.dismiss();
+        texto1[0]="No hay eventos";
+        texto1[1]="No hay eventos";
+        texto2[0]="No hay más eventos";
+        texto2[1]="No hay más eventos";
+        texto3[0]="No hay más eventos";
+        texto3[1]="No hay más eventos";
+        texto4[0]="No hay más eventos";
+        texto4[1]="No hay más eventos";
         SharedPreferences prefs =
                 getSharedPreferences("MisPreferencias", Context.MODE_PRIVATE);
         sesion = prefs.getBoolean("sesion", false);
@@ -299,6 +308,9 @@ public class MainActivity extends AppCompatActivity {
     public void onRestart(){
         super.onRestart();
         progressDialog=new ProgressDialog(getApplicationContext());
+        progressDialog.dismiss();
+        //actualizar datos del usuario
+
     }
     public void IniciarDatosActivity()
     {
@@ -443,6 +455,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            progressDialog = new ProgressDialog(MainActivity.this);
             progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
             progressDialog.setMax(100);
             progressDialog.show();}

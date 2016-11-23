@@ -96,6 +96,9 @@ public class VerLibro extends AppCompatActivity {
         });
         return builder.create();
     }
+    @Override
+    public void onBackPressed() {
+    }
     /*
     public void iniciarEliminar(int param)
     {

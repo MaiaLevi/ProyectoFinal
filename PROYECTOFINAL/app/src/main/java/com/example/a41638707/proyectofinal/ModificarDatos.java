@@ -7,10 +7,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.squareup.okhttp.MediaType;
@@ -24,6 +27,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -37,11 +41,24 @@ public class ModificarDatos extends AppCompatActivity {
     Usuarios Miusu;
     Button btnGuardar, btnCancelar;
     Date convertedDate;
+    ArrayList<Integer> divi = new ArrayList<Integer>();
+    int diviselec=1, iddivision=1;
+    Spinner spnDivi;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_modificar_datos);
         ObtenerRef();
+        divi.add(1);
+        divi.add(2);
+        divi.add(3);
+        divi.add(4);
+        ArrayAdapter<Integer> adaptador = new ArrayAdapter<Integer>(
+                getApplicationContext(),
+                android.R.layout.simple_spinner_item,
+                divi);
+        adaptador.setDropDownViewResource(R.layout.simple_spinner_dropdown_item);
+        spnDivi.setAdapter(adaptador);
         String url="http://apicampus.azurewebsites.net/traerUsuario.php?idusuario=";
         int id=Usuarios.getId();
         url=url+id;
@@ -65,6 +82,15 @@ public class ModificarDatos extends AppCompatActivity {
                 }
             }
         });
+        spnDivi.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                diviselec = divi.get(i);
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
         btnCancelar.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Atras();
@@ -75,6 +101,9 @@ public class ModificarDatos extends AppCompatActivity {
         Intent nuevaActivity = new Intent(this, MainActivity.class);
         startActivity(nuevaActivity);
     }
+    @Override
+    public void onBackPressed() {
+    }
     public void ObtenerRef()
     {
         miCalen=(CalendarView)findViewById(R.id.nacimiento);
@@ -83,6 +112,7 @@ public class ModificarDatos extends AppCompatActivity {
         edtMail = (EditText) findViewById(R.id.edtMail);
         edtCelular = (EditText) findViewById(R.id.edtCelular);
         btnGuardar=(Button) findViewById(R.id.btnGuardar);
+        spnDivi=(Spinner) findViewById(R.id.spnDivi);
         btnCancelar=(Button) findViewById(R.id.btnCancelar);
     }
     private class modificarUsuario extends AsyncTask<String, Void, Void> {
@@ -113,11 +143,12 @@ public class ModificarDatos extends AppCompatActivity {
                 dato.put("nombre", edtNombre.getText().toString());
                 dato.put("apellido", (edtApellido.getText().toString()));
                 dato.put("mail", edtMail.getText().toString());
-                dato.put("celular", Integer.valueOf(edtCelular.getText().toString()));
+                dato.put("celular", edtCelular.getText().toString());
                 SimpleDateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
                 String reportDate = df.format(calen.getTime());
                 dato.put("fechanacimiento", reportDate);
-                dato.put("idUsuario", Miusu.getId());
+                dato.put("iddivision", diviselec);
+                dato.put("idusuario", Miusu.getId());
                 RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), dato.toString());
                 Request request = new Request.Builder()
                         .url(url)
@@ -162,6 +193,11 @@ public class ModificarDatos extends AppCompatActivity {
         protected void onPostExecute(Usuarios usuario) {
             super.onPostExecute(usuario);
             Log.d("entro","entro");
+            for (int i = 0; i < divi.size(); i++) {
+                if (divi.get(i) == iddivision){
+                    spnDivi.setSelection(i);
+                }
+            }
             edtNombre.setText(Miusu.getNombre());
             edtApellido.setText(Miusu.getApellido());
             edtCelular.setText(String.valueOf(Miusu.getTelefono()));
@@ -178,7 +214,7 @@ public class ModificarDatos extends AppCompatActivity {
             calendar.set(Calendar.YEAR, year);
             long milliTime = calendar.getTimeInMillis();
             //hacer try catch porque si hay una fecha rara se rompe
-            miCalen.setDate(milliTime, true, true);
+            miCalen.setDate(milliTime, false, false);
         }
         Usuarios parsearUsu(String JSONstring) throws JSONException {
             JSONObject json = new JSONObject(JSONstring);                 // Convierto el String recibido a JSONObject
@@ -195,7 +231,7 @@ public class ModificarDatos extends AppCompatActivity {
                 e.printStackTrace();
             }
             int celular = json.getInt("celular");
-            int iddivision = json.getInt("iddivision");
+            iddivision = json.getInt("iddivision");
             Miusu = new Usuarios(nombre, mail, contrasena, celular);
             Miusu.setNombre(nombre);
             Miusu.setApellido(apellido);

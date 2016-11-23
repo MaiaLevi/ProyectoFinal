@@ -170,7 +170,9 @@ public class ListarLibrosPropios extends AppCompatActivity {
             }
         });
     }
-
+    @Override
+    public void onBackPressed() {
+    }
     private void IniciarAgregarActividad()
     {
         Intent nuevaActivity=new Intent(ListarLibrosPropios.this,AgregarLibro.class);

@@ -335,4 +335,7 @@ public class ListarHorario extends AppCompatActivity {
             return listaHorario;
         }
     }
+    @Override
+    public void onBackPressed() {
+    }
 }

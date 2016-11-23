@@ -6,10 +6,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.squareup.okhttp.MediaType;
@@ -25,27 +28,48 @@ import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 public class Registrarme extends AppCompatActivity {
     String url;
-    EditText edtNombre, edtApellido, edtMail, edtContra, edtCel, edtDivi;
+    EditText edtNombre, edtApellido, edtMail, edtContra, edtCel;
     CalendarView miCalen;
     Button btnListo;
     Calendar calen;
     Button btnCancel;
+    Spinner spnDivi;
+    int DiviSelec;
+    ArrayList<Integer> divi = new ArrayList<Integer>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registrarme);
         ObtRef();
+        divi.add(1);
+        divi.add(2);
+        divi.add(3);
+        divi.add(4);
+        ArrayAdapter<Integer> adaptador = new ArrayAdapter<Integer>(
+                getApplicationContext(),android.R.layout.simple_spinner_item,divi);
+        adaptador.setDropDownViewResource(R.layout.simple_spinner_dropdown_item);
+        spnDivi.setAdapter(adaptador);
         url="http://apicampus.azurewebsites.net/agregarUsuario.php";
         final String mail = edtMail.getText().toString();
         miCalen.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
                 calen = new GregorianCalendar(year, month, dayOfMonth);
             }//met
+        });
+        spnDivi.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                DiviSelec = divi.get(i);
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
         });
         btnListo.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -59,14 +83,7 @@ public class Registrarme extends AppCompatActivity {
                             {
                                 if (edtCel.getText().toString().length()<10 || edtCel.getText().toString()!="")
                                 {
-                                    if (edtDivi.getText().toString()!="")
-                                    {
                                         new agregarUsuario().execute(url);
-                                    }
-                                    else
-                                    {
-                                        Toast.makeText(getApplicationContext(), "Completar división", Toast.LENGTH_SHORT).show();
-                                    }
                                 }
                                 else
                                 {
@@ -100,18 +117,20 @@ public class Registrarme extends AppCompatActivity {
                 Atras();
             }
         });
-
+    }
+    @Override
+    public void onBackPressed() {
     }
     public void ObtRef()
     {
+        spnDivi=(Spinner) findViewById(R.id.spndivi);
         edtNombre= (EditText) findViewById(R.id.edtNombre);
         edtApellido= (EditText) findViewById(R.id.edtApellido);
         edtMail= (EditText) findViewById(R.id.edtMail);
         edtContra= (EditText) findViewById(R.id.edtContra);
-        edtCel= (EditText) findViewById(R.id.edtNombre);
+        edtCel= (EditText) findViewById(R.id.edtCelular);
         miCalen=(CalendarView)findViewById(R.id.calendarView);
         btnListo=(Button) findViewById(R.id.btnListo);
-        edtDivi=(EditText) findViewById(R.id.edtDivision);
         btnCancel=(Button) findViewById(R.id.btnCancelar);
     }
     private void Atras()
@@ -158,7 +177,7 @@ public class Registrarme extends AppCompatActivity {
                 String reportDate = df.format(calen.getTime());
                 json.put("fechanacimiento", reportDate);
                 json.put("celular", edtCel.getText());
-                json.put("iddivision", edtDivi.getText());
+                json.put("iddivision", DiviSelec);
                 RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json.toString());
                 Request request = new Request.Builder()
                         .url(url)

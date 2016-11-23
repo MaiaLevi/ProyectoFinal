@@ -49,7 +49,9 @@ public class VerDatos extends AppCompatActivity {
         });
 
     }
-
+    @Override
+    public void onBackPressed() {
+    }
     private void Atras()
     {
         this.finish();
